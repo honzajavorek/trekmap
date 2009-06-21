@@ -31,7 +31,11 @@ abstract class BasePresenter extends Presenter {
 		if ($user->isAuthenticated()) {
 			$this->template->identity = $user->getIdentity();	
 		}
+		
+		// scripts
+		$this->template->scripts = array();
 	}
+		
 
 	/**
 	 * Creates link to GRAVATAR.

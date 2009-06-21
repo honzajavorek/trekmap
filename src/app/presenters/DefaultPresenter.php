@@ -12,5 +12,19 @@ class DefaultPresenter extends BasePresenter {
 		$this->template->title = 'Ahoj';
 		// TODO
 	}
+	
+	public function renderDemo() {
+		$this->template->title = 'Demo';
+		$this->template->scripts[] = 'trekmap';
+		
+		
+		
+		// TODO
+	}
+	
+	public function renderInfo() {
+		$this->template->title = 'Info';
+		// TODO
+	}
 
 }

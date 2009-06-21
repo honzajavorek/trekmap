@@ -3,6 +3,7 @@ variable.superadmin =
 variable.email = 
 variable.since = "2009"
 variable.robots = "all"
+variable.guid = 
 
 service.Nette-Security-IAuthenticator = "Users"
 database.charset = "utf8"

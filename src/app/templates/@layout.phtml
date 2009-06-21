@@ -34,6 +34,10 @@
 	<link rel="stylesheet" type="text/css" href="{$baseUri}css/print.css" media="print">
 
 	<!-- javascript -->
+	<script type="text/javascript" charset="utf-8" src="http://amapy.atlas.cz/api/api.ashx?guid={=Environment::getVariable('guid')}"></script>
+	{if !empty($scripts)}
+	{foreach $scripts as $script}<script type="text/javascript" charset="utf-8" src="{$baseUri}js/{$script}.js"></script>{/foreach}
+	{/if}
 
 	<!-- bookmarking, icon -->
 	<link rel="bookmark" title="TrekMap" href="{$absoluteUri}">
