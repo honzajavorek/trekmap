@@ -1,12 +1,26 @@
 [common]
+variable.superadmin = 
+variable.email = 
+variable.since = "2009"
+variable.robots = "all"
+
+service.Nette-Security-IAuthenticator = "Users"
+database.charset = "utf8"
+database.driver = "mysql"
 
 [common.set!]
 date.timezone = "Europe/Prague"
 iconv.internal_encoding = "%encoding%"
 mbstring.internal_encoding = "%encoding%"
 
-
 [production < common]
-
+database.host = 
+database.username = 
+database.password = 
+database.database = 
 
 [development < production]
+database.host = 
+database.username = 
+database.password = 
+database.database = 

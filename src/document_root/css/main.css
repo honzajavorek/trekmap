@@ -1,5 +1,5 @@
 body {
-	font: 16px/1.5 "Trebuchet MS", "Geneva CE", lucida, sans-serif;
+	font: 75% "Trebuchet MS", "Geneva CE", lucida, sans-serif;
 	color: #333;
 	background-color: #fff;
 }
@@ -22,4 +22,10 @@ div.flash {
 	border: 1px solid #E2C822;
 	padding: 1em;
 	margin: 1em 0;
+}
+
+a[href^="error:"] {
+	background: red;
+	color: white;
+	text-decoration: blink;
 }

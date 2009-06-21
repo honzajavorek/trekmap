@@ -1,36 +1,113 @@
-{**
- * My Application layout template.
- *
- * @copyright  Copyright (c) 2009 John Doe
- * @package    MyApplication
- * @version    $Id: @layout.phtml 182 2008-12-31 00:28:33Z david@grudl.com $
- *
- * @param string   $title    page title
- * @param string   $robots   tell robots how to index the content of a page (optinal)
- * @param string   $baseUri  web base URI
- * @param array    $flashes  flash messages
- * @param Template $content  view template
- *}
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html dir="ltr" lang="{$language}">
+<head profile="http://purl.org/uF/2008/03/">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="author" content="Honza Javorek, http://honza.javorek.net">
+	<meta name="copyright" content="{$copyright} Honza Javorek">
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Language" content="en" />
+		TrekMap
 
-	<meta name="description" content="Nette Framework web application skeleton" />
+		Aplikace pro evidenci geografických tras uživatele.
+		Copyright {$copyright} Honza Javorek, http://honza.javorek.net/
+
+		Vzniklo na základě bakalářské práce pro VUT FIT, http://www.fit.vutbr.cz/
+
+	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+
+	<!-- agents, robots -->
+	<meta http-equiv="imagetoolbar" content="no">
 	{if isset($robots)}<meta name="robots" content="{$robots}">{/if}
 
-	<title>{$title}</title>
+	<!-- description -->
+	<meta name="keywords" lang="{$language}" content="trekmap{if !empty($keywords)},{= implode(',', $keywords)}{/if}">
+	<meta name="description" content="{$description}">
 
-	<link rel="stylesheet" media="screen,projection,tv" href="{$baseUri}css/screen.css" type="text/css" />
-	<link rel="stylesheet" media="print" href="{$baseUri}css/print.css" type="text/css" />
-	<link rel="shortcut icon" href="{$baseUri}favicon.ico" type="image/x-icon" />
+	{if !empty($feeds)}
+	<!-- feeds -->
+	{foreach $feeds as $feed}<link rel="alternate" type="application/rss+xml" title="{$feed['title']}" href="{link $feed['link']}">{/foreach}
+	{/if}
+
+	<!-- stylesheets -->
+	<link rel="stylesheet" type="text/css" href="{$baseUri}css/main.css" media="screen,projection,tv">
+	<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{$baseUri}css/ie.css" media="screen,projection,tv"><![endif]-->
+	<link rel="stylesheet" type="text/css" href="{$baseUri}css/print.css" media="print">
+
+	<!-- javascript -->
+
+	<!-- bookmarking, icon -->
+	<link rel="bookmark" title="TrekMap" href="{$absoluteUri}">
+	<meta name="application-name" content="TrekMap">
+	<meta name="application-url" content="{$absoluteUri}">
+	<link rel="shortcut icon" type="image/x-icon" href="{$baseUri}favicon.ico">
+	
+	<title>{$title} - TrekMap, mapuj svou trasu pro běh, kolo, běžky, in-line brusle!</title>
 </head>
-
 <body>
-	{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}
+	<div id="document">
+		
+		<div class="header">
+			<strong><a href="{link Default:}" title="na úvodní stranu">TrekMap &mdash; mapuj svůj volný čas</a></strong>
+		</div>
+		
+		<p>Přeskočit na <a href="#menu"
+		title="přeskočit na navigaci">menu ↓</a>.</p>
 
-	{include $content}
+		<hr>
+
+        {if !empty($flashes)}{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}<hr>{/if}
+
+        {include $content}
+        
+        <hr>
+
+		<div class="nav">
+			<h2>Menu</h2>
+			<ul>{include '@menu.phtml'}</ul>
+		</div>
+
+		<hr>
+
+		<div class="aside">
+{if isset($identity)}
+		<h2>{$identity->fullname}</h2>
+		<p><img src="{$presenter->linkGravatar(40, $identity->email, $identity->female)}" alt="gravatar &mdash; {$identity->fullname}"></p>
+		{include '@user.phtml'}
+{else}
+		<h2>Kolemjdoucí</h2>
+		<p><img src="{$presenter->linkGravatar(40)}" alt="kolemjdoucí"></p>
+		<ul><li><a href="{link Account:login}">Přihlásit</a></li></ul>
+{/if}
+	
+		 	<hr>
+	
+			<div class="nav" id="menu">
+				<h2>Odkazy</h2>
+				
+				<h3>Ty</h3>
+				{if isset($identity)}<ul>{include '@user.phtml'}</ul>{else}<ul><li><a href="{link Account:login}">Přihlásit</a></li></ul>{/if}
+				
+				<h3>TrekMap</h3>
+				<ul>{include '@menu.phtml'}</ul>
+				
+				{if !empty($feeds)}
+				<h3>RSS</h3>
+				<ul>{foreach $feeds as $feed}<li><a href="{link $feed['link']}">{$feed['title']}</a></li>{/foreach}</ul>
+				{/if}
+			</div>
+		</div>
+
+		<hr>
+	
+		<div class="footer">
+		 	<p>{$copyright} <a href="http://honza.javorek.net/">Honza Javorek</a> &mdash;
+		 	<a href="{link Default:info}">O webu &amp; kontakt</a></p>
+		</div>
+
+		<p>Zpět <a href="#document"
+		title="přeskočit na začátek">nahoru ↑</a>.</p>
+
+	</div>
 </body>
 </html>
+

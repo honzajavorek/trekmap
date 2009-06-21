@@ -1,47 +1,32 @@
 <?php
 
 /**
- * My Application
- *
- * @copyright  Copyright (c) 2009 John Doe
- * @package    MyApplication
- * @version    $Id: ErrorPresenter.php 285 2009-04-27 18:52:23Z david@grudl.com $
- */
-
-
-
-/**
  * Error presenter.
  *
- * @author     John Doe
- * @package    MyApplication
+ * @author     Honza Javorek, http://www.javorek.net/
+ * @copyright  Copyright (c) 2008 Jan Javorek
  */
-class ErrorPresenter extends BasePresenter
-{
+class ErrorPresenter extends BasePresenter {
 
-	/**
-	 * @return void
-	 */
-	public function renderDefault($exception)
-	{
+	public function renderDefault($exception) {
 		if ($this->isAjax()) {
 			$this->getPayload()->events[] = array('error', $exception->getMessage());
 			$this->terminate();
-
 		} else {
+			$this->template->email = Environment::getVariable('email');
 			$this->template->robots = 'noindex,noarchive';
 
-			if ($exception instanceof /*Nette\Application\*/BadRequestException) {
+			if ($exception instanceof BadRequestException) {
 				Environment::getHttpResponse()->setCode($exception->getCode());
-				$this->template->title = '404 Not Found';
+				$this->template->title = 'Chybièka se vloudila (404 Not Found)';
 				$this->setView('404');
 
 			} else {
 				Environment::getHttpResponse()->setCode(500);
-				$this->template->title = '500 Internal Server Error';
+				$this->template->title = 'Ajajaj… (500 Internal Server Error)';
 				$this->setView('500');
 
-				/*Nette\*/Debug::processException($exception);
+				Debug::processException($exception);
 			}
 		}
 	}
