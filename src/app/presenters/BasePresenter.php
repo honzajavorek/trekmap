@@ -5,6 +5,7 @@
  *
  * @author     Honza Javorek, http://www.javorek.net/
  * @copyright  Copyright (c) 2008 Jan Javorek
+ * @package    Javorek
  */
 abstract class BasePresenter extends Presenter {
 
@@ -25,6 +26,9 @@ abstract class BasePresenter extends Presenter {
 		// absolute uri
 		Environment::setVariable('absoluteUri', Environment::getHttpRequest()->uri->hostUri . Environment::getVariable('baseUri'));
 		$this->template->absoluteUri = Environment::getVariable('absoluteUri');
+
+		// stored request (for login, logout)
+		$this->template->request = $this->getApplication()->storeRequest();
 		
 		// identity
 		$user = Environment::getUser();
@@ -35,8 +39,38 @@ abstract class BasePresenter extends Presenter {
 		// scripts
 		$this->template->scripts = array();
 	}
-		
 
+	/********************* helpers *********************/
+	
+	/**
+	 * Authentication and basic authorization.
+	 *
+	 * @param bool $admin Whether common user can see the page or must have an admin flag.
+	 */
+	protected function authenticate($onlyAdmin = FALSE) {
+		// user authentication
+		$user = Environment::getUser();
+		$authorized = ($onlyAdmin)? $user->isInRole('admin') : TRUE;
+
+		if (!$user->isAuthenticated() && $authorized) {
+			if ($user->getSignOutReason() === User::INACTIVITY) {
+				$this->flashMessage('Odhlásili jsme tě, protože jsi se nehýbal/a moc dlouho.');
+			}
+			$this->redirect('Account:login', $this->backlink());
+		}
+	}
+	
+	/**
+	 * Is the current user admin?
+	 *
+	 * @return bool
+	 */
+	public function isAdmin() {
+		$user = Environment::getUser();
+		return $user->isInRole('admin');
+	}
+	
+	
 	/**
 	 * Creates link to GRAVATAR.
 	 */

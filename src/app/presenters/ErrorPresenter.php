@@ -5,6 +5,7 @@
  *
  * @author     Honza Javorek, http://www.javorek.net/
  * @copyright  Copyright (c) 2008 Jan Javorek
+ * @package    Javorek
  */
 class ErrorPresenter extends BasePresenter {
 
@@ -18,12 +19,12 @@ class ErrorPresenter extends BasePresenter {
 
 			if ($exception instanceof BadRequestException) {
 				Environment::getHttpResponse()->setCode($exception->getCode());
-				$this->template->title = 'Chybièka se vloudila (404 Not Found)';
+				$this->template->title = 'Chybiï¿½ka se vloudila (404 Not Found)';
 				$this->setView('404');
 
 			} else {
 				Environment::getHttpResponse()->setCode(500);
-				$this->template->title = 'Ajajaj… (500 Internal Server Error)';
+				$this->template->title = 'Ajajajï¿½ (500 Internal Server Error)';
 				$this->setView('500');
 
 				Debug::processException($exception);

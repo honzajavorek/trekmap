@@ -59,7 +59,7 @@
 
 		<hr>
 
-        {if !empty($flashes)}{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}<hr>{/if}
+        {if !empty($flashes)}{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}{/if}
 
         {include $content}
         
@@ -80,7 +80,7 @@
 {else}
 		<h2>Kolemjdoucí</h2>
 		<p><img src="{$presenter->linkGravatar(40)}" alt="kolemjdoucí"></p>
-		<ul><li><a href="{link Account:login}">Přihlásit</a></li></ul>
+		<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>
 {/if}
 	
 		 	<hr>
@@ -89,7 +89,7 @@
 				<h2>Odkazy</h2>
 				
 				<h3>Ty</h3>
-				{if isset($identity)}<ul>{include '@user.phtml'}</ul>{else}<ul><li><a href="{link Account:login}">Přihlásit</a></li></ul>{/if}
+				{if isset($identity)}<ul>{include '@user.phtml'}</ul>{else}<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>{/if}
 				
 				<h3>TrekMap</h3>
 				<ul>{include '@menu.phtml'}</ul>
