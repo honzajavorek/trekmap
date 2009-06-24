@@ -84,12 +84,12 @@ class AccountPresenter extends BasePresenter {
 	
 	public function editUser(AppForm $form) {
 		$data = $form->getValues();
-		
+
 		$user = Environment::getUser();
 		$identity = $user->getIdentity();
 		
-		$users = new Users;
-		$users->update($identity->id, $data);
+		$u = new Users;
+		$u->update($identity->id, $data);
 		
 		$user->authenticate($identity->username, NULL);
 	}

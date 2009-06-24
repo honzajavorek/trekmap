@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Users.
+ * User model.
  * 
  * @author     Honza Javorek, http://www.javorek.net/
  * @copyright  Copyright (c) 2008 Jan Javorek
@@ -9,8 +9,15 @@
  */
 class Users extends DataBaseModel implements IAuthenticator {
 	
+	public function getAll() {
+		return $this->db->dataSource('
+			SELECT *
+			FROM [users]
+		');
+	}
+	
 	public function update($id, $data) {
-		return $this->db->update('users', $data)->where('id = %i', $id);
+		$this->db->update('users', $data)->where('id = %i', $id)->execute();
 	}
 	
 	public function fetchAdmin() {
@@ -46,12 +53,12 @@ class Users extends DataBaseModel implements IAuthenticator {
 		), $admin, $active);
 
 		if (!$row) {
-			$this->db->insert('users', $data);
+			$this->db->insert('users', $data)->execute();
 		} else {
 			if (array_key_exists('female', $data)) {
 				unset($data['female']);
 			}
-			$this->db->update('users', $data)->where('id = %i', $row['id']);
+			$this->db->update('users', $data)->where('id = %i', $row['id'])->execute();
 		}
 
 		$row = $this->db->query('
