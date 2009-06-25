@@ -1,12 +1,19 @@
 <h1>{$title}</h1>
 
-<div id="trekmap" style="height: 500px;">
-	<noscript><p>JavaScript turned off.</p></noscript>
-</div>
+<div id="trekmap" style="height: 300px;"></div>
 
-<div id="trekmap-menu">
-	<button id="trekmap-toggle-mode">Změnit režim</button>
-</div>
+<div id="trekmap-menu"><button id="trekmap-toggle-mode">Změnit režim</button></div>
+
+<div id="trekmap-altitude-chart"></div>
 
 <p>Kilometrů: <strong id="trekmap-total-distance"></strong></p>
-<p><label for="trekmap-milestones">Zobrazovat kilometráž:</label><input id="trekmap-milestones" type="checkbox" checked></p>
+
+<p>
+	<label for="trekmap-milestones">Zobrazovat kilometráž:</label>
+	<input id="trekmap-milestones" type="checkbox" checked>
+</p>
+
+<p>
+	<label for="trekmap-altitude">Výškový profil:</label>
+	<input id="trekmap-altitude" type="checkbox" checked>
+</p>

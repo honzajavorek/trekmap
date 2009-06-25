@@ -34,8 +34,9 @@
 	<link rel="stylesheet" type="text/css" href="{$baseUri}css/print.css" media="print">
 
 	<!-- javascript -->
-	<script type="text/javascript" charset="utf-8" src="http://amapy.atlas.cz/api/api.ashx?guid={=Environment::getVariable('guid')}"></script>
 	{if !empty($scripts)}
+	<script type="text/javascript" charset="utf-8" src="http://amapy.atlas.cz/api/api.ashx?guid={=Environment::getVariable('amapy')}"></script>
+	{if !empty($js)}<script type="text/javascript">var php = {$js};</script>{/if}
 	{foreach $scripts as $script}<script type="text/javascript" charset="utf-8" src="{$baseUri}js/{$script}.js"></script>{/foreach}
 	{/if}
 
@@ -59,7 +60,10 @@
 
 		<hr>
 
-        {if !empty($flashes)}{foreach $flashes as $flash}<div class="flash {$flash->type}">{$flash->message}</div>{/foreach}{/if}
+		<div class="flashes">
+		<noscript><p class="flash javascript">Máš vypnutý JavaScript. Bez něj TrekMap nejede, <a href="{link Default:help}">zapni si jej</a> prosím.</p></noscript>
+        {if !empty($flashes)}{foreach $flashes as $flash}<p class="flash {$flash->type}">{$flash->message}</p>{/foreach}{/if}
+        </div>
 
         {include $content}
         

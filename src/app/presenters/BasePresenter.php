@@ -37,6 +37,10 @@ abstract class BasePresenter extends Presenter {
 		}
 		
 		// scripts
+		$this->template->js = array(
+			'baseUri' => Environment::getVariable('baseUri'),
+			'absoluteUri' => Environment::getVariable('absoluteUri'),
+		);
 		$this->template->scripts = array();
 	}
 

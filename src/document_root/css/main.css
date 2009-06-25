@@ -16,7 +16,7 @@ h1 {
 	z-index: 1000;
 }
 
-div.flash {
+p.flash {
 	color: black;
 	background: #FFF9D7;
 	border: 1px solid #E2C822;

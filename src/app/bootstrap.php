@@ -78,6 +78,7 @@ Route::setStyleProperty('action', Route::FILTER_TABLE, array(
 		'demo' => 'demo',
         'info' => 'info',
 		'moje' => 'my',
+		'napoveda' => 'help',
 ));
 
 $router[] = new Route('<presenter uzivatele|trasy>/<id [0-9]+>/', array(
