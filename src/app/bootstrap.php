@@ -81,16 +81,16 @@ Route::setStyleProperty('action', Route::FILTER_TABLE, array(
 		'napoveda' => 'help',
 ));
 
-$router[] = new Route('<presenter uzivatele|trasy>/<id [0-9]+>/', array(
+$router[] = new Route('<presenter uzivatele|trasy>/<id [0-9]+>', array(
 	'action' => 'item',
 ));
 
-$router[] = new Route('<presenter ucet|uzivatele|trasy>/<action>/<id>/', array(
+$router[] = new Route('<presenter ucet|uzivatele|trasy>/<action>/<id>', array(
 	'action' => 'default',
 	'id' => NULL,
 ));
 
-$router[] = new Route('<action>/<id>/', array(
+$router[] = new Route('<action>/<id>', array(
 	'presenter' => 'Default',
 	'action' => 'default',
 	'id' => NULL,

@@ -62,7 +62,7 @@
 
 		<div class="flashes">
 		<noscript><p class="flash javascript">Máš vypnutý JavaScript. Bez něj TrekMap nejede, <a href="{link Default:help}">zapni si jej</a> prosím.</p></noscript>
-        {if !empty($flashes)}{foreach $flashes as $flash}<p class="flash {$flash->type}">{$flash->message}</p>{/foreach}{/if}
+        {if !empty($flashes)}{foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}{/if}
         </div>
 
         {include $content}
