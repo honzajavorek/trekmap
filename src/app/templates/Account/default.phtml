@@ -1,0 +1,66 @@
+		<h1>{$title}</h1>
+		
+		{$form->render('begin')}
+		{if $form->getErrors()}
+		{$form->render('errors')}
+		{/if}
+		
+		<fieldset>
+			<legend>Kdo jsem</legend>
+			<p>Tyto údaje jsou <strong>vždy při přihlášení</strong> synchronizovány s tvým OpenID. Pokud ve svém OpenID změníš jméno, změní se i tady. E-mail není nikde zveřejňován.</p>
+			<table>
+				<tr>
+					<th>OpenID</th>
+					<td><a href="http://{$username}">{$username}</a></td>
+				</tr>
+				<tr>
+					<th>Celé jméno</th>
+					<td>{$fullname}</td>
+				</tr>
+				<tr>
+					<th>E-mail</th>
+					<td>{$email}</td>
+				</tr>
+			</table>	
+		</fieldset>
+		
+		<fieldset>
+			<legend>Holčička nebo chlapeček?</legend>
+			{if $ova && !$female}<p class="remark">Jedno z tvých jmen končí na -ová, ale podle nastavení jsi muž. Kde udělali soudruzi z NDR chybu?</p>{/if}
+			<table>
+				<tr><th>{$form['female']->label}</th><td>{$form['female']->control}</td></tr>
+				<tr><td colspan="2">{$form['gender']->control}</td></tr>
+			</table>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Něco málo o mně</legend>
+			<p>Sem můžeš napsat cokoli chceš. Příklad:</p>
+			<blockquote>
+				<p>Původem jsem Keňan. Jsem vysoký blondýn s dlouhýma nohama a pevnými boky. Už když jsem jako malý při hrách běhal s ostatními dětmi, zjistil jsem, že na mé nadzvukové rychlosti nikdo nemá. Stal jsem se běžcem a TrekMap se svou evidencí tras je proto pro mě dnes nepostradatelný!</p>
+			</blockquote>
+			<table>
+				<tr><th>{$form['description']->label}</th><td>{$form['description']->control}</td></tr>
+				<tr><td colspan="2">{$form['bio']->control}</td></tr>
+			</table>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Obrázek</legend>
+			<p>TrekMap podporuje tzv. <a href="http://www.gravatar.com/">gravatar</a>, což je <strong>obrázek navázaný na tvůj e-mail</strong>. Používá se různě po Internetu, ale hlavně asi na <a href="http://cs.wikipedia.org/wiki/Blog">blozích</a>. Když si na <a href="http://www.gravatar.com/">gravatar.com</a> zaregistruješ pod svůj e-mail obrázek, bude se ti zobrazovat i tady na TrekMap. V opačném případě se zobrazuje výchozí obrázek podle pohlaví.</p>
+			<table>
+				<tr>
+					<th>Aktuální obrázek</th>
+					<td><img src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$id->fullname}"></td>
+				</tr>
+			</table>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Veřejný profil</legend>
+			<p><a href="{link User:profile $identity->id}">Jak mě vidí ostatní?</a></p>
+		</fieldset>
+		
+		{$form->render('end')}
+		
+

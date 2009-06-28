@@ -1,0 +1,10 @@
+		<h1>{$title}</h1>
+		
+		<ul class="error">
+		{foreach $errors as $error}
+			<li>{$error->message}</li>
+		{/foreach}
+		</ul>
+		
+		<p><a href="{link Account:login}">Zpět na přihlášení</a></p>
+		

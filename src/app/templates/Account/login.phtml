@@ -1,0 +1,18 @@
+		<h1>{$title}</h1>
+		
+		{$form->render('begin')}
+		<fieldset>
+			{if $form->getErrors()}
+			{$form->render('errors')}
+			{/if}
+			<table>
+				<tr><th>{$form['openid']->label}</th><td>{$form['openid']->control}</td></tr>
+				<tr><td colspan="2">{$form['send']->control}</td></tr>
+			</table>
+		</fieldset>
+		{$form->render('end')}
+		
+		<h2>Co je to OpenID?</h2>
+		<p>Jednoduše řečeno, <strong>univerzální přihlašování</strong>. Nemusíš si pro TrekMap registrovat nějakou přezdívku a vymýšlet posté další heslo &mdash; využij účtu, který již dávno máš! Jedním z poskytovatelů OpenID je například i <a href="http://napoveda.seznam.cz/cz/login/openid/">Seznam.cz</a>. Máš-li účet na Seznamu, můžeš se s ním přihlásit i zde na TrekMap:</p>
+		<img src="{$baseUri}img/seznam-oid.png" alt="kolemjdoucí">
+		<p>Aby bylo možné přihlásit se na TrekMap, musíš ve svém OpenID poskytnout <strong>své celé jméno a e-mail</strong> (nebude zveřejněn).</p>
