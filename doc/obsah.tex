@@ -1,100 +1,233 @@
-%=========================================================================
-% (c) Michal Bidlo, Bohuslav Křena, 2008
-
 \chapter*{Úvod}
-Abychom mohli napsat odborný text jasně a~srozumitelně, musíme splnit několik základních předpokladů:
-\begin{itemize}
-	\item Musíme mít co říci,
-	\item musíme vědět, komu to chceme říci,
-	\item musíme si dokonale promyslet obsah,
-	\item musíme psát strukturovaně. 
-\end{itemize}
 
-Tyto a další pokyny jsou dostupné též na školních internetových stránkách \cite{fitWeb}.
+Webové technologie procházejí velkými evolučními proměnami. Internet
+už není ono nové a neprobádané místo jako v 90. letech 20.
+století, ale naopak se stal běžnou a často i nepostradatelnou
+součástí života obyčejných lidí. Technologie se posunují vpřed
+jednotně na základě konsensu lídrů trhu, aplikace se přesouvají z
+operačního systému do prohlížeče a vyvíjí se pro ně uživatelská
+rozhraní s ohledem na běžné lidi. Ti se vlastně dostali do středu
+veškerého zájmu. Jestliže dříve byl internet místem spíše pro
+technicky založené, nyní se snaží oslovit širokou veřejnost. Lidem se
+nabízí místa, kde mohou sdílet fotografie s přáteli a kde zjistí, co
+jejich známí zrovna dělají, poslouchají, tvoří, čtou nebo sledují. Internet žije
+okamžitou přítomností a zaznamenáváním této přítomnosti.
 
-Přehled základů typografie a tvorby dokumentů s využitím systému \LaTeX je 
-uveden v~\cite{Rybicka}.
+Různé zajímavé služby otevřeně poskytují svá data a na těch se staví
+aplikace s dříve nepředstavitelnými komplexními funkcemi. Nejlépe to lze vidět
+asi na mapách, které prošly neskutečným vývojem a dnes díky nim (když
+zmíním jen zlomek jejich možností) například pohodlně naplánujete
+cestu autem, zjistíte počasí v dané lokalitě, vyhledáte nejbližší
+pekárnu, nebo si prohlédnete fotografie jiných lidí z míst, kam na
+léto plánujete dovolenou. Na základě takových online map vznikají
+mnohé specializované služby -- z těch nejzajímavějších v českém
+prostředí bych zmínil například server www.bezrealitky.cz, jenž na
+mapových podkladech zobrazuje realitní objekty. Nechal jsem se
+inspirovat a na základě map jsem i já postavil systém, který využívá
+mnoha otevřeně nabízených služeb a integruje je do komplexní aplikace
+s užitkem pro běžného uživatele.
 
-\section{Musíme mít co říci}
-Dalším důležitým předpokladem dobrého psaní je {\it psát pro někoho}. Píšeme-li si poznámky sami pro sebe, píšeme je jinak než výzkumnou zprávu, článek, diplomovou práci, knihu nebo dopis. Podle předpokládaného čtenáře se rozhodneme pro způsob psaní, rozsah informace a~míru detailů.
+Evidencí geografických tras uživatele je tedy myšlena webová aplikace,
+jež umožňuje uživateli interaktivně zaznačit do mapových podkladů trasu,
+kterou plánuje absolvovat či kterou již absolvoval například na kole,
+pěšky, na bruslích nebo během. Nic samozřejmě uživateli nebrání
+evidovat i jiné, delší trasy, systém by měl být však primárně určen
+pro výše naznačené lokální sportovní využití.
 
-\section{Musíme vědět, komu to chceme říci}
-Dalším důležitým předpokladem dobrého psaní je psát pro někoho. Píšeme-li si poznámky sami pro sebe, píšeme je jinak než výzkumnou zprávu, článek, diplomovou práci, knihu nebo dopis. Podle předpokládaného čtenáře se rozhodneme pro způsob psaní, rozsah informace a~míru detailů.
+Bakalářská práce se zabývá analýzou požadavků na aplikaci, výběrem
+technologií, mapových podkladů, \ldots
 
-\section{Musíme si dokonale promyslet obsah}
-Musíme si dokonale promyslet a~sestavit obsah sdělení a~vytvořit pořadí, v~jakém chceme čtenáři své myšlenky prezentovat. 
-Jakmile víme, co chceme říci a~komu, musíme si rozvrhnout látku. Ideální je takové rozvržení, které tvoří logicky přesný a~psychologicky stravitelný celek, ve kterém je pro všechno místo a~jehož jednotlivé části do sebe přesně zapadají. Jsou jasné všechny souvislosti a~je zřejmé, co kam patří.
+DOPSAT STRUCNE PRULET OBSAHEM BP (KRATKY ODSTAVECEK)
 
-Abychom tohoto cíle dosáhli, musíme pečlivě organizovat látku. Rozhodneme, co budou hlavní kapitoly, co podkapitoly a~jaké jsou mezi nimi vztahy. Diagramem takové organizace je graf, který je velmi podobný stromu, ale ne řetězci. Při organizaci látky je stejně důležitá otázka, co do osnovy zahrnout, jako otázka, co z~ní vypustit. Příliš mnoho podrobností může čtenáře právě tak odradit jako žádné detaily.
+(TOTO MOZNA, UZ I TAK JE UVOD DOST DLOUHY) DOPSAT KRATCE A STRUCNE
+ODKAZY NA POUZITOU LITERATURU A OBJASNENI PROC JSEM JI POUZIL (DVE VETY)
 
-Výsledkem této etapy je osnova textu, kterou tvoří sled hlavních myšlenek a~mezi ně zařazené detaily.
+\chapter{Proměna internetu}
 
-\section{Musíme psát strukturovaně} 
-Musíme začít psát strukturovaně a~současně pracujeme na co nejsrozumitelnější formě, včetně dobrého slohu a~dokonalého značení. 
-Máme-li tedy myšlenku, představu o~budoucím čtenáři, cíl a~osnovu textu, můžeme začít psát. Při psaní prvního konceptu se snažíme zaznamenat všechny své myšlenky a~názory vztahující se k~jednotlivým kapitolám a~podkapitolám. Každou myšlenku musíme vysvětlit, popsat a~prokázat. Hlavní myšlenku má vždy vyjadřovat hlavní věta a~nikoliv věta vedlejší.
+Dvacáté století nám připravilo univerzální platformu s obrovským
+potenciálem. Lidé spojili inovativní myšlenky z mnoha směrů informatiky,
+vybudovali fungující síť, úspěšně ji rozšířili po celé planetě
+a dokázali z ní vytvořit každodenního pomocníka, bez kterého si život
+už příliš představit nedokážeme. Kolem roku 2000 bylo na světě kolem
+250~000~uživatelů internetu a toto číslo dále stoupalo exponenciálně.
 
-I k~procesu psaní textu přistupujeme strukturovaně. Současně s~tím, jak si ujasňujeme strukturu písemné práce, vytváříme kostru textu, kterou postupně doplňujeme. Využíváme ty prostředky DTP programu, které podporují strukturovanou stavbu textu (předdefinované typy pro nadpisy a~bloky textu). 
+Do nového století jsme však stále vstupovali spíše s pocitem, že
+internet je něco nového a že tušíme minimum o tom, jaké jsou jeho
+možnosti. Webové technologie byly celkem nesmělé, statické a pasivní.
+Trh s prohlížeči, hlavními katalyzátory vývoje, byl nestabilizovaný.
+Namísto toho, aby velcí hráči internetového trhu spolupracovali a v
+navrhovaných novinkách se pokoušeli o konsensus, byly technologie
+proprietárně uzamykány.
 
+Až dnes se postupně dostáváme do doby, kdy můžeme pracovat s
+relativně jednodtně podporovanými technologiemi, kdy se prosazují
+spíše otevřená řešení a kdy začínají internetové subjekty
+spolupracovat mezi sebou a více využívat možností propojení pomocí
+internetu. Evoluce přinesla novou éru webu, brzy pojmenovanou jako
+{\it Web~2.0}. Začaly se objevovat složité interaktivní aplikace přímo
+ve webovém prohlížeči, stránky přestaly být izolovanými ostrůvky
+statických informací, ale naopak mezi sebou začaly kooperovat,
+poskytovat si navzájem data a funkcionalitu. Masivní rozšíření
+internetu mezi běžné uživatele podnítilo vznik tzv. {\it sociálních
+služeb}, kde mohou lidé sdílet informace mezi sebou a snadno
+komunikovat, a také přineslo požadavek na propracovanější a
+příjemnější uživatelské rozhraní webových aplikací.
 
-\chapter{Několik formálních pravidel}
-Naším cílem je vytvořit jasný a~srozumitelný text. Vyjadřujeme se proto přesně, píšeme dobrou češtinou (nebo zpravidla angličtinou) a~dobrým slohem podle obecně přijatých zvyklostí. Text má upravit čtenáři cestu k~rychlému pochopení problému, předvídat jeho obtíže a~předcházet jim. Dobrý sloh předpokládá bezvadnou gramatiku, správnou interpunkci a~vhodnou volbu slov. Snažíme se, aby náš text nepůsobil příliš jednotvárně používáním malého výběru slov a~tím, že některá zvlášť oblíbená slova používáme příliš často. Pokud používáme cizích slov, je samozřejmým předpokladem, že známe jejich přesný význam. Ale i~českých slov musíme používat ve správném smyslu. Např. platí jistá pravidla při používání slova {\it zřejmě}. Je {\it zřejmé} opravdu zřejmé? A~přesvědčili jsme se, zda to, co je {\it zřejmé} opravdu platí? Pozor bychom si měli dát i~na příliš časté používání zvratného se. Například obratu {\it dokázalo se}, že... zásadně nepoužíváme. Není špatné používat autorského {\it my}, tím předpokládáme, že něco řešíme, nebo například zobecňujeme spolu se čtenářem. V~kvalifikačních pracích použijeme autorského {\it já} (například když vymezujeme podíl vlastní práce vůči převzatému textu), ale v~běžném textu se nadměrné používání první osoby jednotného čísla nedoporučuje.
+Do kontextu tohoto nového proudu jsem se rozhodl zasadit svou práci.
+Má aplikace využívá mnoha služeb a datových zdrojů
+poskytovaných otevřeně a online, spojuje je dohromady a staví na nich
+novou službu pro běžného netechnického uživatele. Taková architektura
+se v terminologii Web~2.0 označuje běžně jako {\it mashup}
+(míchanice). Navíc nabízí interaktivní uživatelské rozhraní a snaží
+se mu poskytnout prostor pro sdílení svých dat s ostatními.
 
-Za pečlivý výběr stojí i~symbolika, kterou používáme ke {\it značení}. Máme tím na mysli volbu zkratek a~symbolů používaných například pro vyjádření typů součástek, pro označení hlavních činností programu, pro pojmenování ovládacích kláves na klávesnici, pro pojmenování proměnných v~matematických formulích a~podobně. Výstižné a~důsledné značení může čtenáři při četbě textu velmi pomoci. Je vhodné uvést seznam značení na začátku textu. Nejen ve značení, ale i~v~odkazech a~v~celkové tiskové úpravě je důležitá důslednost.
+\chapter{Specifikace a analýza požadavků}
 
-S tím souvisí i~pojem z~typografie nazývaný {\it vyznačování}. Zde máme na mysli způsob sazby textu pro jeho zvýraznění. Pro zvolené značení by měl být zvolen i~způsob vyznačování v~textu. Tak například klávesy mohou být umístěny do obdélníčku, identifikátory ze zdrojového textu mohou být vypisovány {\tt písmem typu psací stroj} a~podobně.
+Jak jsem již pro osvětlení zmínil v úvodu práce, evidencí
+geografických tras uživatele se rozumí webová aplikace, umožňující
+člověku pohodlně a interaktivně zaznačit do mapových podkladů trasu,
+kterou plánuje absolvovat či kterou již absolvoval například na kole,
+pěšky, na bruslích nebo během. Nic samozřejmě uživateli nebrání
+evidovat i jiné, delší trasy, systém by měl být však primárně určen
+pro výše naznačené lokální sportovní využití.
 
-Uvádíme-li některá fakta, neskrýváme jejich původ a~náš vztah k~nim. Když něco tvrdíme, vždycky výslovně uvedeme, co z~toho bylo dokázáno, co teprve bude dokázáno v~našem textu a~co přebíráme z~literatury s~uvedením odkazu na příslušný zdroj. V~tomto směru nenecháváme čtenáře nikdy na pochybách, zda jde o~myšlenku naši nebo převzatou z~literatury.
+Aplikace by měla být službou, kam se uživatel zaregistruje a potom,
+přihlášen na svůj účet, může zakládat trasy svých výletů. Ty má
+možnost ukládat a zpětně prohlížet. Trasy jako takové neposkytují jen
+interaktivní záznam cesty na mapovém podkladu, ale také statistiky a
+běžné informace o trase. Zde je prostor pro kombinaci s dalšími
+podklady –- například s informacemi o nadmořské výšce terénu lze
+uživateli poskytnout navíc výškový profil jeho trasy. Uživatel má
+možnost trasy i plánovat. V tomto režimu aplikace vykazuje statistiky
+trasy a může využít zase jiných datových zdrojů, aby poskytnula lepší
+obraz o tom, co může například běžce na trase potkat (to může být
+opět výškový profil, ale také např. předpověď počasí pro místo trasy
+nebo vrstva s fotografiemi místních zajímavostí či panoramat).
 
-Nikdy neplýtváme čtenářovým časem výkladem triviálních a~nepodstatných informací. Neuvádíme rovněž několikrát totéž jen jinými slovy. Při pozdějších úpravách textu se nám může některá dříve napsaná pasáž jevit jako zbytečně podrobná nebo dokonce zcela zbytečná. Vypuštění takové pasáže nebo alespoň její zestručnění přispěje k~lepší čitelnosti práce! Tento krok ale vyžaduje odvahu zahodit čas, který jsme jejímu vytvoření věnovali. 
+Integrace s jinými zdroji dat potom může zasahovat i do zcela jiných
+sfér –- např. by mohlo být možné implementovat výměnu dat s přenosným
+GPS zařízením.
 
-Pokus.
+\section{Cílení projektu}
+svet vs čr
 
-\chapter{Nikdy to nebude naprosto dokonalé}
-Když jsme už napsali vše, o~čem jsme přemýšleli, uděláme si den nebo dva dny volna a~pak si přečteme sami rukopis znovu. Uděláme ještě poslední úpravy a~skončíme. Jsme si vědomi toho, že vždy zůstane něco nedokončeno, vždy existuje lepší způsob, jak něco vysvětlit, ale každá etapa úprav musí být konečná.
+\chapter{Výběr aplikačních rozhraní a zdrojů dat}
+\ldots
 
+\section{Specifika práce na základě API}
+\subsection{Úskalí a výhody závislosti na externích API}
+vyhody a nevyhody
+\subsection{Formy API}
+javascript, rest, obrázek, xml, json, \ldots
+technologie nerozepisovat podrobne, jen se o nich zminit a vysvetlit
+fungovani samotneho spojeni
 
-\chapter{Typografické a~jazykové zásady}
-Při tisku odborného textu typu {\it technická zpráva} (anglicky {\it technical report}), ke kterému patří například i~text kvalifikačních prací, se často volí formát A4 a~často se tiskne pouze po jedné straně papíru. V~takovém případě volte levý okraj všech stránek o~něco větší než pravý -- v~tomto místě budou papíry svázány a~technologie vazby si tento požadavek vynucuje. Při vazbě s~pevným hřbetem by se levý okraj měl dělat o~něco širší pro tlusté svazky, protože se stránky budou hůře rozevírat a~levý okraj se tak bude oku méně odhalovat.
+\section{Mapové podklady}
+seznam, google, atlas, \ldots
 
-Horní a~spodní okraj volte stejně veliký, případně potištěnou část posuňte mírně nahoru (horní okraj menší než dolní). Počítejte s~tím, že při vazbě budou okraje mírně oříznuty.
+\section{Výškový profil}
+\subsection{Nadmořská výška}
+geonames a vyskopis
+\subsection{Grafy}
+gugl a dalsi knihovny
 
-Pro sazbu na stránku formátu A4 je vhodné používat pro základní text písmo stupně (velikosti) 11 bodů. Volte šířku sazby 15 až 16 centimetrů a~výšku 22 až 23 centimetrů (včetně případných hlaviček a~patiček). Proklad mezi řádky se volí 120 procent stupně použitého základního písma, což je optimální hodnota pro rychlost čtení souvislého textu. V~případě použití systému LaTeX ponecháme implicitní nastavení. Při psaní kvalifikační práce se řiďte příslušnými závaznými požadavky.
+\section{Obraz z terénu}
+\subsection{Fotografie}
+panoramio atd.
+\subsection{Webkamery}
+\ldots
 
-Stupeň písma u~nadpisů různé úrovně volíme podle standardních typografických pravidel. 
-Pro všechny uvedené druhy nadpisů se obvykle používá polotučné nebo tučné písmo (jednotně buď všude polotučné nebo všude tučné). Proklad se volí tak, aby se následující text běžných odstavců sázel pokud možno na {\it pevný rejstřík}, to znamená jakoby na linky s~předem definovanou a~pevnou roztečí.
+\section{Počasí}
+\ldots
 
-Uspořádání jednotlivých částí textu musí být přehledné a~logické. Je třeba odlišit názvy kapitol a~podkapitol -- píšeme je malými písmeny kromě velkých začátečních písmen. U~jednotlivých odstavců textu odsazujeme první řádek odstavce asi o~jeden až dva čtverčíky (vždy o~stejnou, předem zvolenou hodnotu), tedy přibližně o~dvě šířky velkého písmene M základního textu. Poslední řádek předchozího odstavce a~první řádek následujícího odstavce se v~takovém případě neoddělují svislou mezerou. Proklad mezi těmito řádky je stejný jako proklad mezi řádky uvnitř odstavce.
+\section{Užitečná turistická data}
+\subsection{Wikipedia}
+\ldots
+\subsection{Zdroje POI}
+\ldots
+\subsection{MHD}
+\ldots
+\subsection{Občerstvení}
+\ldots
 
-Při vkládání obrázků volte jejich rozměry tak, aby nepřesáhly oblast, do které se tiskne text (tj. okraje textu ze všech stran). Pro velké obrázky vyčleňte samostatnou stránku. Obrázky nebo tabulky o~rozměrech větších než A4 umístěte do písemné zprávy formou skládanky všité do přílohy nebo vložené do záložek na zadní desce.
+\chapter{Interoperabilita aplikace}
+\ldots
 
-Obrázky i~tabulky musí být pořadově očíslovány. Číslování se volí buď průběžné v~rámci celého textu, nebo -- což bývá praktičtější -- průběžné v~rámci kapitoly. V~druhém případě se číslo tabulky nebo obrázku skládá z~čísla kapitoly a~čísla obrázku/tabulky v~rámci kapitoly -- čísla jsou oddělena tečkou. Čísla podkapitol nemají na číslování obrázků a~tabulek žádný vliv.
+\section{Autentizace uživatele}
+openid
 
-Tabulky a~obrázky používají své vlastní, nezávislé číselné řady. Z toho vyplývá, že v~odkazech uvnitř textu musíme kromě čísla udat i~informaci o~tom, zda se jedná o~obrázek či tabulku (například ``... {\it viz tabulka 2.7} ...''). Dodržování této zásady je ostatně velmi přirozené.
+\section{Import a export dat}
+gpx, kml
+\subsection{GPS eXchange Format}
+gpx
+\subsection{Keyhole Markup Language}
+kml
 
-Pro odkazy na stránky, na čísla kapitol a~podkapitol, na čísla obrázků a~tabulek a~v~dalších podobných příkladech využíváme speciálních prostředků DTP programu, které zajistí vygenerování správného čísla i~v~případě, že se text posune díky změnám samotného textu nebo díky úpravě parametrů sazby. Příkladem takového prostředku v~systému LaTeX je odkaz na číslo odpovídající umístění značky v~textu, například návěští ($\backslash${\tt ref\{navesti\}} -- podle umístění návěští se bude jednat o~číslo kapitoly, podkapitoly, obrázku, tabulky nebo podobného číslovaného prvku), na stránku, která obsahuje danou značku ($\backslash${\tt pageref\{navesti\}}), nebo na literární odkaz ($\backslash${\tt cite\{identifikator\}}).
+\section{Mikroformáty}
+\ldots
 
-Rovnice, na které se budeme v~textu odvolávat, opatříme pořadovými čísly při pravém okraji příslušného řádku. Tato pořadová čísla se píší v~kulatých závorkách. Číslování rovnic může být průběžné v~textu nebo v~jednotlivých kapitolách.
+\chapter{Použité technologie}
+celkem klasicke kvuli prenosnosti a urovni hostingu +
+udrzovatelnosti do budoucna a podpory nastroju, api apod.\ldots
 
-Jste-li na pochybách při sazbě matematického textu, snažte se dodržet způsob sazby definovaný systémem LaTeX. Obsahuje-li vaše práce velké množství matematických formulí, doporučujeme dát přednost použití systému LaTeX.
+\section{Uživatelské rozhraní webové stránky}
+šablona, \ldots
+\subsection{Sémantický dokument s HTML}
+zaklady + se malinko odkazat i na mikroformaty
 
-Mezeru neděláme tam, kde se spojují číslice s~písmeny v~jedno slovo nebo v~jeden znak -- například {\it 25krát}.
+\subsection{Volba mezi HTML a XHTML}
+webylon\ldots
 
-Členicí (interpunkční) znaménka tečka, čárka, středník, dvojtečka, otazník a~vykřičník, jakož i~uzavírací závorky a~uvozovky se přimykají k~předcházejícímu slovu bez mezery. Mezera se dělá až za nimi. To se ovšem netýká desetinné čárky (nebo desetinné tečky). Otevírací závorka a~přední uvozovky se přimykají k~následujícímu slovu a~mezera se vynechává před nimi -- (takto) a~``takto''.
+\subsection{Styly pomocí CSS}
+\ldots
 
-Pro spojovací a~rozdělovací čárku a~pomlčku nepoužíváme stejný znak. Pro pomlčku je vyhrazen jiný znak (delší). V~systému TeX (LaTeX) se spojovací čárka zapisuje jako jeden znak ``pomlčka'' (například ``Brno-město''), pro sázení textu ve smyslu intervalu nebo dvojic, soupeřů a~podobně se ve zdrojovém textu používá dvojice znaků ``pomlčka'' (například ``zápas Sparta -- Slavie''; ``cena 23--25 korun''), pro výrazné oddělení části věty, pro výrazné oddělení vložené věty, pro vyjádření nevyslovené myšlenky a~v~dalších situacích (viz Pravidla českého pravopisu) se používá nejdelší typ pomlčky, která se ve zdrojovém textu zapisuje jako trojice znaků ``pomlčka'' (například ``Další pojem --- jakkoliv se může zdát nevýznamný --- bude neformálně definován v~následujícím odstavci.''). Při sazbě matematického mínus se při sazbě používá rovněž odlišný znak. V~systému TeX je ve zdrojovém textu zapsán jako normální mínus (tj. znak ``pomlčka''). Sazba v~matematickém prostředí, kdy se vzoreček uzavírá mezi dolary, zajistí vygenerování správného výstupu.
+\subsection{Jazyk JavaScript}
+ecmascript\ldots
 
-Lomítko se píše bez mezer. Například školní rok 2008/2009.
+\subsection{Framework MooTools}
+i jine fw, vylepseni, odstineni, dom, vyhody fw obecne
 
-Pravidla pro psaní zkratek jsou uvedena v~Pravidlech českého pravopisu \cite{Pravidla}. I~z~jiných důvodů je vhodné, abyste tuto knihu měli po ruce. 
+\section{Serverová část}
+generovani ux na serveru
+\subsection{Jazyk PHP}
+\ldots
+\subsection{Systém řízení báze dat MySQL}
+\ldots
+\subsection{Nette Framework}
+nette, dibi\ldots
 
+\section{AJAX}
+vysvetleni
 
-\section{Co to je normovaná stránka?}
-Pojem {\it normovaná stránka} se vztahuje k~posuzování objemu práce, nikoliv k~počtu vytištěných listů. Z historického hlediska jde o~počet stránek rukopisu, který se psal psacím strojem na speciální předtištěné formuláře při dodržení průměrné délky řádku 60 znaků a~při 30 řádcích na stránku rukopisu. Vzhledem k~zápisu korekturních značek se používalo řádkování 2 (ob jeden řádek). Tyto údaje (počet znaků na řádek, počet řádků a~proklad mezi nimi) se nijak nevztahují ke konečnému vytištěnému výsledku. Používají se pouze pro posouzení rozsahu. Jednou normovanou stránkou se tedy rozumí 60*30 = 1800 znaků. Obrázky zařazené do textu se započítávají do rozsahu písemné práce odhadem jako množství textu, které by ve výsledném dokumentu potisklo stejně velkou plochu.
+\section{Práce s API}
+pouzivani api klicu atd.\ldots
+\subsection{Univerzální jazyk XML}
+zakladni uvedeni do problematiky, vyhody nevyhody\ldots
+\subsection{Lidsky čitelný JSON}
+vyhody nevyhody\ldots
 
-Orientační rozsah práce v~normostranách lze v~programu Microsoft Word zjistit pomocí funkce {\it Počet slov} v~menu {\it Nástroje}, když hodnotu {\it Znaky (včetně mezer)} vydělíte konstantou 1800. Do rozsahu práce se započítává pouze text uvedený v~jádru práce. Části jako abstrakt, klíčová slova, prohlášení, obsah, literatura nebo přílohy se do rozsahu práce nepočítají. Je proto nutné nejdříve označit jádro práce a~teprve pak si nechat spočítat počet znaků. Přibližný rozsah obrázků odhadnete ručně. Podobně lze postupovat i~při použití OpenOffice. Při použití systému LaTeX pro sazbu je situace trochu složitější. Pro hrubý odhad počtu normostran lze využít součet velikostí zdrojových souborů práce podělený konstantou cca 2000 (normálně bychom dělili konstantou 1800, jenže ve zdrojových souborech jsou i~vyznačovací příkazy, které se do rozsahu nepočítají). Pro přesnější odhad lze pak vyextrahovat holý text z~PDF (např. metodou cut-and-paste nebo {\it Save as Text...}) a~jeho velikost podělit konstantou 1800. 
+\chapter{Řešení systému}
+popis celkoveho reseni systemu, detaily v kapitolkach o jednotlivych
+problemech jako pocitani ruznych bodu na mape, reseni prodlev dat
+dodavanych z api, zdvojovani api apod.
 
+\chapter{Implementace}
+navrh databaze, mozna use case, ale do toho se mi moc nechce,
+rozepsani detailneji nez v minule kapitole o tom kde je javascript,
+co dela, jak je implementovano ukladani, kresleni car na tu mapu
+apod. detaily
+
+\chapter{Vývoj a testování}
+verze vyvojovych nastroju, verze mootools, nette, eclipse, apache,
+php, mysql, testovane prohlizece
 
 \chapter*{Závěr}
-Závěrečná kapitola obsahuje zhodnocení dosažených výsledků se zvlášť vyznačeným vlastním přínosem studenta. Povinně se zde objeví i zhodnocení z pohledu dalšího vývoje projektu, student uvede náměty vycházející ze zkušeností s řešeným projektem a uvede rovněž návaznosti na právě dokončené projekty.
+dosazene vysledky a prinos prace
 
-%=========================================================================
+Závěrečná kapitola obsahuje zhodnocení dosažených výsledků se zvlášť
+vyznačeným vlastním přínosem studenta. Povinně se zde objeví i
+zhodnocení z pohledu dalšího vývoje projektu, student uvede náměty
+vycházející ze zkušeností s řešeným projektem a uvede rovněž
+návaznosti na právě dokončené projekty (řešené v rámci ostatních
+bakalářských prací v daném roce nebo na projekty řešené na externích
+pracovištích).

@@ -75,7 +75,7 @@
 \def\@keywords@CS{Klíčová slova}
 \def\@keywords@EN{Keywords}
 \def\@cite@CS{Citace}
-\def\@copyright@CS{Tato práce vznikla jako školní dílo na Vysokém učení technickém v Brně, Fakultě informačních technologií. 
+\def\@copyright@CS{Tato práce vznikla jako školní dílo na Vysokém učení technickém v Brně, Fakultě infor\-mač\-ních technologií. 
 Práce je chráněna autorským zákonem a její užití bez udělení oprávnění autorem je nezákonné, s výjimkou zákonem definovaných případů.}
 \def\@tdecl@CS{Prohlášení}
 \def\@tackn@CS{Poděkování}

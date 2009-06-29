@@ -15,5 +15,6 @@ cd tmp\
 make
 
 "C:\progs\Foxit Reader\Foxit Reader.exe" projekt.pdf
+copy projekt.pdf "D:\hq\public\"
 
 cd ..\
