@@ -21,7 +21,7 @@ cestu autem, zjistíte počasí v dané lokalitě, vyhledáte nejbližší
 pekárnu, nebo si prohlédnete fotografie jiných lidí z míst, kam na
 léto plánujete dovolenou. Na základě takových online map vznikají
 mnohé specializované služby -- z těch nejzajímavějších v českém
-prostředí bych zmínil například server www.bezrealitky.cz, jenž na
+prostředí bych zmínil například server bezrealitky.cz, jenž na
 mapových podkladech zobrazuje realitní objekty. Nechal jsem se
 inspirovat a na základě map jsem i já postavil systém, který využívá
 mnoha otevřeně nabízených služeb a integruje je do komplexní aplikace
@@ -111,11 +111,18 @@ GPS zařízením.
 \section{Cílení projektu}
 svet vs čr
 
+Území Česka a Slovenska má jednu z nejdokonalejších a nejhustších sítí turistického 
+značení pro pěší turistiku. Podobné značení má také Polsko, ale jinak je takováto síť prakticky 
+světově unikátní. To znamená pro mou aplikaci především skutečnost, že pokud chce poskytovat 
+možnost zobrazení těchto tras, musí využít lokálního poskytovatele mapových podkladů. Na 
+druhou stranu bude potom funkčnost systému omezena prakticky na jeden stát, protože kvalitní 
+a podrobné mapové podklady místních poskytovatelů nejsou v zásadě celosvětové.
+
 \chapter{Výběr aplikačních rozhraní a zdrojů dat}
 \ldots
 
 \section{Specifika práce na základě API}
-\subsection{Úskalí a výhody závislosti na externích API}
+\subsection{Výhody a úskalí závislosti na externích API}
 vyhody a nevyhody
 \subsection{Formy API}
 javascript, rest, obrázek, xml, json, \ldots
@@ -123,7 +130,183 @@ technologie nerozepisovat podrobne, jen se o nich zminit a vysvetlit
 fungovani samotneho spojeni
 
 \section{Mapové podklady}
-seznam, google, atlas, \ldots
+V oblasti mapových technologií na internetu proběhl v
+posledních letech opravdový zlom. Vše začalo 8. 2.
+2005\footnote{http://googleblog.blogspot.com/2005/02/mapping-your-way.html},
+kdy Google spustil své revolučně zpracované, interaktivní Google Maps.
+V řetězové reakci si postupně i další provozovatelé online map začali
+uvědomovat skrytý potenciál této služby (prodej regionální reklamy,
+cílená reklama, partnerství s jízdními řády apod.) a začali také
+investovat velké částky do její modernizace. Na českém internetu
+navíc vznikly časem tři velké a velmi kvalitní mapové servery, což je
+ve světě celkem jedinečný úkaz a působí ještě unikátněji,
+přihlédneme-li k velikosti a významu naší země.
+
+Ještě v roce jejich vydání představil Google jako první u svých
+map aplikační rozhraní pro použití mapových podkladů i na jiných
+webech. Vydání API se setkalo s obrovským ohlasem a nadobro změnilo
+web, jak jsme ho znali. Po celém internetu se začaly objevovat
+interaktivní mapy -- od jednoduchých orientačních výřezů po aplikace
+na mapách kompletně založené. Konkurence ani nyní nespala a odpověděla
+svými vlastními API.
+
+V následujících odstavcích se pokusím popsat specifika, výhody a
+nevýhody jednotlivých mapových podkladů, jež jsem bral pro svou práci
+v úvahu. Je nutné podotknout, že samotných mapových serverů je mnohem
+více (např. Mapy iDNES.cz, Ask.com Maps \& Directions, Multimap,
+NAVTEQ Map24, Bing Maps, aj.), ale nelze jejich služeb využít,
+protože API vůbec nenabízejí, nebo má velmi omezené možnosti. Také
+jsem vynechal možnost získat geografická data jejich zakoupením přímo
+od dodavatelů.
+
+\subsection{Google Maps společnosti Google}
+Průkopník v oblasti online map, Google, nabízí samozřejmě mapový
+server i API již hodně dlouho, takže jeho služby jsou v mnoha směrech
+nejvyzrálejší. API je pod neustálým vývojem a v době psaní práce
+Google pracuje na jeho třetí
+verzi\footnote{http://code.google.com/intl/cs/apis/maps/documentation/v3/}.
+
+Nelze se však nechat unést jeho možnostmi a je nutné zaměřit se i na
+jiné rysy, důležité pro tuto práci. Mezi takové patří
+například skutečnost, že do češtiny začala být služba lokalizována až
+nedávno\footnote{http://www.lupa.cz/clanky/mapy-google-v-cestine-realita-nebo-zbozne-prani/}.
+Dnes je již sice míra integrace map do českého prostředí na velmi
+dobré úrovni, ale z hlediska mapových podkladů má jednu velkou mezeru
+-- turistická data. Google poskytuje mapy globálně a proto se mu v
+nich velmi špatně odráží specifika jednotlivých zemí. K dispozici
+jsou sice terénní mapy s vrstevnicemi, ale neexistuje možnost
+zobrazit na nich české turistické trasy a cyklostezky.
+
+Jinak jsou podklady kvalitní, i když někdy méně přesné, než u
+lokálních mapových služeb. Google používá kombinaci několika zdrojů
+geografických map, přičemž většinu českých podkladů získává od
+dodavatele GEODIS Brno. Předností map je samozřejmě dostupnost
+podkladů pro celý svět a lákavá je rovněž představa možného budoucího 
+napojení aplikace např. v podobě vrstvy na program Google
+Earth\footnote{Google Earth je multiplatformní program společnosti
+Google představující virtuální online glóbus. Nabízí pohled na zemi
+jako z družice, virtuální 3D modely některých měst, detailní snímky
+zajímavých míst po celém světě a umožňuje překryv mapových podkladů
+tzv. vrstvami poskytujícími další informace. Google jej nabízí v
+několika variantách, z nichž základní je zdarma.}.
+
+\subsection{Mapy.cz společnosti Seznam.cz}
+Mapy.cz byly prvním ryze českým projektem v oblasti nových online map
+a dodnes jsou lídrem lokálního trhu. Stejně jako za Google Maps stojí
+i za těmito mapami silná společnost. Budoucnost serveru a případný
+další vývoj API je celkem jistý. Seznam.cz se na rozdíl od všech
+ostatních českých portálů profiloval po vzoru Google spíše do
+společnosti, jež svou budoucnost spojuje s technologickým pokrokem,
+než do mediálního vydavatelství jako například Centrum Holdings.
+Odhadnutelné záměry potvrdili uveřejněním zprávy o vývoji nového
+API\footnote{http://mapy.cz.sblog.cz/2009/02/18/29} v čase tvorby
+této práce.
+
+Současný stav API je ale celkem nešťastný. Aplikační rozhraní nabízí
+jen omezenou škálu funkcí, omezené mapové podklady oproti službě
+Mapy.cz a samotná práce s funkcemi API působí na vývojáře poněkud
+těžkopádně. Jeho licenční podmínky navíc nejsou tak volné jako u
+ostatních API a požadují registraci klíče nikoliv na doménu, ale
+přímo na unikátní URL, kde se má mapa nacházet. To jej pro tvorbu
+složitější aplikace prakticky vyřazuje ze hry. V podmínkách je také
+omezení na 1000 zobrazení denně a zákaz provozu map pro komerční
+užití, což v ranné fázi projektu není velkou překážkou, ale pro
+budoucí rozvoj projektu ano\footnote{http://api.mapy.cz/keygen}.
+
+Nové API čtvrté verze vyvíjí v Seznam.cz Ondřej Žára, autor známého
+nástroje pro tvorbu databázových schémat, {\it WWW SQL
+Designer}\footnote{http://code.google.com/p/wwwsqldesigner/}. Bohužel
+rozhraní je zatím stále dost nestabilní a podle jeho slov ani jemu
+stále ještě nejsou známy nové licenční podmínky.
+
+Mapy.cz jsou připraveny kombinací geografických dat od PLANstudio a
+GEODIS Brno. Turistická mapa je nejkvalitnější podobnou mapou na českém
+internetu. Seznam.cz ji poskytuje na základě dat společnosti SHOCart,
+známou svými papírovými turistickými a cyklistickými publikacemi. Je
+škoda, že nepoužitelné API v tomto případě brání využít tak kvalitní
+podklady.
+
+\subsection{Amapy.cz společnosti Centrum Holdings}
+Amapy.cz se na svět dostaly v roce 2006 pod hlavičkou portálu
+Atlas.cz\footnote{http://management.blog.lupa.cz/2006/11/05/spetka-koreni-ze-zakulisi-projektu-novych-atlasich-map/}.
+Ihned od představení bylo jasné, že se s nimi musí na českém
+trhu počítat -- zpracování bylo profesionální a spolu s mapami přišlo
+i první na funkce bohaté, dobře dokumentované české mapové API. Vývoj
+však postupně ustával a po tom, co byl Atlas.cz s sjednocen s
+Centrum.cz pod hlavičku Centrum Holdings, již nelze kolem API
+pozorovat vůbec žádnou činnost ze strany provozovatele. Celou službu
+původně zpracoval Daniel Steigerwald, který tyto informace pro mou
+práci potvrdil.
+
+API je však opravdu velmi dobře použitelné a mapové podklady
+kvalitní, připravené ve spolupráci s firmou DPA. I přes API lze
+dokonce zobrazovat vrstvy s turistickými a cyklistickými značkami a už i
+zcela základní mapa disponuje vrstevnicemi. Aplikační rozhraní nabízí
+funkce, jež nelze najít ani u Google Maps API a podporuje několik
+souřadnicových systémů naráz, což je výhodné při spolupráci s jinými
+službami (každá požaduje body v jiném formátu).
+
+Specifikem API je integrovaný JavaScriptový framework MooTools 1.11.
+Výhodou je, že po vložení API do stránky lze přímo využít všech výhod
+frameworku a není nutné nějaký připojovat dodatečně. Nevýhodou je
+nemožnost vlastního výběru frameworku a také ustrnutí vývoje API,
+protože v důsledku toho nebyl průběžně framework obnovován a zůstal
+ve verzi 1.11, ačkoliv během psaní práce byl k dispozici již ve velmi
+odlišné verzi 1.2.3.
+
+\subsection{Otevřený projekt OpenStreetMap}
+OpenStreetMap je otevřený projekt, který se snaží vytvořit volně
+dostupná geografická data. Získává je integrací dat z různých zdrojů
+a především individuálním sběrem dat pomocí GPS zařízení. Mnoho
+institucí, ogranizací a dokonce i firem uvolnilo svá data pod licencí
+kompatibilní s OpenStreetMap, aby tomuto projektu pomohli.
+
+Kvalita mapových podkladů pro ČR však není zrovna nejlepší a
+pro účely aplikace se nehodí ani forma jejich zobrazení. Mapy sice
+obsahují například polohu sloupů elektrického vedení nebo přesné
+hranice lesů, vrstevnice nebo turistické značky a cyklostezky však
+nepodporují.
+
+OpenStreetMap je zajímavý počin a do budoucna možná perspektivní, ale
+o jeho použití ve své práci jsem příliš neuvažoval. Uvedl jsem jej
+pro úplnost jako alternativní a otevřený zdroj geografických dat,
+jenž by v budoucnosti mohl nabýt na relevanci.
+
+\subsection{Výběr API s ohledem na požadavky a cílení práce}
+Z charakteru aplikace, jež je předmětem této práce, celkem jasně
+vyplývá, že výběr mapových podkladů je jedním z nejdůležitějších
+rozhodnutí, které bude mít vliv na celý další vývoj projektu.
+Soustředil jsem se proto opravdu pečlivě na charakteristiky
+jednotlivých API a dlouze zvažoval.
+
+Vzhledem k faktům zmíněným v předcházejících odstavcích jsem
+postupně nabyl dojmu, že ani jedno řešení rozhodně nelze favorizovat a
+spíše bude nutné vybrat nejméně bolestivý kompromis. Vybíral jsem
+podle třech hlavních kritérií:
+\begin{itemize}
+	\item Možnosti a funkce API,
+	\item kvalita mapových podkladů s důrazem na turistické
+	mapy a možnosti zobrazovat české turistické značky a cyklictické
+	trasy,
+	\item zázemí poskytovatele a budoucnost API.
+\end{itemize}
+
+Google nabízí bezkonkurenční API a dokonce v současné době
+představuje jeho zcela novou verzi, ale jeho mapové podklady jsou pro turistiku v
+českých podmínkách naprosto nedostatečné. Mapy.cz naopak disponují
+vynikajícími mapovými podklady, jenomže jejich aplikační rozhraní je
+velmi chabé z hlediska funkcionality a ještě mnohem více omezující v
+oblasti licenčních podmínek jeho použití. Seznam.cz sice vyvíjí nové
+API, ale to je zatím velmi nestabilní a jeho licence je stále
+neznámá. Pro svou práci jsem nakonec vybral podklady od Centrum
+Holdings, protože poskytují dobré turistické mapy a mají bohatou
+škálu funkcí. S faktem, že vývoj aplikačního rozhraní je již několik
+let zcela mrtvý a jeho budoucnost je nejistá, mi nezbylo než se
+smířit a počítat s tím, že v budoucnu ji možná bude zapotřebí přepsat
+pro jiné API. V tomto ohledu bych vzhlížel k vývoji nového API v Seznam.cz.
+
+
+
 
 \section{Výškový profil}
 \subsection{Nadmořská výška}
@@ -181,8 +364,8 @@ webylon\ldots
 \subsection{Styly pomocí CSS}
 \ldots
 
-\subsection{Jazyk JavaScript}
-ecmascript\ldots
+\subsection{Jazyk ECMAScript}
+javascript\ldots
 
 \subsection{Framework MooTools}
 i jine fw, vylepseni, odstineni, dom, vyhody fw obecne
