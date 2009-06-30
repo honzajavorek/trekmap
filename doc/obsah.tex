@@ -8,10 +8,7 @@ jednotně na základě konsensu lídrů trhu, aplikace se přesouvají z
 operačního systému do prohlížeče a vyvíjí se pro ně uživatelská
 rozhraní s ohledem na běžné lidi. Ti se vlastně dostali do středu
 veškerého zájmu. Jestliže dříve byl internet místem spíše pro
-technicky založené, nyní se snaží oslovit širokou veřejnost. Lidem se
-nabízí místa, kde mohou sdílet fotografie s přáteli a kde zjistí, co
-jejich známí zrovna dělají, poslouchají, tvoří, čtou nebo sledují. Internet žije
-okamžitou přítomností a zaznamenáváním této přítomnosti.
+technicky založené, nyní se snaží oslovit širokou veřejnost.
 
 Různé zajímavé služby otevřeně poskytují svá data a na těch se staví
 aplikace s dříve nepředstavitelnými komplexními funkcemi. Nejlépe to lze vidět
@@ -34,15 +31,15 @@ pěšky, na bruslích nebo během. Nic samozřejmě uživateli nebrání
 evidovat i jiné, delší trasy, systém by měl být však primárně určen
 pro výše naznačené lokální sportovní využití.
 
-Bakalářská práce se zabývá analýzou požadavků na aplikaci, výběrem
-technologií, mapových podkladů, \ldots
+Bakalářská práce se postupně zabývá \ldots DOPSAT STRUCNE PRULET
+OBSAHEM BP (KRATKY ODSTAVECEK).
 
-DOPSAT STRUCNE PRULET OBSAHEM BP (KRATKY ODSTAVECEK)
+Celkově chce práce uvést čtenáře do problematiky stavby webové
+aplikace na základě různých API, osvětlit mu pojmy související s
+problematikou a navést či pomoci při řešení některých tradičních
+problémů, pokud by měl zájem podobnou aplikaci vyvíjet.
 
-(TOTO MOZNA, UZ I TAK JE UVOD DOST DLOUHY) DOPSAT KRATCE A STRUCNE
-ODKAZY NA POUZITOU LITERATURU A OBJASNENI PROC JSEM JI POUZIL (DVE VETY)
-
-\chapter{Proměna internetu}
+\chapter{Pojmy Web~2.0 a mashup}\label{mashup}
 
 Dvacáté století nám připravilo univerzální platformu s obrovským
 potenciálem. Lidé spojili inovativní myšlenky z mnoha směrů informatiky,
@@ -64,8 +61,8 @@ relativně jednodtně podporovanými technologiemi, kdy se prosazují
 spíše otevřená řešení a kdy začínají internetové subjekty
 spolupracovat mezi sebou a více využívat možností propojení pomocí
 internetu. Evoluce přinesla novou éru webu, brzy pojmenovanou jako
-{\it Web~2.0}. Začaly se objevovat složité interaktivní aplikace přímo
-ve webovém prohlížeči, stránky přestaly být izolovanými ostrůvky
+{\it Web~2.0} \cite{web20}. Začaly se objevovat složité interaktivní
+aplikace přímo ve webovém prohlížeči, stránky přestaly být izolovanými ostrůvky
 statických informací, ale naopak mezi sebou začaly kooperovat,
 poskytovat si navzájem data a funkcionalitu. Masivní rozšíření
 internetu mezi běžné uživatele podnítilo vznik tzv. {\it sociálních
@@ -73,15 +70,25 @@ služeb}, kde mohou lidé sdílet informace mezi sebou a snadno
 komunikovat, a také přineslo požadavek na propracovanější a
 příjemnější uživatelské rozhraní webových aplikací.
 
-Do kontextu tohoto nového proudu jsem se rozhodl zasadit svou práci.
-Má aplikace využívá mnoha služeb a datových zdrojů
-poskytovaných otevřeně a online, spojuje je dohromady a staví na nich
-novou službu pro běžného netechnického uživatele. Taková architektura
-se v terminologii Web~2.0 označuje běžně jako {\it mashup}
-(míchanice). Navíc nabízí interaktivní uživatelské rozhraní a snaží
-se mu poskytnout prostor pro sdílení svých dat s ostatními.
+Velmi mnoho nových Web~2.0 služeb dnes nabízí své aplikační
+rozhraní (API, {\it Application Programming Interface}) k volnému
+využití. Kombinací těchto API vznikají velmi silné aplikace, postavené
+pomocí minima programování a maximálního využití hotové funkčnosti.
+Taková architektura se dnes označuje běžně jako mashup (míchanice).
 
-\chapter{Specifikace a analýza požadavků}
+Do kontextu tohoto nového proudu jsem se rozhodl zasadit svou práci a
+vytvořit právě výše zmíněný mashup. Má aplikace využívá mnoha služeb a
+datových zdrojů poskytovaných otevřeně a online, spojuje je dohromady
+a staví na nich novou službu pro běžného netechnického uživatele.
+Navíc nabízí dle trendů interaktivní uživatelské rozhraní a snaží se
+uživateli poskytnout prostor pro sdílení svých dat s ostatními.
+
+Zajímavě problematiku mashupů zpracoval ve svém článku
+\cite{certodejMashup} český internetový novinář a podnikatel Patrick
+Zandl. Na téma API se v seriálu \cite{misantropApi} rozepsal Martin
+Malý.
+
+\chapter{Analýza a specifikace požadavků}
 
 Jak jsem již pro osvětlení zmínil v úvodu práce, evidencí
 geografických tras uživatele se rozumí webová aplikace, umožňující
@@ -109,43 +116,108 @@ sfér –- např. by mohlo být možné implementovat výměnu dat s přenosným
 GPS zařízením.
 
 \section{Cílení projektu}
-svet vs čr
+Výsledkem mé práce má být aplikace, jejíž cílovou skupinou jsou
+běžci, pěší turisté, cyklisté, běžkaři, bruslaři, jezdci na koních a
+třeba i vodáci. Je tedy důležité si uvědomit, že projekt pracuje s
+uživatelem, jenž nemusí být nijak technicky vzdělán, takže by mu měl
+nabídnout srozumitelné a příjemné uživatelské prostředí. Během výběru
+mapových podkladů (viz \ref{vybermap}) však také vyvstává otázka, zda
+projekt cílit pouze na Českou republiku, nebo počítat s uživatelskou
+základnou z celého světa.
 
-Území Česka a Slovenska má jednu z nejdokonalejších a nejhustších sítí turistického 
-značení pro pěší turistiku. Podobné značení má také Polsko, ale jinak je takováto síť prakticky 
-světově unikátní. To znamená pro mou aplikaci především skutečnost, že pokud chce poskytovat 
-možnost zobrazení těchto tras, musí využít lokálního poskytovatele mapových podkladů. Na 
-druhou stranu bude potom funkčnost systému omezena prakticky na jeden stát, protože kvalitní 
-a podrobné mapové podklady místních poskytovatelů nejsou v zásadě celosvětové.
+Cílit mapový projekt celosvětově totiž neznamená jen lokalizovat
+systém přinejmenším i do angličtiny, ale také mít k dispozici dobré
+globální mapové podklady a s nimi samozřejmě také všechna použitá
+API. Území Česka a Slovenska má jednu z nejdokonalejších a nejhustších
+sítí turistického značení pro pěší turistiku \cite{kct}.
+Podobné značení má také Polsko, ale jinak je takováto síť prakticky světově unikátní. To
+znamená pro mou aplikaci především skutečnost, že pokud chce
+poskytovat možnost zobrazení těchto tras, musí využít lokálního
+poskytovatele mapových podkladů. Na druhou stranu bude potom
+funkčnost systému omezena prakticky na jeden stát, protože kvalitní a
+podrobné mapové podklady místních poskytovatelů nejsou v zásadě celosvětové.
+
+Je třeba se rozhodnout, zda se vydat cestou horších podkladů, ale
+oslovením větší uživatelské základny, nebo zkusit oslovit maximum
+uživatelů na domácím trhu a moci odrážet jeho lokální specifika. Dá se
+říci, že Češi jsou pro výše zmíněnou turistickou činnost dosti
+zapálení \cite{turistika} a proto lze očekávat, že hustota
+potencionálních uživatelů systému by zde byla mnohem vyšší než v jiných zemích, i přes zdánlivě
+malý, desetimilionový trh.
+
+Specifika českého turismu, existence celosvětově operujících
+konkurenčních projektů jako např. MapMyRun.com a absence vážné
+konkurence na domácím trhu mě přivedla k rozhodnutí cílit aplikaci
+pouze na Českou republiku. Jak se lze dočíst v \ref{vybranamapa},
+využívám tedy nakonec podkladů lokálního poskytovatele. Navíc jsou
+často na ČR omezeny i jiné zdroje dat a celý systém je pouze v
+češtině.
 
 \chapter{Výběr aplikačních rozhraní a zdrojů dat}
-\ldots
+Evidence geografických tras uživatele má být aplikací typu mashup
+\ref{mashup}, což znamená, že je z většiny postavená na funkcích a
+datech, které již existují a jsou od jejich poskytovatelů volně
+přístupné přes aplikační rozhraní. Proto je také jednotlivým
+API věnován velký následující úsek práce.
 
 \section{Specifika práce na základě API}
-\subsection{Výhody a úskalí závislosti na externích API}
-vyhody a nevyhody
-\subsection{Formy API}
-javascript, rest, obrázek, xml, json, \ldots
-technologie nerozepisovat podrobne, jen se o nich zminit a vysvetlit
-fungovani samotneho spojeni
+Vystavět aplikaci z větší části na externích zdrojích přináší možnost
+využít již hotových, profesionálních a ihned funkčních řešení a služeb
+od specializovaných poskytovatelů. Kdybychom si například chtěli sami
+naprogramovat mapový systém, stálo by nás to nemalé prostředky a
+rozsahem problému bychom překročili celou tuto práci. Stejně tak by
+nebylo snadné zajistit si svá vlastní geografická data s nadmořskými
+výškami nebo aktuální informace o počasí. S použitím API se na tyto
+problémy nemusíme soustředit a s využitím minima úsilí spojujeme
+existující prostředky do velmi silných aplikací.
 
-\section{Mapové podklady}
+Přístup samozřejmě ale přináší také nevýhody. Zdroje dat nejsou nijak
+v naší moci a proto hrozí riziko prodlev či nedostupnosti služeb v
+případě lepším, v tom horším potom jejich neaktuálnost, chybovost, nebo
+dokonce zánik. Prodlevy v odpovědích z cizích serverů musí program
+zohlednit, zabývat se synchronizací požadavků s interaktivním
+uživatelským rozhraním a zamezit kolizím. Pokud navíc hrozí, že 
+prodlevy budou dlouhé a znepříjemní uživatelský prožitek, je dobré
+funkci, která je způsobuje separovat a dát uživateli možnost ji
+vypínat a zapínat. Rizika s vážným dopadem na funkčnost programu může
+potom aplikace postavená nad API ošetřovat především omezením své
+závislosti na jediném poskytovateli dat.
+
+U mapových podkladů si takové řešení můžeme představit například v
+naprogramování vrstvy, která nám poskytne rozhraní k funkcím API,
+ale oddělí nás od jejich konkrétní implementace. Vrstva potom může
+obalovat API Google Maps, Mapy.cz i Amapy.cz (viz \ref{vybermap}) a
+konkrétní službu potom použít na základě jediného parametru, podobně
+jako se to dělá například u databázových vrstev s abstrakcí
+několika druhů SŘBD. Podobný projekt již existuje a nese název
+Mapstraction\footnote{\url{http://code.google.com/p/mapstraction/}},
+ale je ve velmi ranném stádiu a navíc podporuje zatím pouze globální
+mapové systémy. Využití jeho zdrojových kódů a případné zanesení českých
+mapových API je nyní tedy spíše zajímavou ideou do budoucna.
+
+U ostatních podkladů není omezování rizik tak obtížné. Pokud má
+aplikace na výběr z několika podkladů, může jednoduše použít lepší z
+nich a pokud ten selže, ve výjimce se na data dotáže alternativního,
+byť třeba méně přesného. Takto jsem zdvojil například API pro
+získávání nadmořské výšky (viz \ref{vyskovyProfil}).
+
+\section{Mapové podklady}\label{vybermap}
 V oblasti mapových technologií na internetu proběhl v
 posledních letech opravdový zlom. Vše začalo 8. 2.
-2005\footnote{http://googleblog.blogspot.com/2005/02/mapping-your-way.html},
-kdy Google spustil své revolučně zpracované, interaktivní Google Maps.
-V řetězové reakci si postupně i další provozovatelé online map začali
-uvědomovat skrytý potenciál této služby (prodej regionální reklamy,
-cílená reklama, partnerství s jízdními řády apod.) a začali také
-investovat velké částky do její modernizace. Na českém internetu
-navíc vznikly časem tři velké a velmi kvalitní mapové servery, což je
-ve světě celkem jedinečný úkaz a působí ještě unikátněji,
-přihlédneme-li k velikosti a významu naší země.
+2005 \cite{gmaps}, kdy Google spustil své revolučně zpracované,
+interaktivní Google Maps. V řetězové reakci si postupně i další
+provozovatelé online map začali uvědomovat skrytý potenciál této
+služby (prodej regionální reklamy, cílená reklama, partnerství s
+jízdními řády apod.) a začali také investovat velké částky do její
+modernizace. Na českém internetu navíc vznikly časem tři velké a
+velmi kvalitní mapové servery, což je ve světě celkem jedinečný úkaz
+a působí ještě unikátněji, přihlédneme-li k velikosti a významu naší
+země.
 
 Ještě v roce jejich vydání představil Google jako první u svých
 map aplikační rozhraní pro použití mapových podkladů i na jiných
-webech. Vydání API se setkalo s obrovským ohlasem a nadobro změnilo
-web, jak jsme ho znali. Po celém internetu se začaly objevovat
+webech. Vydání API se setkalo s obrovským ohlasem \cite{gmapsSuccess}
+a nadobro změnilo web, jak jsme ho znali. Po celém internetu se začaly objevovat
 interaktivní mapy -- od jednoduchých orientačních výřezů po aplikace
 na mapách kompletně založené. Konkurence ani nyní nespala a odpověděla
 svými vlastními API.
@@ -153,23 +225,23 @@ svými vlastními API.
 V následujících odstavcích se pokusím popsat specifika, výhody a
 nevýhody jednotlivých mapových podkladů, jež jsem bral pro svou práci
 v úvahu. Je nutné podotknout, že samotných mapových serverů je mnohem
-více (např. Mapy iDNES.cz, Ask.com Maps \& Directions, Multimap,
-NAVTEQ Map24, Bing Maps, aj.), ale nelze jejich služeb využít,
-protože API vůbec nenabízejí, nebo má velmi omezené možnosti. Také
-jsem vynechal možnost získat geografická data jejich zakoupením přímo
-od dodavatelů.
+více (např. Mapy iDNES.cz, Yahoo! Maps, Ask.com Maps \& Directions,
+Multimap, NAVTEQ Map24, Bing Maps, aj.), ale nelze jejich služeb využít,
+protože poskytované datové podklady nejsou dostatečné pro Českou
+republiku, API vůbec nenabízejí, nebo má velmi omezené možnosti. Také
+jsem vynechal možnost získat geografická data jejich zakoupením přímo od dodavatelů.
 
 \subsection{Google Maps společnosti Google}
 Průkopník v oblasti online map, Google, nabízí samozřejmě mapový
 server i API již hodně dlouho, takže jeho služby jsou v mnoha směrech
 nejvyzrálejší. API je pod neustálým vývojem a v době psaní práce
 Google pracuje na jeho třetí
-verzi\footnote{http://code.google.com/intl/cs/apis/maps/documentation/v3/}.
+verzi\footnote{\url{http://code.google.com/intl/cs/apis/maps/documentation/v3/}}.
 
 Nelze se však nechat unést jeho možnostmi a je nutné zaměřit se i na
 jiné rysy, důležité pro tuto práci. Mezi takové patří
 například skutečnost, že do češtiny začala být služba lokalizována až
-nedávno\footnote{http://www.lupa.cz/clanky/mapy-google-v-cestine-realita-nebo-zbozne-prani/}.
+nedávno \cite{googleCesky}.
 Dnes je již sice míra integrace map do českého prostředí na velmi
 dobré úrovni, ale z hlediska mapových podkladů má jednu velkou mezeru
 -- turistická data. Google poskytuje mapy globálně a proto se mu v
@@ -199,25 +271,26 @@ ostatních českých portálů profiloval po vzoru Google spíše do
 společnosti, jež svou budoucnost spojuje s technologickým pokrokem,
 než do mediálního vydavatelství jako například Centrum Holdings.
 Odhadnutelné záměry potvrdili uveřejněním zprávy o vývoji nového
-API\footnote{http://mapy.cz.sblog.cz/2009/02/18/29} v čase tvorby
-této práce.
+API\footnote{\url{http://mapy.cz.sblog.cz/2009/02/18/29}} v čase
+tvorby této práce.
 
 Současný stav API je ale celkem nešťastný. Aplikační rozhraní nabízí
 jen omezenou škálu funkcí, omezené mapové podklady oproti službě
 Mapy.cz a samotná práce s funkcemi API působí na vývojáře poněkud
 těžkopádně. Jeho licenční podmínky navíc nejsou tak volné jako u
 ostatních API a požadují registraci klíče nikoliv na doménu, ale
-přímo na unikátní URL, kde se má mapa nacházet. To jej pro tvorbu
+přímo na unikátní URI, kde se má mapa nacházet. To jej pro tvorbu
 složitější aplikace prakticky vyřazuje ze hry. V podmínkách je také
 omezení na 1000 zobrazení denně a zákaz provozu map pro komerční
 užití, což v ranné fázi projektu není velkou překážkou, ale pro
-budoucí rozvoj projektu ano\footnote{http://api.mapy.cz/keygen}.
+budoucí rozvoj projektu ano.
 
 Nové API čtvrté verze vyvíjí v Seznam.cz Ondřej Žára, autor známého
 nástroje pro tvorbu databázových schémat, {\it WWW SQL
-Designer}\footnote{http://code.google.com/p/wwwsqldesigner/}. Bohužel
-rozhraní je zatím stále dost nestabilní a podle jeho slov ani jemu
-stále ještě nejsou známy nové licenční podmínky.
+Designer}\footnote{\url{http://code.google.com/p/wwwsqldesigner/}},
+což je určitou zárukou kvality. Bohužel rozhraní je zatím stále dost
+nestabilní a podle jeho slov na diskusi k projektu ani jemu stále
+ještě nejsou známy nové licenční podmínky.
 
 Mapy.cz jsou připraveny kombinací geografických dat od PLANstudio a
 GEODIS Brno. Turistická mapa je nejkvalitnější podobnou mapou na českém
@@ -228,15 +301,15 @@ podklady.
 
 \subsection{Amapy.cz společnosti Centrum Holdings}
 Amapy.cz se na svět dostaly v roce 2006 pod hlavičkou portálu
-Atlas.cz\footnote{http://management.blog.lupa.cz/2006/11/05/spetka-koreni-ze-zakulisi-projektu-novych-atlasich-map/}.
-Ihned od představení bylo jasné, že se s nimi musí na českém
-trhu počítat -- zpracování bylo profesionální a spolu s mapami přišlo
-i první na funkce bohaté, dobře dokumentované české mapové API. Vývoj
-však postupně ustával a po tom, co byl Atlas.cz s sjednocen s
-Centrum.cz pod hlavičku Centrum Holdings, již nelze kolem API
+Atlas.cz. Ihned od představení (viz \cite{amapy}) bylo jasné, že se s
+nimi musí na českém trhu počítat -- zpracování bylo profesionální a spolu s mapami přišlo
+i první, na funkce bohaté, dobře dokumentované české mapové API. Vývoj
+však postupně ustával a po tom, co byl Atlas.cz sjednocen s
+Centrum.cz pod hlavičku Centrum Holdings, nelze již kolem API
 pozorovat vůbec žádnou činnost ze strany provozovatele. Celou službu
 původně zpracoval Daniel Steigerwald, který tyto informace pro mou
-práci potvrdil.
+práci potvrdil
+\footnote{\url{http://twitter.com/steida/statuses/2211073537}}.
 
 API je však opravdu velmi dobře použitelné a mapové podklady
 kvalitní, připravené ve spolupráci s firmou DPA. I přes API lze
@@ -251,8 +324,8 @@ Výhodou je, že po vložení API do stránky lze přímo využít všech výhod
 frameworku a není nutné nějaký připojovat dodatečně. Nevýhodou je
 nemožnost vlastního výběru frameworku a také ustrnutí vývoje API,
 protože v důsledku toho nebyl průběžně framework obnovován a zůstal
-ve verzi 1.11, ačkoliv během psaní práce byl k dispozici již ve velmi
-odlišné verzi 1.2.3.
+v API ve verzi 1.11, ačkoliv během psaní práce byl vydán již ve
+velmi odlišné verzi 1.2.3.
 
 \subsection{Otevřený projekt OpenStreetMap}
 OpenStreetMap je otevřený projekt, který se snaží vytvořit volně
@@ -272,14 +345,15 @@ o jeho použití ve své práci jsem příliš neuvažoval. Uvedl jsem jej
 pro úplnost jako alternativní a otevřený zdroj geografických dat,
 jenž by v budoucnosti mohl nabýt na relevanci.
 
-\subsection{Výběr API s ohledem na požadavky a cílení práce}
+\subsection{Výběr API s ohledem na požadavky a cílení
+práce}\label{vybranamapa}
 Z charakteru aplikace, jež je předmětem této práce, celkem jasně
 vyplývá, že výběr mapových podkladů je jedním z nejdůležitějších
 rozhodnutí, které bude mít vliv na celý další vývoj projektu.
-Soustředil jsem se proto opravdu pečlivě na charakteristiky
+Soustředil jsem se proto opravdu pečlivě na vlastnosti
 jednotlivých API a dlouze zvažoval.
 
-Vzhledem k faktům zmíněným v předcházejících odstavcích jsem
+Vzhledem k faktům zmíněným v předcházejících odstavcích jsem však
 postupně nabyl dojmu, že ani jedno řešení rozhodně nelze favorizovat a
 spíše bude nutné vybrat nejméně bolestivý kompromis. Vybíral jsem
 podle třech hlavních kritérií:
@@ -298,20 +372,17 @@ vynikajícími mapovými podklady, jenomže jejich aplikační rozhraní je
 velmi chabé z hlediska funkcionality a ještě mnohem více omezující v
 oblasti licenčních podmínek jeho použití. Seznam.cz sice vyvíjí nové
 API, ale to je zatím velmi nestabilní a jeho licence je stále
-neznámá. Pro svou práci jsem nakonec vybral podklady od Centrum
+neznámá. Pro svou práci jsem tedy nakonec vybral podklady od Centrum
 Holdings, protože poskytují dobré turistické mapy a mají bohatou
 škálu funkcí. S faktem, že vývoj aplikačního rozhraní je již několik
 let zcela mrtvý a jeho budoucnost je nejistá, mi nezbylo než se
 smířit a počítat s tím, že v budoucnu ji možná bude zapotřebí přepsat
 pro jiné API. V tomto ohledu bych vzhlížel k vývoji nového API v Seznam.cz.
 
-
-
-
-\section{Výškový profil}
+\section{Výškový profil}\label{vyskovyProfil}
 \subsection{Nadmořská výška}
 geonames a vyskopis
-\subsection{Grafy}
+\subsection{Grafy}\label{grafy}
 gugl a dalsi knihovny
 
 \section{Obraz z terénu}
@@ -364,8 +435,11 @@ webylon\ldots
 \subsection{Styly pomocí CSS}
 \ldots
 
-\subsection{Jazyk ECMAScript}
-javascript\ldots
+\subsection{Skriptovací jazyk JavaScript a DOM}\label{javaScript}
+ecmascript/javascript, dom\ldots
+
+\subsection{Asynchronní požadavky}\label{ajax}
+ajax
 
 \subsection{Framework MooTools}
 i jine fw, vylepseni, odstineni, dom, vyhody fw obecne
@@ -379,23 +453,61 @@ generovani ux na serveru
 \subsection{Nette Framework}
 nette, dibi\ldots
 
-\section{AJAX}
-vysvetleni
-
 \section{Práce s API}
-pouzivani api klicu atd.\ldots
-\subsection{Univerzální jazyk XML}
-zakladni uvedeni do problematiky, vyhody nevyhody\ldots
-\subsection{Lidsky čitelný JSON}
-vyhody nevyhody\ldots
+API služeb relevantních pro tento projekt je poskytováno v zásadě
+dvěma způsoby. Dodavatelé se většinou vyhýbají
+složitým protokolům jako RPC nebo SOAP a nabízejí jednoduchá a
+přístupná aplikační rozhraní. Funkčnost API tak lze získat buď přímo
+pomocí vzdálených souborů s kódem v jazyce JavaScript (viz
+\ref{javaScript}), nebo, pokud služba nabízí data přímo, pomocí
+rozhraní REST ({\it Representational State Transfer}).
 
-\chapter{Řešení systému}
-popis celkoveho reseni systemu, detaily v kapitolkach o jednotlivych
-problemech jako pocitani ruznych bodu na mape, reseni prodlev dat
-dodavanych z api, zdvojovani api apod.
+\subsection{Vzdálené volání skriptů}
+Skripty připojujeme jako běžně v hlavičce či těle HTML
+dokumentu, akorát využíváme vzdálených souborů namísto lokálních.
+Vzdálené soubory se skripty jsou většinou vázány na tzv. {\it API
+klíč}, který je zapotřebí vygenerovat zpravidla pro doménu, na níž má
+probíhat provoz aplikace. Při použití na jiném serveru potom API
+nefunguje a je potřeba vygenerovat nový klíč. Poskytovatelé díky tomu
+mohou kontrolovat dodržování podmínek použití API, např. limity
+požadavků aj. Kontrola klíče je často inteligentní a není aplikována
+při použití na vlastním stroji (IP adresa 127.0.0.1, tzv. {\it
+localhost}) za účely vývoje a ladění aplikace. Zajímavá možnost je
+připojovat a odpojovat skripty k dokumentu dynamicky, pomocí jiného
+řídícího skriptu a technologie DOM (viz \ref{javaScript}).
+
+\subsection{Technologie REST}
+REST je architektura představená v roce 2000 jedním z autorů
+specifikace protokolu HTTP \cite{rest}. Pro naše účely by API v
+podobě REST šlo ve zkratce popsat jako technologii, v níž poskytovatel dat zveřejní webové URI, MIME typ odpovědi a množinu operací, které jsou k dispozici přes HTTP metody POST, GET, PUT nebo DELETE. V praxi
+potom máme například adresu {\tt \url{ws.geonames.org/gtopo30JSON}},
+víme z dokumentace GeoNames.org, že můžeme použít parametry {\tt lat} a {\tt
+lng} pro určení souřadnic a že výsledkem bude JSON s nadmořskou
+výškou. Když tedy vytvoříme požadavek na adresu
+{\tt \url{http://ws.geonames.org/gtopo30JSON?lat=47.01&lng=10.2}},
+dostaneme přes HTTP patřičnou odpověď ve formátu JSON.
+
+Z formátů odpovědí jsou nejvyužívanější obyčejný text, XML (\ref{xml})
+a JSON (\ref{json}). Vyjímečně se lze také u specifických služeb
+setkat s jinými, jako např. u Google Chart API, kde lze přes REST
+pohodlně vygenerovat obrázek s grafem (použití v \ref{grafy}).
+
+\subsection{Univerzální jazyk XML}\label{xml}
+zakladni uvedeni do problematiky, vyhody nevyhody\ldots
+jen mala zminka, pro uplnost
+\subsection{Lidsky čitelný JSON}\label{json}
+vyhody nevyhody\ldots
+REST (odkaz nahoru), JSON (vysvetleni formatu)
+
+\chapter{Návrh systému}
+navrh databaze, mozna use case, popis celkoveho reseni systemu,
 
 \chapter{Implementace}
-navrh databaze, mozna use case, ale do toho se mi moc nechce,
+struktura portalu, viz 9193 str 26
+
+detaily v kapitolkach o jednotlivych problemech jako pocitani ruznych bodu na mape, reseni prodlev dat
+dodavanych z api, zdvojovani api apod.
+
 rozepsani detailneji nez v minule kapitole o tom kde je javascript,
 co dela, jak je implementovano ukladani, kresleni car na tu mapu
 apod. detaily
