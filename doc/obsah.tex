@@ -14,10 +14,10 @@ Různé zajímavé služby otevřeně poskytují svá data a na těch se staví
 aplikace s dříve nepředstavitelnými komplexními funkcemi. Nejlépe to lze vidět
 asi na mapách, které prošly neskutečným vývojem a dnes díky nim (když
 zmíním jen zlomek jejich možností) například pohodlně naplánujete
-cestu autem, zjistíte počasí v dané lokalitě, vyhledáte nejbližší
+cestu autem, zjistíte počasí v dané lokalitě, vyhledáte nej\-bližší
 pekárnu, nebo si prohlédnete fotografie jiných lidí z míst, kam na
 léto plánujete dovolenou. Na základě takových online map vznikají
-mnohé specializované služby -- z těch nejzajímavějších v českém
+mnohé specializované služby -- z těch nej\-zajímavějších v českém
 prostředí bych zmínil například server bezrealitky.cz, jenž na
 mapových podkladech zobrazuje realitní objekty. Nechal jsem se
 inspirovat a na základě map jsem i já postavil systém, který využívá
@@ -126,16 +126,17 @@ projekt cílit pouze na Českou republiku, nebo počítat s uživatelskou
 základnou z celého světa.
 
 Cílit mapový projekt celosvětově totiž neznamená jen lokalizovat
-systém přinejmenším i do angličtiny, ale také mít k dispozici dobré
+systém přinej\-menším i do angličtiny, ale také mít k dispozici dobré
 globální mapové podklady a s nimi samozřejmě také všechna použitá
-API. Území Česka a Slovenska má jednu z nejdokonalejších a nejhustších
+API. Území Česka a Slovenska má jednu z nej\-dokonalejších a nej\-hustších
 sítí turistického značení pro pěší turistiku \cite{kct}.
 Podobné značení má také Polsko, ale jinak je takováto síť prakticky světově unikátní. To
 znamená pro mou aplikaci především skutečnost, že pokud chce
 poskytovat možnost zobrazení těchto tras, musí využít lokálního
 poskytovatele mapových podkladů. Na druhou stranu bude potom
 funkčnost systému omezena prakticky na jeden stát, protože kvalitní a
-podrobné mapové podklady místních poskytovatelů nejsou v zásadě celosvětové.
+podrobné mapové podklady místních poskytovatelů nejsou v zásadě
+celosvětové.
 
 Je třeba se rozhodnout, zda se vydat cestou horších podkladů, ale
 oslovením větší uživatelské základny, nebo zkusit oslovit maximum
@@ -234,7 +235,7 @@ jsem vynechal možnost získat geografická data jejich zakoupením přímo od d
 \subsection{Google Maps společnosti Google}
 Průkopník v oblasti online map, Google, nabízí samozřejmě mapový
 server i API již hodně dlouho, takže jeho služby jsou v mnoha směrech
-nejvyzrálejší. API je pod neustálým vývojem a v době psaní práce
+nej\-vyzrálejší. API je pod neustálým vývojem a v době psaní práce
 Google pracuje na jeho třetí
 verzi\footnote{V době psaní práce dostupné na
 \url{http://code.google.com/intl/cs/apis/maps/documentation/v3/}.}.
@@ -293,7 +294,7 @@ nestabilní a podle jeho slov na diskusi k projektu ani jemu stále
 ještě nejsou známy nové licenční podmínky.
 
 Mapy.cz jsou připraveny kombinací geografických dat od PLANstudio a
-GEODIS Brno. Turistická mapa je nejkvalitnější podobnou mapou na českém
+GEODIS Brno. Turistická mapa je nej\-kvalitnější podobnou mapou na českém
 internetu. Seznam.cz ji poskytuje na základě dat společnosti SHOCart,
 známou svými papírovými turistickými a cyklistickými publikacemi. Je
 škoda, že nepoužitelné API v tomto případě brání využít tak kvalitní
@@ -334,7 +335,7 @@ a především individuálním sběrem dat pomocí GPS zařízení. Mnoho
 institucí, ogranizací a dokonce i firem uvolnilo svá data pod licencí
 kompatibilní s OpenStreetMap, aby tomuto projektu pomohli.
 
-Kvalita mapových podkladů pro ČR však není zrovna nejlepší a
+Kvalita mapových podkladů pro ČR však není zrovna nej\-lepší a
 pro účely aplikace se nehodí ani forma jejich zobrazení. Mapy sice
 obsahují například polohu sloupů elektrického vedení nebo přesné
 hranice lesů, vrstevnice nebo turistické značky a cyklostezky však
@@ -348,14 +349,14 @@ jenž by v budoucnosti mohl nabýt na relevanci.
 \subsection{Výběr API s ohledem na požadavky a cílení
 práce}\label{vybranamapa}
 Z charakteru aplikace, jež je předmětem této práce, celkem jasně
-vyplývá, že výběr mapových podkladů je jedním z nejdůležitějších
+vyplývá, že výběr mapových podkladů je jedním z nej\-důležitějších
 rozhodnutí, které bude mít vliv na celý další vývoj projektu.
 Soustředil jsem se proto opravdu pečlivě na vlastnosti
 jednotlivých API a dlouze zvažoval.
 
 Vzhledem k faktům zmíněným v předcházejících odstavcích jsem však
 postupně nabyl dojmu, že ani jedno řešení rozhodně nelze favorizovat a
-spíše bude nutné vybrat nejméně bolestivý kompromis. Vybíral jsem
+spíše bude nutné vybrat nej\-méně bolestivý kompromis. Vybíral jsem
 podle třech hlavních kritérií:
 \begin{itemize}
 	\item Možnosti a funkce API,
@@ -446,9 +447,10 @@ panoramio atd.
 Pojem interoperabilita lze vysvětlit jako schopnost vzájemně si
 rozumět, vzájemně spolupracovat, dosáhnout vzájemné součinnosti. V
 kontextu této práce jsem pojem převedl především na součinnost s
-okolím. V rámci webu jde například o autentizaci nebo mikroformáty,
-významná je však také interoperabilita mimo internet -- s přenosnými
-GPS systémy, jež se stávají stále populárnější mezi běžnými lidmi.
+okolím. V rámci webu jde například o autentizaci, mikroformáty nebo
+spolupráci s geografickými nástroji od společnosti Google, významná je
+však také interoperabilita mimo internet -- s přenosnými GPS systémy,
+jež se stávají stále populárnější mezi běžnými lidmi.
 
 Jelikož je kooperace webových služeb a vzájemná kompatibilita dnes
 jednou z nejvíce progresivních myšlenek, dotknul jsem se v této části
@@ -490,7 +492,7 @@ základní data o uživateli, lze na jednoduchých službách zcela
 vypustit registraci (neboli provozovat tzv. {\it tichou} registraci
 při prvním přihlášní uživatele), což je pro návštěvníky nadmíru
 pohodlné. Přesně této skutečnosti jsem využil i na popisovaném
-projektu. Minimum nejdůležitějších informací aplikace získá z OpenID
+projektu. Minimum nej\-důležitějších informací aplikace získá z OpenID
 identity a doplňkové údaje si potom uživatel může sám vyplnit
 dodatečně v nastavení svého účtu.
 
@@ -500,19 +502,55 @@ metodu nasadit jako jediný způsob registrace a přihlášení do aplikace.
 Protože ale OpenID nasadil i hegemon českého internetu
 Seznam.cz\footnote{Nápověda
 k OpenID je na \url{http://napoveda.seznam.cz/cz/login/openid/}.}, u
-něhož většina Čechů účet má, rozhodl jsem se tuto nejpokrokovější metodu autentizace implementovat opravdu bez alternativy. Získání
+něhož většina Čechů účet má, rozhodl jsem se tuto nej\-pokrokovější metodu autentizace implementovat opravdu bez alternativy. Získání
 OpenID od Seznam.cz je navíc velmi snadné -- stačí ve své e-mailové
 adrese (např. {\tt uzivatel@seznam.cz}) zaměnit znak zavináče za
 písmena {\tt id} oddělená tečkami ({\tt uzivatel.id.seznam.cz}).
 
 \section{Import a export dat}
-gpx, kml
+Jak bylo zmíněno v úvodu kapitoly, přenosné GPS systémy se stávají
+mezi běžnými lidmi stále populárnější. Jejich příznivější ceny
+způsobují, že je v dnešní době vlastní již nejeden běžec či cyklista.
+Na základě těchto pozorování pak můžeme lehce odvodit, že možnost importu a
+exportu zaznamenané trasy by měla být spíše jednou z
+hlavních než doplňkových funkcí výsledné aplikace. Při
+jejich implementaci jsme navíc už jen krok od interoperability s
+geografickými aplikacemi jako Google Earth nebo Google Maps. Ty
+podporují buď přímo formát přenosných GPS zařízení, nebo vyžadují
+svůj, který je ale velmi podobný, protože je rovněž založen na XML
+(viz \ref{xml}).
+
 \subsection{GPS eXchange Format}
-gpx
+GPS navigace většinou operují v rámci svých vlastních, uzavřených
+formátů. Naštěstí se v oblasti těch ručně přenosných vytvořil de
+facto standard v podobě GPX, formátu nej\-rozšířenějšího výrobce GPS
+navigací, společnosti Garmin. GPX je aplikací univerzálního jazyka
+XML a jeho schémata jsou veřejně dostupná\footnote{Viz
+\url{http://www.topografix.com/gpx/1/1/}.}.
+
 \subsection{Keyhole Markup Language}
-kml
-http://navigovat.mobilmania.cz/Bleskovky/Ar.asp?ARI=113103
-http://google-code-updates.blogspot.com/2006/12/maps-kml-update.html
+Společnost Keyhole, která vytvořila formát KML, již dnes přežívá
+právě jen v jeho názvu. Tvůrce programu, jenž dnes známe pod jménem
+Google Earth, pohltil vyhledávací gigant již v roce
+2004\footnote{Podrobnosti dostupné na
+\url{http://www.google.com/press/pressrel/keyhole.html}.}, tři roky od
+jeho založení.
+
+KML je stejně jako GPX aplikací jazyka XML a stalo se vedle něj
+druhým používaným a uznávaným standardem pro záznam geografických
+dat. Existuje i jeho komprimovaná verze pod názvem KMZ. Trasu
+exportovanou do KML lze zobrazit nejen v programu Google Earth, ale
+také online na Google Maps, což je funkčnost poněkud revoluční. Pokud
+totiž na Google Maps takovýmto způsobem napojíme online generovaná
+KML, lze vytvářet dy\-na\-mic\-ky aktualizované uživatelské
+mapy\footnote{Malá ukázka je k dispozici např. ve formě zobrazení tras Tour de France
+2005 --
+\url{http://maps.google.com/maps?q=http://kml.lover.googlepages.com/leTourDeFrance2005.kmz&t=k}.}.
+Přitom ke spojení stačí zadat adresu KML či KMZ souboru do vyhledávacího pole online map.
+
+Generovat KML opět není nijak obtížné. Formát je otevřený a nabízí na
+webu ucelenou dokumentaci\footnote{Viz
+\url{http://code.google.com/intl/cs/apis/kml/}.}.
 
 \section{Mikroformáty}
 Mikroformáty jsou způsob, jak do webových stránek vkládat strojově
@@ -616,7 +654,7 @@ výškou. Když tedy vytvoříme požadavek na adresu
 {\tt \url{http://ws.geonames.org/gtopo30JSON?lat=47.01&lng=10.2}},
 dostaneme přes HTTP patřičnou odpověď ve formátu JSON.
 
-Z formátů odpovědí jsou nejvyužívanější obyčejný text, XML (\ref{xml})
+Z formátů odpovědí jsou nej\-využívanější obyčejný text, XML (\ref{xml})
 a JSON (\ref{json}). Vyjímečně se lze také u specifických služeb
 setkat s jinými, jako např. u Google Chart API, kde lze přes REST
 pohodlně vygenerovat obrázek s grafem (použití v \ref{grafy}).
