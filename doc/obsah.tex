@@ -190,8 +190,8 @@ obalovat API Google Maps, Mapy.cz i Amapy.cz (viz \ref{vybermap}) a
 konkrétní službu potom použít na základě jediného parametru, podobně
 jako se to dělá například u databázových vrstev s abstrakcí
 několika druhů SŘBD. Podobný projekt již existuje a nese název
-Mapstraction\footnote{\url{http://code.google.com/p/mapstraction/}},
-ale je ve velmi ranném stádiu a navíc podporuje zatím pouze globální
+Mapstraction\footnote{Aktuální zdrojové kódy jsou k dispozici na
+\url{http://code.google.com/p/mapstraction/}.}, ale je ve velmi ranném stádiu a navíc podporuje zatím pouze globální
 mapové systémy. Využití jeho zdrojových kódů a případné zanesení českých
 mapových API je nyní tedy spíše zajímavou ideou do budoucna.
 
@@ -236,7 +236,8 @@ Průkopník v oblasti online map, Google, nabízí samozřejmě mapový
 server i API již hodně dlouho, takže jeho služby jsou v mnoha směrech
 nejvyzrálejší. API je pod neustálým vývojem a v době psaní práce
 Google pracuje na jeho třetí
-verzi\footnote{\url{http://code.google.com/intl/cs/apis/maps/documentation/v3/}}.
+verzi\footnote{V době psaní práce dostupné na
+\url{http://code.google.com/intl/cs/apis/maps/documentation/v3/}.}.
 
 Nelze se však nechat unést jeho možnostmi a je nutné zaměřit se i na
 jiné rysy, důležité pro tuto práci. Mezi takové patří
@@ -271,8 +272,7 @@ ostatních českých portálů profiloval po vzoru Google spíše do
 společnosti, jež svou budoucnost spojuje s technologickým pokrokem,
 než do mediálního vydavatelství jako například Centrum Holdings.
 Odhadnutelné záměry potvrdili uveřejněním zprávy o vývoji nového
-API\footnote{\url{http://mapy.cz.sblog.cz/2009/02/18/29}} v čase
-tvorby této práce.
+API \cite{apiSeznam} v době tvorby této práce.
 
 Současný stav API je ale celkem nešťastný. Aplikační rozhraní nabízí
 jen omezenou škálu funkcí, omezené mapové podklady oproti službě
@@ -287,8 +287,8 @@ budoucí rozvoj projektu ano.
 
 Nové API čtvrté verze vyvíjí v Seznam.cz Ondřej Žára, autor známého
 nástroje pro tvorbu databázových schémat, {\it WWW SQL
-Designer}\footnote{\url{http://code.google.com/p/wwwsqldesigner/}},
-což je určitou zárukou kvality. Bohužel rozhraní je zatím stále dost
+Designer}\footnote{Dostupné na
+\url{http://code.google.com/p/wwwsqldesigner/}.}, což je určitou zárukou kvality. Bohužel rozhraní je zatím stále dost
 nestabilní a podle jeho slov na diskusi k projektu ani jemu stále
 ještě nejsou známy nové licenční podmínky.
 
@@ -309,7 +309,7 @@ Centrum.cz pod hlavičku Centrum Holdings, nelze již kolem API
 pozorovat vůbec žádnou činnost ze strany provozovatele. Celou službu
 původně zpracoval Daniel Steigerwald, který tyto informace pro mou
 práci potvrdil
-\footnote{\url{http://twitter.com/steida/statuses/2211073537}}.
+\footnote{Viz \url{http://twitter.com/steida/statuses/2211073537}.}.
 
 API je však opravdu velmi dobře použitelné a mapové podklady
 kvalitní, připravené ve spolupráci s firmou DPA. I přes API lze
@@ -380,10 +380,48 @@ smířit a počítat s tím, že v budoucnu ji možná bude zapotřebí přepsat
 pro jiné API. V tomto ohledu bych vzhlížel k vývoji nového API v Seznam.cz.
 
 \section{Výškový profil}\label{vyskovyProfil}
-\subsection{Nadmořská výška}
-geonames a vyskopis
+\subsection{Nadmořská výška}\label{vyskopis}
+Existují de facto dva hlavní zdroje dat o nadmořské výšce.
+Český Výškopis.cz (celosvětově pod názvem Topocoding.com) a potom
+jeden ze škály zdrojů dostupných na GeoNames.org.
+
+Výškopis.cz na svých stránkách představuje ukázky JavaScriptového API
+přímo na všech třech českých mapových systémech a má dokonce přímou funkci pro
+vygenerování výškového profilu Na druhou stranu má však mírně
+omezující podmínky (počet požadavků za 24 hodin může být
+limitován na 10000) a hlavně nejsou nikde k dispozici nejen kontaktní
+údaje, ale ani název provozovatele. Nicméně služba funguje a
+její topografická data jsou kvalitní kombinací SRTM3 a GTOPO30 -- pro
+většinu území mají horizontální rozlišení kolem 90 metrů
+\footnote{Viz popis služby dostupný na
+\url{http://www.vyskopis.cz/index.php?option=com_content&task=view&id=1&Itemid=9}.}.
+
+GeoNames.org poskytují pouze data z
+GTOPO30, takže dosahují rozlišení asi jednoho kilometru
+\footnote{Viz dokumentace k API dostupná na
+\url{http://www.geonames.org/export/web-services.html\#gtopo30}.}. GeoNames.org jsou široce využívaným a známým \footnote{Seznam uživatelů obsahuje společnosti jako BBC, Adidas nebo Nike -- viz \url{http://www.geonames.org/users.html}.} poskytovatelem nej\-růz\-něj\-ších dat, takže jej zřejmě lze považovat za spolehlivý.
+
+Pro svůj projekt jsem se rozhodl použít jako primární zdroj dat
+Výškopis.cz a v podobě záložního jsem implementoval API s méně
+přesnými výsledky od GeoNames.org.
+
 \subsection{Grafy}\label{grafy}
-gugl a dalsi knihovny
+Pro zobrazení výškového profilu uživateli je potřeba mít možnost
+dynamicky vygenerovat spojnicový graf. Dalo by se použít přímé funkce
+aplikačního rozhraní služby Výškopis.cz (viz \ref{vyskopis}), ale
+výsledná podoba jejich grafu není příliš parametrizovatelná a navíc by
+jeho implementace vázala důležitou část aplikace na jedno konkrétní API.
+
+Profil se dá pomocí výškopisných dat generovat jednoduše i s
+vlastními nástroji, pokud má aplikace k dispozici potřebná data na
+trase. Vybíral jsem mezi povedenou PHP knihovnou pro generování
+grafů {\it pChart}, interaktivní Flash knihovnou {\it Open Flash Chart
+2} a vzdáleným REST rozhraním {\it Google Chart API} (viz \ref{rest}).
+Knihovny by zřejmě dokázaly poskytnout sofistikovanější
+výstup, ale hledal jsem spíše rychlé a jednoduché řešení a tím se
+ukázalo být Google Chart API. V případě, že by v budoucnu svými
+základními funkcemi nedostačovalo, je zde vždy možnost nahradit jej
+jednou z výše zmíněných knihoven.
 
 \section{Obraz z terénu}
 \subsection{Fotografie}
@@ -405,10 +443,67 @@ panoramio atd.
 \ldots
 
 \chapter{Interoperabilita aplikace}
-\ldots
+Pojem interoperabilita lze vysvětlit jako schopnost vzájemně si
+rozumět, vzájemně spolupracovat, dosáhnout vzájemné součinnosti. V
+kontextu této práce jsem pojem převedl především na součinnost s
+okolím. V rámci webu jde například o autentizaci nebo mikroformáty,
+významná je však také interoperabilita mimo internet -- s přenosnými
+GPS systémy, jež se stávají stále populárnější mezi běžnými lidmi.
 
-\section{Autentizace uživatele}
-openid
+Jelikož je kooperace webových služeb a vzájemná kompatibilita dnes
+jednou z nejvíce progresivních myšlenek, dotknul jsem se v této části
+práce nejvíce technologií a standardů, jež bychom mohli označit za
+moderní a nově vznikající.
+
+\section{Autentizace uživatele}\label{openid}
+Na internetu se začíná prosazovat nový trend v podobě sjednocování
+způsobu přihlašování do webových aplikací. Aby uživatel nemusel na každé
+službě provádět opakovaně registraci, vymýšlet nová
+přihlašovací jména, hesla a udržovat desítky různých účtů, vznikl v
+posledních letech standard s názvem {\it OpenID}. Jedná se o
+otevřenou a decentralizovanou metodu pro ověřování uživatelů, pro niž
+deklarovaly nebo dokonce už i zrealizovaly svou podporu společnosti
+jako Google, IBM, Microsoft, Yahoo!, BBC, Yandex, SourceForge, MySpace
+nebo Seznam.cz \cite{dataportability}. Popis přesného fungování technologie
+OpenID přesahuje rámec této práce a díky oficiální knihovně pro PHP
+se ani při stavbě projektu nebylo zapotřebí obeznamovat s detaily
+implementace. Proto uvedu myšlenku OpenID jen ve zkratce.
+
+Identita OpenID není spravována jednou centrální autoritou. Uživatel
+si může sám vybrat registrátora OpenID, kterému důvěřuje a jemuž
+poskytne svá osobní data. Identifikátor má tvar běžné adresy webové
+stránky, kterou má namísto tradiční dvojice {\it jméno \& heslo}.
+Systém funguje tak, že uživatel zadá v klientské aplikaci svůj
+identifikátor (např. {\tt uzivatel.myopenid.com}) a ta zašle
+požadavek na registrátora (v tomto případě {\tt myopenid.com}).
+Registrátor si s aplikací vymění klíče a ta uživatele přes HTTP
+přesměruje na přihlašovací stránku OpenID providera. Zde uživatel
+zadá své heslo, jediné, které si musí zapamatovat, společné pro
+všechny služby podporující OpenID. Proběhne ověření identity a
+přesměrování zpět na klientskou stránku, opět pomocí HTTP. Aplikace
+nakonec ověří klíče a některá metadata a proces zakončí přihlášením
+uživatele. Další podrobnosti a způsoby vlastní implementace jsou
+dobře popsány v osvětovém seriálu Martina Malého \cite{openid}.
+
+Díky tomu, že si aplikace může po registrátorovi vyžádat některá
+základní data o uživateli, lze na jednoduchých službách zcela
+vypustit registraci (neboli provozovat tzv. {\it tichou} registraci
+při prvním přihlášní uživatele), což je pro návštěvníky nadmíru
+pohodlné. Přesně této skutečnosti jsem využil i na popisovaném
+projektu. Minimum nejdůležitějších informací aplikace získá z OpenID
+identity a doplňkové údaje si potom uživatel může sám vyplnit
+dodatečně v nastavení svého účtu.
+
+I vzhledem k současné podpoře OpenID je vše teprve v začátcích a
+povědomí o službě není tak velké. Mohlo by být tedy celkem rizikové
+metodu nasadit jako jediný způsob registrace a přihlášení do aplikace.
+Protože ale OpenID nasadil i hegemon českého internetu
+Seznam.cz\footnote{Nápověda
+k OpenID je na \url{http://napoveda.seznam.cz/cz/login/openid/}.}, u
+něhož většina Čechů účet má, rozhodl jsem se tuto nejpokrokovější metodu autentizace implementovat opravdu bez alternativy. Získání
+OpenID od Seznam.cz je navíc velmi snadné -- stačí ve své e-mailové
+adrese (např. {\tt uzivatel@seznam.cz}) zaměnit znak zavináče za
+písmena {\tt id} oddělená tečkami ({\tt uzivatel.id.seznam.cz}).
 
 \section{Import a export dat}
 gpx, kml
@@ -416,9 +511,43 @@ gpx, kml
 gpx
 \subsection{Keyhole Markup Language}
 kml
+http://navigovat.mobilmania.cz/Bleskovky/Ar.asp?ARI=113103
+http://google-code-updates.blogspot.com/2006/12/maps-kml-update.html
 
 \section{Mikroformáty}
-\ldots
+Mikroformáty jsou způsob, jak do webových stránek vkládat strojově
+čitelnou informaci a přitom zůstat v rámci syntaxe na možnostech
+existujících HTML značek a atributů. Dají se tedy pochopit také jako
+cesta, jak vytvořit aplikační rozhraní přímo v HTML kódu bez
+speciálních exportů do jiných formátů jako JSON nebo XML (viz
+\ref{api}). Automatické nástroje (ať už klientského či robotického
+charakteru) totiž potom mohou podle určitých pravidel přes DOM (viz
+\ref{javaScript}) přistoupit k hodnotám jednotlivých položek
+mikroformátu a pracovat s nimi.
+
+Mikroformáty se postupně rozšiřují a získávají si oblibu i přesto, že
+zatím neexistuje příliš klientských nástrojů ani mashupů s jejich
+podporou. S přibývajícím výskytem sémanticky vyznačeného kódu u
+poskytovatelů dat lze však očekávat, že se brzy objeví. Ukázku
+mikroformátů v akci lze koneckonců spatřit i na webu
+fakulty, např. u stránky \url{http://www.fit.vutbr.cz/~hruska/}.
+
+Při tvorbě práce však zřejmě mikroformáty nebude možné příliš využít.
+Množiny specifikovaných mikroformátů a prvků stránek použitých v
+projektu se totiž příliš neprotínají. Na několika místech by šlo
+implementovat například
+hCard\footnote{Viz
+specifikace \url{http://microformats.org/wiki/hcard}.} –- pro
+vyznačení adresy uživatele (výchozí lokace na mapě) nebo provozovatele služby. Z ostatních mikroformátů je zajímavý především
+geo\footnote{Viz specifikace \url{http://microformats.org/wiki/geo}.},
+který specifikuje zaznačení zeměpisných souřadnic do webové stránky.
+Nachází se však zatím v rozpracovaném stavu a je označen jako
+koncept\footnote{Tato skutečnost ale například nijak nebránila vyhledávači Seznam.cz
+přidat pro něj podporu \cite{geoSeznam}.}.
+
+Velmi aktivně se o technologie mikroformátů v České republice zajímá
+Martin Hassman \cite{mfLupa}. Komplexní seriál o problematice vyšel
+na serveru Zdroják.cz Janu Sládkovi \cite{mf}.
 
 \chapter{Použité technologie}
 celkem klasicke kvuli prenosnosti a urovni hostingu +
@@ -453,7 +582,7 @@ generovani ux na serveru
 \subsection{Nette Framework}
 nette, dibi\ldots
 
-\section{Práce s API}
+\section{Práce s API}\label{api}
 API služeb relevantních pro tento projekt je poskytováno v zásadě
 dvěma způsoby. Dodavatelé se většinou vyhýbají
 složitým protokolům jako RPC nebo SOAP a nabízejí jednoduchá a
@@ -476,7 +605,7 @@ localhost}) za účely vývoje a ladění aplikace. Zajímavá možnost je
 připojovat a odpojovat skripty k dokumentu dynamicky, pomocí jiného
 řídícího skriptu a technologie DOM (viz \ref{javaScript}).
 
-\subsection{Technologie REST}
+\subsection{Technologie REST}\label{rest}
 REST je architektura představená v roce 2000 jedním z autorů
 specifikace protokolu HTTP \cite{rest}. Pro naše účely by API v
 podobě REST šlo ve zkratce popsat jako technologii, v níž poskytovatel dat zveřejní webové URI, MIME typ odpovědi a množinu operací, které jsou k dispozici přes HTTP metody POST, GET, PUT nebo DELETE. V praxi
@@ -511,6 +640,15 @@ dodavanych z api, zdvojovani api apod.
 rozepsani detailneji nez v minule kapitole o tom kde je javascript,
 co dela, jak je implementovano ukladani, kresleni car na tu mapu
 apod. detaily
+
+Při zaznamenávání dat je důležité si uvědomit, že pokud známe
+nadmořskou výšku dvou bodů, neznamená to, že mezi nimi existuje
+lineární spojnice (např. mezi body Praha a Brno jistě nebude jen
+pozvolné stoupání vyrovnávající rozdíl nadmořských výšek těchto
+měst). Správně by měl systém dopočítávat mezibody na relevantních
+intervalech a zjišťovat nadmořskou výšku i na nich. To by však mohlo
+vést k velkému provozu na API pro zjištění výškopisu a také k velkým
+prodlevám. \ldots
 
 \chapter{Vývoj a testování}
 verze vyvojovych nastroju, verze mootools, nette, eclipse, apache,
