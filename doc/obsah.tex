@@ -46,7 +46,8 @@ potenciálem. Lidé spojili inovativní myšlenky z mnoha směrů informatiky,
 vybudovali fungující síť, úspěšně ji rozšířili po celé planetě
 a dokázali z ní vytvořit každodenního pomocníka, bez kterého si život
 už příliš představit nedokážeme. Kolem roku 2000 bylo na světě kolem
-250~000~uživatelů internetu a toto číslo dále stoupalo exponenciálně.
+250~000~uživatelů internetu a toto číslo dále stoupalo exponenciálně
+\footnote{Viz \url{http://www.internetworldstats.com/}.}.
 
 Do nového století jsme však stále vstupovali spíše s pocitem, že
 internet je něco nového a že tušíme minimum o tom, jaké jsou jeho
@@ -57,7 +58,7 @@ navrhovaných novinkách se pokoušeli o konsensus, byly technologie
 proprietárně uzamykány.
 
 Až dnes se postupně dostáváme do doby, kdy můžeme pracovat s
-relativně jednodtně podporovanými technologiemi, kdy se prosazují
+relativně jednotně podporovanými technologiemi, kdy se prosazují
 spíše otevřená řešení a kdy začínají internetové subjekty
 spolupracovat mezi sebou a více využívat možností propojení pomocí
 internetu. Evoluce přinesla novou éru webu, brzy pojmenovanou jako
@@ -98,7 +99,7 @@ pěšky, na bruslích nebo během. Nic samozřejmě uživateli nebrání
 evidovat i jiné, delší trasy, systém by měl být však primárně určen
 pro výše naznačené lokální sportovní využití.
 
-Aplikace by měla být službou, kam se uživatel zaregistruje a potom,
+Aplikace je službou, kam se uživatel zaregistruje a potom,
 přihlášen na svůj účet, může zakládat trasy svých výletů. Ty má
 možnost ukládat a zpětně prohlížet. Trasy jako takové neposkytují jen
 interaktivní záznam cesty na mapovém podkladu, ale také statistiky a
@@ -116,14 +117,13 @@ sfér –- např. by mohlo být možné implementovat výměnu dat s přenosným
 GPS zařízením.
 
 \section{Cílení projektu}
-Výsledkem mé práce má být aplikace, jejíž cílovou skupinou jsou
-běžci, pěší turisté, cyklisté, běžkaři, bruslaři, jezdci na koních a
-třeba i vodáci. Je tedy důležité si uvědomit, že projekt pracuje s
-uživatelem, jenž nemusí být nijak technicky vzdělán, takže by mu měl
-nabídnout srozumitelné a příjemné uživatelské prostředí. Během výběru
-mapových podkladů (viz \ref{vybermap}) však také vyvstává otázka, zda
-projekt cílit pouze na Českou republiku, nebo počítat s uživatelskou
-základnou z celého světa.
+Cílovou skupinou projektu jsou běžci, pěší turisté, cyklisté,
+běžkaři, bruslaři, jezdci na koních a třeba i vodáci. Je tedy
+důležité si uvědomit, že projekt pracuje s uživatelem, jenž nemusí
+být nijak technicky vzdělán, takže by mu měl nabídnout srozumitelné a
+příjemné uživatelské prostředí. Během výběru mapových podkladů (viz
+\ref{vybermap}) však také vyvstává otázka, zda projekt cílit pouze na
+Českou republiku, nebo počítat s uživatelskou základnou z celého světa.
 
 Cílit mapový projekt celosvětově totiž neznamená jen lokalizovat
 systém přinej\-menším i do angličtiny, ale také mít k dispozici dobré
@@ -138,13 +138,13 @@ funkčnost systému omezena prakticky na jeden stát, protože kvalitní a
 podrobné mapové podklady místních poskytovatelů nejsou v zásadě
 celosvětové.
 
-Je třeba se rozhodnout, zda se vydat cestou horších podkladů, ale
+Nabízí se dvě možnosti -- zda se vydat cestou horších podkladů, ale
 oslovením větší uživatelské základny, nebo zkusit oslovit maximum
 uživatelů na domácím trhu a moci odrážet jeho lokální specifika. Dá se
 říci, že Češi jsou pro výše zmíněnou turistickou činnost dosti
 zapálení \cite{turistika} a proto lze očekávat, že hustota
-potencionálních uživatelů systému by zde byla mnohem vyšší než v jiných zemích, i přes zdánlivě
-malý, desetimilionový trh.
+potencionálních uživatelů systému by zde byla mnohem vyšší než v
+jiných zemích, i přes zdánlivě malý, desetimilionový trh.
 
 Specifika českého turismu, existence celosvětově operujících
 konkurenčních projektů jako např. MapMyRun.com a absence vážné
@@ -155,11 +155,10 @@ využívám tedy nakonec podkladů lokálního poskytovatele. Navíc jsou
 češtině.
 
 \chapter{Výběr aplikačních rozhraní a zdrojů dat}
-Evidence geografických tras uživatele má být aplikací typu mashup
-\ref{mashup}, což znamená, že je z většiny postavená na funkcích a
-datech, které již existují a jsou od jejich poskytovatelů volně
-přístupné přes aplikační rozhraní. Proto je také jednotlivým
-API věnován velký následující úsek práce.
+Evidence geografických tras uživatele je aplikací postavenou na
+architektuře mashup (viz \ref{mashup}), a proto je výběr API již z
+principu zcela zásadní. S ohledem na tuto skutečnost problematice
+věnuji velký následující úsek práce.
 
 \section{Specifika práce na základě API}
 Vystavět aplikaci z větší části na externích zdrojích přináší možnost
@@ -511,9 +510,8 @@ písmena {\tt id} oddělená tečkami ({\tt uzivatel.id.seznam.cz}).
 Jak bylo zmíněno v úvodu kapitoly, přenosné GPS systémy se stávají
 mezi běžnými lidmi stále populárnější. Jejich příznivější ceny
 způsobují, že je v dnešní době vlastní již nejeden běžec či cyklista.
-Na základě těchto pozorování pak můžeme lehce odvodit, že možnost importu a
-exportu zaznamenané trasy by měla být spíše jednou z
-hlavních než doplňkových funkcí výsledné aplikace. Při
+Možnost importu a exportu zaznamenané trasy by tedy měla být spíše
+jednou z hlavních než doplňkových funkcí výsledné aplikace. Při
 jejich implementaci jsme navíc už jen krok od interoperability s
 geografickými aplikacemi jako Google Earth nebo Google Maps. Ty
 podporují buď přímo formát přenosných GPS zařízení, nebo vyžadují
@@ -523,7 +521,7 @@ svůj, který je ale velmi podobný, protože je rovněž založen na XML
 \subsection{GPS eXchange Format}
 GPS navigace většinou operují v rámci svých vlastních, uzavřených
 formátů. Naštěstí se v oblasti těch ručně přenosných vytvořil de
-facto standard v podobě GPX, formátu nej\-rozšířenějšího výrobce GPS
+facto standard v podobě GPX, formátu velmi rozšířeného výrobce GPS
 navigací, společnosti Garmin. GPX je aplikací univerzálního jazyka
 XML a jeho schémata jsou veřejně dostupná\footnote{Viz
 \url{http://www.topografix.com/gpx/1/1/}.}.
@@ -552,7 +550,7 @@ Generovat KML opět není nijak obtížné. Formát je otevřený a nabízí na
 webu ucelenou dokumentaci\footnote{Viz
 \url{http://code.google.com/intl/cs/apis/kml/}.}.
 
-\section{Mikroformáty}
+\section{Mikroformáty}\label{microformats}
 Mikroformáty jsou způsob, jak do webových stránek vkládat strojově
 čitelnou informaci a přitom zůstat v rámci syntaxe na možnostech
 existujících HTML značek a atributů. Dají se tedy pochopit také jako
@@ -568,7 +566,8 @@ zatím neexistuje příliš klientských nástrojů ani mashupů s jejich
 podporou. S přibývajícím výskytem sémanticky vyznačeného kódu u
 poskytovatelů dat lze však očekávat, že se brzy objeví. Ukázku
 mikroformátů v akci lze koneckonců spatřit i na webu
-fakulty, např. u stránky \url{http://www.fit.vutbr.cz/~hruska/}.
+fakulty, např. u stránky s profilem vedoucího této práce
+\url{http://www.fit.vutbr.cz/~hruska/}.
 
 Při tvorbě práce však zřejmě mikroformáty nebude možné příliš využít.
 Množiny specifikovaných mikroformátů a prvků stránek použitých v
@@ -588,22 +587,137 @@ Martin Hassman \cite{mfLupa}. Komplexní seriál o problematice vyšel
 na serveru Zdroják.cz Janu Sládkovi \cite{mf}.
 
 \chapter{Použité technologie}
-celkem klasicke kvuli prenosnosti a urovni hostingu +
-udrzovatelnosti do budoucna a podpory nastroju, api apod.\ldots
+CITACE! CITACE! CITACE! CITACE! CITACE! CITACE! CITACE! CITACE!
+
+Množina technologií použitých na tomto projektu by se dala označit v
+rámci webového kontextu za vyloženě tradiční. Experimentům s ne tak
+rozšířenými technologiemi brání v rámci malých projektů špatná
+dostupnost jiných hostingových služeb, než těch pro jazyk PHP. Lze samozřejmě
+připravit vlastní instalaci serveru nebo využít služeb
+specializovaných hostingových programů, ale to by pro aplikaci do
+budoucna znamenalo velmi omezenou přenosnost a udržovatelnost. Pro
+použití tradičních webových jazyků také hovoří existence mnoha
+hotových řešení, podpůrných knihoven a podpory nástrojů a návodů.
+
+V oblasti uživatelského rozhraní navíc ani velký prostor pro výběr
+není. Dá se sice uvažovat o použití technologií jako Adobe Flash, Microsoft
+Silverlight apod., ale ty vyžadují zásuvné moduly na straně klienta
+a to velmi omezuje jejich přístupnost. Lze namítat, že ani jazyk
+JavaScript není podporován mnoha zařízeními, je ovšem alespoň
+standardem nezávislým na operačním systému a podporovaném napříč všemi
+moderními prohlížeči. V poslední době jej začínají implementovat i
+nejnovější mobilní zařízení.
+
+V mnoha případech jsem využil výhod frameworků, tedy komplexů
+knihoven řešících rutinní problémy v daných jazycích a usnadňující
+programátorovu práci. Ten se může soustředit na řešení samotného
+problému, místo aby se většinu času zabýval \uv{vynalézáním kola}.
+
+Ke konci kapitoly se zabývám použitím technologií souvisejících s API
+jako architekturu REST nebo formáty XML a JSON.
 
 \section{Uživatelské rozhraní webové stránky}
-šablona, \ldots
-\subsection{Sémantický dokument s HTML}
-zaklady + se malinko odkazat i na mikroformaty
+Uživatelské rozhraní webových aplikací je tvořeno kombinací
+značkovacího jazyka, stylu a případně skriptů. Výsledek se často mezi
+webovými tvůrci označuje jako tzv. {\it šablona webu} nebo {\it kód
+webu}.
 
-\subsection{Volba mezi HTML a XHTML}
-webylon\ldots
+Značkovací jazyk je zpravidla z rodiny HTML či XML a slouží k
+zaznamenání sémantiky dokumentu. Styl, připojovaný většinou v podobě
+externího souboru, slouží k definici vzhledu dokumentu. Pro HTML je
+to nejčastěji CSS, zatímco v aplikacích XML se setkáme asi spíše s
+XSL. Třetí vrstvou bývá v  moderních projektech skriptovací
+jazyk, jenž se spouští na klientském prohlížeči během a po vykreslení
+webové stránky. Má schopnost dynamicky měnit obsah i styl dokumentu, v
+čemž mu pomáhá úzká spolupráce s technologií DOM. Takovým skriptovacím
+jazykem je dnes již prakticky pouze JavaScript, jemuž se za svou
+existenci podařilo dospět do široce podporovaného jazyka a který z
+webu vytlačil všechny své potencionální konkurenty (např. VBScript
+společnosti Microsoft).
+
+\subsection{Sémantický dokument s HTML}
+HTML ({\it HyperText Markup Language}) je jazyk pro snadné
+značkování dokumentů a jejich šíření po webu přes protokol HTTP. Tim
+Berners-Lee jej spolu s tímto protokolem v roce 1990 sestavil, aby
+pro svět objevil technologii webu. HTML je aplikací SGML ({\it
+Standard Generalized Markup Language}), univerzálního jazyka pro značkování
+dokumentů\footnote{HTML se aplikací SGML stalo ve verzi 2.0 a od
+připravované verze 5 se opět od tohoto vztahu upouští.}.
+
+HTML disponuje množinou elementů, jež je možné použít k značkování
+dokumentu (např. {\tt <p>Text odstavce</p>}). To má za výsledek
+přiřazování významu částem textu a možnost odlišení jejich zpracování
+či zobrazení. Bohužel sémantická vybavenost HTML již příliš
+nepostačuje dnešním potřebám a proto se můžeme setkat s aktivitami
+jako např. mikroformáty (viz \ref{microformats}) nebo snahami o
+posílení sémantiky v právě připravované verzi, HTML5.
+
+Značky v rámci zápisu dokumentu tvoří stromovou strukturu. Této
+skutečnosti využívá technologie DOM (viz \ref{javaScript}). Informaci
+o tom, kde může být jaký element a co může obsahovat se nachází v
+tzv. DTD ({\it Document Type Definition}), připojovaném na samý
+začátek HTML dokumentu. Jazyk HTML má DTD už připravená k použití
+(např. \url{http://www.w3.org/TR/html4/strict.dtd}) a připojují se
+prakticky bezvýhradně externím odkazem. Nejen v závislosti na
+použitém typu DTD prohlížeče často mění zpracování šablony dokumentu,
+především jejích stylů. DTD lze použít i pro XML, ale pro něj je lepší
+použít sofistikovanější nástroje jako např. XML Schema. 
+
+\subsection{Výběr HTML místo XHTML}
+O vývoj jazyka HTML a souvisejících webových standardů se stará
+sdružení internetových firem, výrobců prohlížečů a jiných
+zainteresovaných subjektů, W3C ({\it World Wide Web Consortium}). Po
+uvedení velmi úspěšného formátu XML přišla tato organizace s
+myšlenkou transformovat HTML na aplikaci tohoto univerzálního
+značkovacího jazyka. Výsledkem snah se stal jazyk XHTML, tedy {\it
+Extensible Hypertext Markup Language}. S jeho uvedením byl vývoj 
+\uv{starého} HTML oficiálně ukončen v poslední verzi 4.01.
+
+W3C poté pokračovalo ve vývoji XHTML 2.0, které mělo být navíc již
+zcela nekompatibilní s původním HTML. První verze XHTML však
+nepřinesly do HTML nic nového a v podstatě způsobovaly jen problémy navíc:
+
+\begin{itemize}
+	\item Špatná podpora správného MIME typu XHTML {\tt
+	application/xhtml+xml} ze strany nejrozšířenějšího prohlížeče,
+	Internet Exploreru, nasazení \uv{opravdového} XHTML v praxi zcela
+	znemožňovala.
+	\item Počet elementů zůstal oproti HTML de facto nezměněn.
+	\item Syntaktická striktnost parseru XHTML po vzoru XML sice
+	nedovolovala vývojáři dělat chyby, ale ty bohužel v praxi nevznikají
+	jen jeho přičiněním. Nekorektnost zápisu přitom způsobovala ukončení
+	zpracování dokumentu a nedostupnost jeho obsahu.
+	\item Rozšiřitelnost, hlavní lákadlo XHTML (viz jeho název), nebylo
+	v praxi příliš využíváno. 
+\end{itemize}
+
+Vývoj standardu XHTML 2.0 ve W3C později navíc téměř ustrnul. Když
+webdesignerská obec objevila problémy XHTML a pochopila, že cesta k
+XML byla slepá, začala vznikat iniciativa WHATWG Iana
+Hicksona. Ta oslovila tvůrce prohlížečů a začala v konsensu s nimi
+vyvíjet novou specifikaci jazyka HTML nazývanou HTML5. Akt se setkal
+s velkým ohlasem, protože WHATWG se snaží do jazyka promítnout
+požadavky dnešních vývojářů webových aplikací a řešit existující
+problémy jako nepostačující sada formulářových prvků, slabá sémantika
+dokumentu, značky pro audio a video aj.
+
+Za datum definitivní změny směru vývoje lze považovat 7. březen 2007,
+kdy W3C založilo novou pracovní skupinu HTML, v níž se prakticky spojilo
+s aktivitami WHATWG, uznalo HTML5 jako budoucnost webu a vzalo
+jej pod svou hlavičku.
+
+Na základě všech těchto skutečností jsem se rozhodl pro práci použít
+jazyk HTML a vyhnout se XHTML, zjevně již neperspektivní technologii.
 
 \subsection{Styly pomocí CSS}
 \ldots
 
 \subsection{Skriptovací jazyk JavaScript a DOM}\label{javaScript}
 ecmascript/javascript, dom\ldots
+
+JavaScript je dnes pod názvem ECMAScript standardizován na základě
+konsensu výrobců prohlížečů, takže jeho použití již není tak frustrující jako v
+dřívějších letech, kdy byl interpretován pokaždé jinak.
 
 \subsection{Asynchronní požadavky}\label{ajax}
 ajax
@@ -622,12 +736,12 @@ nette, dibi\ldots
 
 \section{Práce s API}\label{api}
 API služeb relevantních pro tento projekt je poskytováno v zásadě
-dvěma způsoby. Dodavatelé se většinou vyhýbají
-složitým protokolům jako RPC nebo SOAP a nabízejí jednoduchá a
-přístupná aplikační rozhraní. Funkčnost API tak lze získat buď přímo
-pomocí vzdálených souborů s kódem v jazyce JavaScript (viz
-\ref{javaScript}), nebo, pokud služba nabízí data přímo, pomocí
-rozhraní REST ({\it Representational State Transfer}).
+dvěma způsoby. Dodavatelé se většinou vyhýbají složitým protokolům či
+technologiím a nabízejí jednoduchá a přístupná aplikační rozhraní.
+Funkčnost API tak lze získat buď přímo pomocí vzdálených souborů s
+kódem v jazyce JavaScript (viz \ref{javaScript}), nebo, pokud služba
+nabízí data přímo, pomocí rozhraní REST ({\it Representational State
+Transfer}, \ref{rest}).
 
 \subsection{Vzdálené volání skriptů}
 Skripty připojujeme jako běžně v hlavičce či těle HTML
