@@ -17,7 +17,7 @@ require LIBS_DIR . '/Nette/loader.php';
  * Enable Debug for better exception and error visualisation
  */
 //if (!Environment::isProduction()) { Debug::enableProfiler(); }
-Debug::enable(Debug::DETECT, NULL, Environment::getVariable('email'));
+Debug::enable(Debug::DEVELOPMENT, NULL, Environment::getVariable('email')); // TODO Debug::DETECT
 
 /*
  * Load configuration from config.ini file
