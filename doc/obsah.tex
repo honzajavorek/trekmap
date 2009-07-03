@@ -189,8 +189,8 @@ ale oddělí nás od jejich konkrétní implementace. Vrstva potom může
 obalovat API Google Maps, Mapy.cz i Amapy.cz (viz \ref{vybermap}) a
 konkrétní službu potom použít na základě jediného parametru, podobně
 jako se to dělá například u databázových vrstev s abstrakcí
-několika druhů SŘBD. Podobný projekt již existuje a nese název
-Mapstraction\footnote{Aktuální zdrojové kódy jsou k dispozici na
+několika druhů SŘBD (viz \ref{mysql}). Podobný projekt již existuje a
+nese název Mapstraction\footnote{Aktuální zdrojové kódy jsou k dispozici na
 \url{http://code.google.com/p/mapstraction/}.}, ale je ve velmi ranném stádiu a navíc podporuje zatím pouze globální
 mapové systémy. Využití jeho zdrojových kódů a případné zanesení českých
 mapových API je nyní tedy spíše zajímavou ideou do budoucna.
@@ -558,7 +558,7 @@ cesta, jak vytvořit aplikační rozhraní přímo v HTML kódu bez
 speciálních exportů do jiných formátů jako JSON nebo XML (viz
 \ref{api}). Automatické nástroje (ať už klientského či robotického
 charakteru) totiž potom mohou podle určitých pravidel přes DOM (viz
-\ref{javaScript}) přistoupit k hodnotám jednotlivých položek
+\ref{dom}) přistoupit k hodnotám jednotlivých položek
 mikroformátu a pracovat s nimi.
 
 Mikroformáty se postupně rozšiřují a získávají si oblibu i přesto, že
@@ -586,15 +586,13 @@ Velmi aktivně se o technologie mikroformátů v České republice zajímá
 Martin Hassman \cite{mfLupa}. Komplexní seriál o problematice vyšel
 na serveru Zdroják.cz Janu Sládkovi \cite{mf}.
 
-\chapter{Použité technologie}
-CITACE! CITACE! CITACE! CITACE! CITACE! CITACE! CITACE! CITACE!
-
+\chapter{Použité technologie}\label{technologie}
 Množina technologií použitých na tomto projektu by se dala označit v
 rámci webového kontextu za vyloženě tradiční. Experimentům s ne tak
 rozšířenými technologiemi brání v rámci malých projektů špatná
-dostupnost jiných hostingových služeb, než těch pro jazyk PHP. Lze samozřejmě
-připravit vlastní instalaci serveru nebo využít služeb
-specializovaných hostingových programů, ale to by pro aplikaci do
+dostupnost jiných hostingových služeb, než těch pro jazyk PHP (viz
+\ref{php}). Lze samozřejmě připravit vlastní instalaci serveru nebo
+využít služeb specializovaných hostingových programů, ale to by pro aplikaci do
 budoucna znamenalo velmi omezenou přenosnost a udržovatelnost. Pro
 použití tradičních webových jazyků také hovoří existence mnoha
 hotových řešení, podpůrných knihoven a podpory nástrojů a návodů.
@@ -614,13 +612,13 @@ programátorovu práci. Ten se může soustředit na řešení samotného
 problému, místo aby se většinu času zabýval \uv{vynalézáním kola}.
 
 Ke konci kapitoly se zabývám použitím technologií souvisejících s API
-jako architekturu REST nebo formáty XML a JSON.
+jako architekturou REST nebo formáty XML a JSON.
 
-\section{Uživatelské rozhraní webové stránky}
-Uživatelské rozhraní webových aplikací je tvořeno kombinací
-značkovacího jazyka, stylu a případně skriptů. Výsledek se často mezi
-webovými tvůrci označuje jako tzv. {\it šablona webu} nebo {\it kód
-webu}.
+\section{Uživatelské rozhraní webové stránky}\label{gui}
+Uživatelské rozhraní, tedy GUI ({\it Graphical User Interface}),
+webových aplikací je tvořeno kombinací značkovacího jazyka, stylu a
+případně skriptů. Výsledek se často mezi webovými tvůrci označuje
+jako tzv. {\it šablona webu} nebo {\it kód webu}.
 
 Značkovací jazyk je zpravidla z rodiny HTML či XML a slouží k
 zaznamenání sémantiky dokumentu. Styl, připojovaný většinou v podobě
@@ -636,13 +634,14 @@ webu vytlačil všechny své potencionální konkurenty (např. VBScript
 společnosti Microsoft).
 
 \subsection{Sémantický dokument s HTML}
-HTML ({\it HyperText Markup Language}) je jazyk pro snadné
-značkování dokumentů a jejich šíření po webu přes protokol HTTP. Tim
+HTML\footnote{Specifikace: \url{http://www.w3.org/TR/html401/}.}
+({\it HyperText Markup Language}) je jazyk pro snadné značkování dokumentů a jejich šíření po webu přes protokol HTTP. Tim
 Berners-Lee jej spolu s tímto protokolem v roce 1990 sestavil, aby
 pro svět objevil technologii webu. HTML je aplikací SGML ({\it
 Standard Generalized Markup Language}), univerzálního jazyka pro značkování
 dokumentů\footnote{HTML se aplikací SGML stalo ve verzi 2.0 a od
 připravované verze 5 se opět od tohoto vztahu upouští.}.
+\cite{htmlHistory}
 
 HTML disponuje množinou elementů, jež je možné použít k značkování
 dokumentu (např. {\tt <p>Text odstavce</p>}). To má za výsledek
@@ -650,10 +649,10 @@ přiřazování významu částem textu a možnost odlišení jejich zpracován�
 či zobrazení. Bohužel sémantická vybavenost HTML již příliš
 nepostačuje dnešním potřebám a proto se můžeme setkat s aktivitami
 jako např. mikroformáty (viz \ref{microformats}) nebo snahami o
-posílení sémantiky v právě připravované verzi, HTML5.
+posílení sémantiky v právě připravované verzi, HTML5 \cite{html5}.
 
 Značky v rámci zápisu dokumentu tvoří stromovou strukturu. Této
-skutečnosti využívá technologie DOM (viz \ref{javaScript}). Informaci
+skutečnosti využívá technologie DOM (viz \ref{dom}). Informaci
 o tom, kde může být jaký element a co může obsahovat se nachází v
 tzv. DTD ({\it Document Type Definition}), připojovaném na samý
 začátek HTML dokumentu. Jazyk HTML má DTD už připravená k použití
@@ -669,13 +668,15 @@ sdružení internetových firem, výrobců prohlížečů a jiných
 zainteresovaných subjektů, W3C ({\it World Wide Web Consortium}). Po
 uvedení velmi úspěšného formátu XML přišla tato organizace s
 myšlenkou transformovat HTML na aplikaci tohoto univerzálního
-značkovacího jazyka. Výsledkem snah se stal jazyk XHTML, tedy {\it
-Extensible Hypertext Markup Language}. S jeho uvedením byl vývoj 
+značkovacího jazyka. Výsledkem snah se stal jazyk
+XHTML\footnote{Specifikace: \url{http://www.w3.org/TR/xhtml1/}.}, tedy
+{\it Extensible Hypertext Markup Language}. S jeho uvedením byl vývoj
 \uv{starého} HTML oficiálně ukončen v poslední verzi 4.01.
 
 W3C poté pokračovalo ve vývoji XHTML 2.0, které mělo být navíc již
 zcela nekompatibilní s původním HTML. První verze XHTML však
-nepřinesly do HTML nic nového a v podstatě způsobovaly jen problémy navíc:
+nepřinesly do HTML nic nového a v podstatě způsobovaly jen problémy
+navíc \cite{xhtml}:
 
 \begin{itemize}
 	\item Špatná podpora správného MIME typu XHTML {\tt
@@ -699,40 +700,308 @@ vyvíjet novou specifikaci jazyka HTML nazývanou HTML5. Akt se setkal
 s velkým ohlasem, protože WHATWG se snaží do jazyka promítnout
 požadavky dnešních vývojářů webových aplikací a řešit existující
 problémy jako nepostačující sada formulářových prvků, slabá sémantika
-dokumentu, značky pro audio a video aj.
+dokumentu, značky pro audio a video aj. \cite{whatwg}
 
 Za datum definitivní změny směru vývoje lze považovat 7. březen 2007,
 kdy W3C založilo novou pracovní skupinu HTML, v níž se prakticky spojilo
 s aktivitami WHATWG, uznalo HTML5 jako budoucnost webu a vzalo
-jej pod svou hlavičku.
+jej pod svou hlavičku. Tim Berners-Lee, v současné době ředitel
+konsorcia W3C, navíc 2. července 2009 oznámil\footnote{Viz zpráva
+\url{http://www.w3.org/News/2009\#item119}.}, že vývoj XHTML2 bude
+pokračovat už jen do konce roku 2009. Na základě všech těchto
+skutečností jsem se rozhodl pro práci použít jazyk HTML a vyhnout se
+XHTML, zjevně již neperspektivní technologii.
 
-Na základě všech těchto skutečností jsem se rozhodl pro práci použít
-jazyk HTML a vyhnout se XHTML, zjevně již neperspektivní technologii.
+\subsection{Styly pomocí CSS}\label{css}
+CSS\footnote{Specifikace: \url{http://www.w3.org/TR/CSS21/}.} ({\it
+Cascading Style Sheets}) je jednoduchý deklarativní jazyk pro definici vzhledu dokumentu zapsaného ve značkovacím jazyku. Lze
+jej připojit jak k HTML a XHTML, tak i k XML. Vznikl ve
+standardizační organizaci W3C za účelem pomoci očistit HTML od
+prezentačních značek a navrátit jeho použití k sémantickému
+značkování dokumentů. To se v zásadě povedlo a se stoupající podporou
+v prohlížečích tvůrci webu začali vzhled definovat většinou pouze
+pomocí externích stylů. To poskytuje především několik výhod
+\cite{css1}:
 
-\subsection{Styly pomocí CSS}
-\ldots
+\begin{itemize}
+	\item Styl je možné aplikovat na několik dokumentů najednou a jeho
+	použitím se lze vyvarovat redundanci. HTML dokument je menší a
+	rychleji se zpracovává.
+	\item Změnou ve stylech dokumentu lze velmi rychle a jednoduše
+	změnit třeba i celý vzhled stránky bez zásahu do vlastního HTML
+	kódu.
+	\item Extrahováním informace o vzhledu do CSS dostáváme HTML zápis,
+	který je čistým sémantickým značkováním textu a zpracování takového
+	HTML je jednodušší. Toho využívají nejen alternativní klienti pro
+	přístup k webu, ale také např. velmi důležití vyhledávací roboti.
+	\item CSS má větší možnosti formátování než původní formátovací
+	značky v HTML.
+\end{itemize}
 
-\subsection{Skriptovací jazyk JavaScript a DOM}\label{javaScript}
-ecmascript/javascript, dom\ldots
+Vlastní zápis definice vzhledu v CSS je poměrně intuitivní. Tzv. {\it
+selektorem} se vybere množina elementů a na tu se poté aplikují
+pravidla (např. {\tt p \{ color: red; font-size: 75\%; \}}).
+Aplikování pravidel se však uplatňuje na základě složitého mechanismu
+kaskády, kdy později definovaná pravidla a pravidla s konkrétnějšími
+selektory mají větší prioritu. \cite{css2}
+
+V současné době se dokončuje revize 2.1 tohoto jazyka. Zatímco
+Internet Explorer 6, jenž má dnes i po vydání nových verzí 7 a 8
+majoritní podíl na trhu, zcela neimplementuje ani CSS verze 2, jiné
+moderní prohlížeče již s předstihem zavádějí podporu pro konstrukce
+navržené v teprve připravovaném CSS3. Různost implementací podpory CSS
+a jejich chyby jsou hlavní nevýhodou tohoto jazyka. Vzhledem k vydaným
+novým verzím prohlížeče Internet Explorer, jenž na dlouhodu dobu
+\uv{zaspal} a vývoj zabrzdil, se však zdá, že situace se nyní již
+bude rok od roku jen zlepšovat.
+
+\subsection{Technologie DOM}\label{dom}
+Objektový model dokumentu, tedy DOM\footnote{Specifikace:
+\url{http://www.w3.org/DOM/DOMTR}.} ({\it Document Object Model}), je
+objektová reprezentace hierarchického stromu XML nebo HTML dokumentu. DOM funguje jako aplikační rozhraní pro přístup k jednotlivým uzlům
+dokumentu jako by se jednalo o objekty a umožňuje číst jejich
+vlastnosti, měnit je a vykonávat nad nimi funkce. Vznikl postupnou
+standardizací přístupu ke zpracování XML a HTML a zavedla jej
+organizace W3C. Specifikace je nezávislá jak na platformě, tak i na
+implementačním jazyku.
+
+Rozebrání dokumentu na bázi DOM vyžaduje mít jej zpracován celý a
+celý jej nahrát do paměti ještě před začátkem jakékoliv manipulace.
+To je výhodné, pokud k elementům přistupujeme náhodně, ale může to
+vést ke zbytečné neefektivitě aplikace, jestliže chceme dokument
+zpracovat rychle a postupně. Proto vznikl i alternativní
+přístup rozebrání XML, tzv. SAX ({\it Simple API for XML}).
+Ten sekvenčně prochází XML a při jednotlivých událostech (začátek
+elementu, konec elementu apod.) volá předdefinované metody.
+
+Uvedení technologie DOM bylo v oblasti uživatelského rozhraní webové
+aplikace významným pokrokem. Díky jeho standardizaci se mohlo
+provést např. napojení jazyka JavaScript na toto API a získat tak velmi mocný
+nástroj pro manipulaci s HTML dokumentem u klienta.
+
+\subsection{Skriptovací jazyk JavaScript}\label{javaScript}
+JavaScript je multiplatformní skriptovací jazyk, původně vyvinutý
+společností Netscape. V prohlížeči se interpretuje během načítání a po
+načtení dokumentu, k němuž je připojen a může tak dynamicky měnit
+jeho strukturu i obsah. Jeho název je čistě marketingový, s jazykem
+Java nemá nic společného a kromě podobnosti syntaxe na něj ani nijak
+nenavazuje. Spolu s aplikačním rozhraním DOM pro přístup do struktury
+dokumentů HTML a XML je JavaScript silným nástrojem pro tvorbu GUI.
+\cite{jsBook}
+
+JavaScript je sice objektově založený, ne však způsobem
+dědění od tříd (jak jej známe u Javy nebo C++), ale klonováním
+prototypů (tzv. {\it prototypově založené programování}, v jehož rámci
+je JavaScript zřejmě nejznámějším představitelem). Zápis jazyka vychází,
+jak již bylo naznačno stejně jako Java, z oblíbené syntaxe jazyka C.
+Dnes se používá nejčastěji pro tvorbu dynamických uživatelských
+rozhraní webových aplikací, ale svou významnou roli hraje např. i v
+XUL, formátu pro tvorbu uživatelských rozhraní desktopových
+aplikací\footnote{XUL je používán především v produktech Mozilla jako
+prohlížeč Firefox nebo e-mailový klient Thunderbird. Staví na
+existujících a známých technologiích jako XML, CSS, JavaScript a DOM,
+čímž zpřístupňuje tvorbu GUI široké skupině vývojářů bez nutnosti
+zdlouhavého studia nových metod.}.
 
 JavaScript je dnes pod názvem ECMAScript standardizován na základě
-konsensu výrobců prohlížečů, takže jeho použití již není tak frustrující jako v
-dřívějších letech, kdy byl interpretován pokaždé jinak.
+konsensu výrobců prohlížečů, takže jeho použití již není tak
+frustrující jako v dřívějších letech, kdy byl interpretován pokaždé
+jinak. I tak se však na jeho podporu nelze spolehnout plně, protože
+nejen že si jej uživatel může v prohlížeči vypnout, ale také existuje
+celá řada zařízení, jež jej vůbec nepodporují. Z
+hlediska cílení webu na běžné uživatele jsou v tomto nejvýznamnější
+mobilní zařízení. I ta ale podléhají a začínají JavaScript
+implementovat (např. Apple iPhone).
 
 \subsection{Asynchronní požadavky}\label{ajax}
-ajax
+AJAX je zkratkou pro {\it Asynchronous JavaScript and XML} a
+představuje spíše techniku než technologii. Ač se v jeho názvu
+zmiňují konkrétní jazyky, je AJAX dnes spíše obecným označením pro
+dosažení asynchronního požadavku na server z webového uživatelského
+rozhraní. \cite{ajax}
+
+Základem AJAXu je existence objektu {\it XMLHttpRequest} (zkracováno
+na XHR), jež JavaScriptu umožňuje zavolat serverový skript i mimo
+klasické schéma požadavek/odpověď. Tendence asynchronní práce se
+serverem zde však existovaly již dlouho před tímto objektem --
+jednou z nich je například existence elementu {\tt IFRAME} v HTML.
+Objekt XHR zavedl Microsoft v rámci rozšíření ActiveX v Internet
+Exploreru 5. Protože však toto řešení postrádalo podporu napříč
+ostatními prohlížeči, mezi vývojáři se neujalo. To se ale časem
+změnilo a technku oprášil Google při tvorbě webových aplikací jako
+Google Suggest, Google Maps nebo Gmail. AJAX byl roku 2005 pojmenován
+v článku J. J. Garretta \cite{ajaxArticle} a dostal se do obecného
+povědomí vývojářů.
+
+Zajímavostí je, že objekt XMLHttpRequest stále ještě není
+standardizován a jeho podpora tedy závisí jen na \uv{dobré vůli}
+tvůrců prohlížečů. Ti jej však až na detaily implementovali jednotně
+a tak lze AJAX bez problémů používat i bez oficiální standardizace,
+která jej čeká pravděpodobně v rámci DOM.
+
+Výhody AJAXu jsou zřejmé. Umožňuje dlouho neuskutečnitelný přenos dat
+i mimo znovunačtení celé stránky, což vede ke vzniku opravdu
+sofistikovaných webových aplikací, jež mají velmi podobné vlastnosti
+jako aplikace desktopové. Tím, že přenáší jen data, která potřebuje,
+stránka navíc snižuje provoz na serveru (na druhou stranu zase
+zvyšuje počet HTTP požadavků). Nevýhody plynou především ze změny
+paradigmatu používání webu. Uživatel například změnu na stránce
+nemusí vůbec zpozorovat nebo se na takovou stránku nemůže odkázat
+pomocí jedinečného URI. Existují již však návrhové vzory, které tyto
+problémy řeší.
+
+AJAXová aplikace si ze serveru asynchronně žádá data a ta dostává
+zpravidla ve třech možných formách. Buďto jako obyčejnou textovou
+informaci (to se hodí, pokud očekává např. jediné číslo, jediný
+řetězec, úsek HTML kódu apod.), XML, nebo JSON (viz \ref{xml} a
+\ref{json}).
 
 \subsection{Framework MooTools}
-i jine fw, vylepseni, odstineni, dom, vyhody fw obecne
+Ke zjednodušení rutinní práce s JavaScriptem a odstínění rozdílů v
+jeho implementaci je užitečné používat nějaký framework. Bez takové sady
+knihoven se dnes neobejde žádná z velkých internetových společností --
+konkrétně například Google a Wikipedia nejčastěji využívají jQuery,
+Microsoft MooTools, Yahoo! má svůj vlastní framework. Mezi známými projekty jako
+Prototype či již zmíněnými jQuery a MooTools jsem nakonec vybral
+poslední zmíněný.
 
-\section{Serverová část}
-generovani ux na serveru
-\subsection{Jazyk PHP}
-\ldots
-\subsection{Systém řízení báze dat MySQL}
-\ldots
-\subsection{Nette Framework}
-nette, dibi\ldots
+Prototype a MooTools jsou architekturou založené na rozšiřování
+existujících objektů JavaScriptu, čímž dosahují poměrně
+efektivních konstrukcí. Na druhou stranu zasahují do jádra
+jazyka a mění jej, takže způsobují nekompatibilitu s jinými nástroji.
+V tomto ohledu je možná lepší druhý přístup, který prosazuje jQuery, a
+to izolovat všechny funkce frameworku do samostatného jmenného
+prostoru a zabránit tak jakýmkoliv kolizím. Knihovna jQuery se tedy
+zdála lepší volbou, nicméně API mapových podkladů, jež jsem vybral
+(viz \ref{vybranamapa}), již obsahovalo MooTools a proto jsem toho
+bez většího rozhodování využil a nastudoval tento framework. I přes
+všechny různé vlastnosti jsou totiž přední JavaScriptové frameworky
+srovnatelné a základní metody pro práci s DOM, tvorbu jednoduchých
+efektů, usnadnění práce s AJAXem aj. poskytují všechny.
+
+Jedním z podstatných ulehčení je na JavaScriptových frameworcích,
+MooTools nevyjímaje, systém přístupu k elementům v HTML dokumentu.
+Autoři frameworků se nechali inspirovat selektory v CSS (viz
+\ref{css}) a zavedli pro ně podporu i v rámci JavaScriptu. Pokud tedy víme, jak bychom k
+danému prvku stránky přistoupili pomocí stylů, můžeme stejný zápis
+předat speciální metodě frameworku a ta nám na jeho základě přes DOM
+vrátí objekt požadovaného elementu, s nímž lze dále pracovat. To je
+samozřejmě pro webové tvůrce velmi efektivní, protože to nejen usnadňuje velmi rutinní
+záležitost a odstiňuje práci se samotným DOM, ale také recykluje
+znalosti, které má programátor již ze psaní stylů.
+
+MooTools jsou, stejně jako jiné současné JavaScriptové frameworky,
+testovány na všech majoritních prohlížečích zahrnujících i Internet
+Explorer 6.
+
+\section{Serverová část}\label{mvc}
+Část aplikace nacházející se na serveru má za úkol perzistentně
+ukládat data a zpřístupňovat je, dynamicky generovat uživatelské
+rozhraní a poskytnout logiku, která bude řídit pochody v aplikaci v
+závislosti na požadavcích ze strany uživatele. Zmíněné tři funkce se
+dají interpretovat také jako tři vrstvy známé softwarové architektury
+MVC, tedy {\it Model-View-Controller} (kde písmenům zmíněné funkce
+odpovídají přesně podle uvedeného pořadí). \cite{janTichy}
+
+Jak jsem již zmínil v \ref{technologie}, výběr serverového
+programovacího jazyka, jenž by byl jádrem aplikace, byl z důvodu
+dostupnosti hostingových služeb a budoucnosti projektu omezený. PHP
+(viz \ref{php}) splňovalo všechny požadavky, ve svých nových verzích
+nabízí plnohodnotný objektový přístup a existují pro něj velmi dobré
+frameworky. Z těch jsem použil relativně nový český framework Nette
+(viz \ref{nette}), který plně využívá objektového PHP a je
+architekturou spřízněn s výše zmíněným vzorem MVC.
+
+Jako úložiště perzistentních dat jsem využil relační databázi. Kvůli
+podobným omezením hostingového trhu jako u jazyka PHP jsem ani zde
+neměl příliš perspektivních možností k výběru a jako systém
+řízení báze dat jsem použil MySQL.
+
+\subsection{Jazyk PHP}\label{php}
+PHP (rekurzivní zkratka {\it PHP: Hypertext Preprocessor}) je
+interpretovaný skriptovací jazyk nezávislý na platformě, přímo
+vytvořený pro tvorbu dynamicky generovaných webových stránek. Jeho
+vznik sahá až k roku 1994. Syntaxí navazuje na jazyk C, ale celkově
+vychází spíše z Perlu. Má velmi rozsáhlou sadu knihoven dostupných
+již ze základní instalace (jmenujme alespoň vestavěnou podporu pro
+většinu databázových systémů, řadu internetových protokolů, nástroje
+pro práci s XML a mnoho dalšího). PHP se stalo pravděpodobně
+nejoblíbenějším jazykem pro dynamické generování webových
+stránek\footnote{Viz \url{http://www.php.net/usage.php}.}. Je na něm
+postaveno mnoho známých projektů jako encyklopedie Wikipedia,
+redakční systém WordPress, fórum phpBB a další. \cite{phpBook}
+
+Nevýhodami PHP mohou být mírně nekonzistentní vývoj a formát funkcí,
+nemožnost udržet kontext aplikace (při každém požadavku se vlastně
+celá aplikace spouští znova), nesnadné lazení aplikací, špatná
+podpora Unicode a chybějící jmenné prostory. Poslední dva jmenované
+problémy má řešit připravovaná verze 6.
+
+Pomocí PHP se na straně serveru dle požadavků
+uživatele dynamicky generuje HTML kód. Ten se následně pošle na
+výstup jako každá jiná statická stránka a klient je tedy od
+samotného PHP izolován a do styku přichází jen s jeho produktem,
+uživatelským rozhraním (popsáno v \ref{gui}). Abych byl přesný,
+výstupem skriptu samozřejmě nemusí být pouze HTML. V PHP lze
+pružně vytvořit cokoliv -- XML v podobě RSS, ale třeba i
+obrázek nebo PDF.
+
+\subsection{Systém řízení báze dat MySQL}\label{mysql}
+Multiplatformní relační databázový systém {\it MySQL} je opět zřejmě
+nejoblíbenější a běžně nejdostupnější variantou nástroje svého druhu. Systém
+vyvinula švédská firma MySQL~AB. Ta se nejdříve stala
+akvizicí společnosti Sun, aby před nedávnem došlo ke spojení ještě
+většímu a oba zmíněné subjekty začne v blízké době vlastnit databázový
+gigant Oracle. Jelikož je MySQL možnou konkurencí Oracle, není budoucnost
+této databáze jasná \cite{mysql}. Systému MySQL využívá mnoho známých produktů psaných v PHP (viz
+\ref{php}), ale také velké společnosti jako např. Google.
+
+MySQL byla i se svým dialektem jazyka SQL od začátku vyvíjena jako
+lehká a rychlá databáze \cite{sql}. Proto byly některé (mohlo by se
+zdát zásadní) funkce přidávány až v posledních letech, kdy začaly chybět vývojářům
+stavějící na MySQL své aplikace. Od verze 5 (od roku 2005) však
+podporuje již většinu svých kritizovaných nedostatků.
+
+Často se při vývoji webových aplikací používá pro přístup k databázi
+mezivrstva, jež abstrahuje rozdíly jednotlivých SŘBD a umožňuje tak
+programátorovi kdykoliv v budoucnu správu perzistentního úložiště
+vyměnit. Taková vrstva je použita i v mé práci, která je v důsledku
+toho na druhu SŘBD závislá minimálně. Vrstva se jmenuje {\it dibi},
+je naprogramovaná v PHP a jedná se o projekt úzce spjatý s Nette
+Frameworkem (viz \ref{nette}).
+
+\subsection{Nette Framework}\label{nette}
+Programování v PHP samotném je na abstraktnější úrovni než např.
+vývoj v jazyce C, ale i tak není možné vyhnout se rutinním a
+problémovým konstrukcím, které je třeba stále znova řešit. U webových
+aplikací, které v podstatě vycházejí všechny ze stejných principů a
+postupů, to platí v ještě větší míře. Řešením je použít framework.
+
+{\it Nette Framework} je open-source\footnote{Od roku 2008. Framework
+podle slov jeho autora a hlavního vývojáře Davida Grudla existuje již od
+roku 2004.} knihovna napsaná v čistě objektovém PHP5. Je tak
+pokroková, že využívá dokonce nejnovější verze PHP5.3 z 30. června
+2009\footnote{Existují samozřejmě souběžné verze frameworku i pro
+starší PHP.}. Nette je sestaveno z modulů, které lze často použít i
+samostatně, nezávisle na sobě. Tímto rysem se podobá rozsáhlému
+frameworku Zend od tvůrců PHP. Na rozdíl od něj je však mnohem menší
+a i výkonnější \cite{netteTest} \cite{netteCo}.
+
+Nette vychází pod derivátem BSD licence a lze na něm proto stavět
+komerční aplikace. Vyrostla kolem něj aktivní komunita vývojářů a brzy
+na něm začaly programovat weby i velké tuzemské společnosti. Jmenujme
+např. Mladou Frontu nebo Internet Info (vydavatel Lupa.cz, Root.cz).
+
+Přednostmi Nette Frameworku je jeho česká podpora,
+pokrokovost, inovativní myšlenky, efektivní integrovaný šablonovací
+systém, výkonnost, zabudované ladící nástroje a také modulárnost,
+která jej umožňuje kombinovat s jinými knihovnami. Z hlediska
+architektury je Nette založeno na upraveném vzoru MVC (viz \ref{mvc})
+a funguje na bázi událostmi řízeného návrhu. Jedním z důležitých aspektů je také
+rychlý vývoj frameworku. Nette je stále poměrně nové, ale komunita
+kolem něj za poměrně krátkou dobu vytvořila již poměrně rozsáhlou
+dokumentaci\footnote{Viz \url{http://nettephp.com/cs/dokumentace}.}.
+\cite{netteProc}
 
 \section{Práce s API}\label{api}
 API služeb relevantních pro tento projekt je poskytováno v zásadě
@@ -755,7 +1024,7 @@ požadavků aj. Kontrola klíče je často inteligentní a není aplikována
 při použití na vlastním stroji (IP adresa 127.0.0.1, tzv. {\it
 localhost}) za účely vývoje a ladění aplikace. Zajímavá možnost je
 připojovat a odpojovat skripty k dokumentu dynamicky, pomocí jiného
-řídícího skriptu a technologie DOM (viz \ref{javaScript}).
+řídícího skriptu a technologie DOM (viz \ref{dom}).
 
 \subsection{Technologie REST}\label{rest}
 REST je architektura představená v roce 2000 jedním z autorů
@@ -774,11 +1043,61 @@ setkat s jinými, jako např. u Google Chart API, kde lze přes REST
 pohodlně vygenerovat obrázek s grafem (použití v \ref{grafy}).
 
 \subsection{Univerzální jazyk XML}\label{xml}
-zakladni uvedeni do problematiky, vyhody nevyhody\ldots
-jen mala zminka, pro uplnost
+XML, celým názvem {\it Extensible Markup Language}, je obecný
+značkovací jazyk. Byl vytvořen se záměrem poskytnout univerzální
+řešení pro značkování dat a dokumentů. XML vlastně ani není kompletní
+deklarativní jazyk, protože neobsahuje sémantiku. Značky XML jsou
+prakticky totožné se značkami jak je známe z HTML, jen jejich názvy
+nejsou předem určeny. Můžeme si díky tomu v rámci XML vytvořit skupinu
+vlastních pravidel a názvů (pomocí popisů jako DTD nebo např. XML
+Schema). Takovým vymezením konkrétních značek zavádíme do XML sémantiku a
+získáme tzv. {\it aplikaci XML}, tedy jeho podmnožinu pro konkrétní
+použití.
+
+Aplikacemi XML jsou např. formát pro syndikaci publikovaných článků
+RSS, formát pro vektorovou grafiku SVG, publikační nástroj DocBook,
+protokol XMPP (znám jako {\it Jabber}), ale např. i nejnovější
+formáty kancelářských balíků jako Office Open XML a OpenDocument.
+
+XML jako nosič dat lze v aplikacích snadno zpracovávat a díky jeho
+rozšířenosti jsou pro to nástroje do programovacích jazyků zabudovány
+již často v základní výbavě. Dva základní přístupy ke
+zpracování XML jsou DOM a SAX (oba popsány v \ref{dom}). Jednou z
+možností jak zpracovávat XML je navíc jeho transformace do jiného typu
+dokumentu (např. do HTML, PDF) pomocí stylů XSL.
+
+Všechny tyto vlastnosti dělají XML velmi výhodným jazykem pro přenos
+a uchování strukturovaných textových informací. XML má však i své
+nevýhody a ty lze vidět především u minimalistického použití jako v
+případě AJAXu nebo různých API (viz \ref{ajax} a \ref{rest}). Pokud
+chceme pomocí XML doručovat jednoduché struktury a základní datové typy, zjistíme, že systém
+tohoto jazyka je pro naše účely příliš komplexní a jeho fragmenty
+nesou více informací v názvech značek než mezi nimi. Proto vznikly
+tzv. \uv{odlehčené}, lidsky čitelné formáty jako YAML nebo JSON.
+
 \subsection{Lidsky čitelný JSON}\label{json}
-vyhody nevyhody\ldots
-REST (odkaz nahoru), JSON (vysvetleni formatu)
+Jak napovídá celý název, {\it JavaScript Object Notation}, JSON byl
+vyvinut v kontextu jazyka JavaScript. Dnes je však samostatným, na
+jazyku či platformě nezávislým způsobem zápisu dat. JSON jsou v
+podstatě serializované objekty naplněné jednoduchými daty (např.
+{\tt \{ jmeno: "Jan", prijmeni: "Javorek", povolani: "student" \}}).
+Jeho výhodami je jednoduchost a také snadná čitelnost pro člověka.
+
+Mezi hlavní nevýhody JSON patří absence určení kódování obsahu
+(znaky mimo ASCII se nahrazují escape sekvencemi) a nemožnost pojmout
+složitější data. To ovšem není tak zásadní problém,
+přihlédneme-li, že přesně za účelem najít odlehčený datový nosič byl
+JSON vynalezen. Protože vychází z JavaScriptu a je de facto literálem
+objektu tohoto jazyka, zpracovává se v něm často pomocí funkce {\tt
+eval()}, která jej za běhu jednoduše jako literál objektu
+interpretuje. Pokud jsou ale zrovna v JSON struktuře uložena škodlivá
+data, může tento přístup vést k bezpečnostním problémům. Proto
+existují sofistikovanější funkce pro jeho rozklad a transformaci do
+objektu. \cite{json}
+
+Formát JSON se objevil s rozmachem AJAXu a dnes se používá na mnoha
+místech, kde k přenosu dat stačí méně komplexní nástroje než je XML
+(viz \ref{ajax} a \ref{rest}).
 
 \chapter{Návrh systému}
 navrh databaze, mozna use case, popis celkoveho reseni systemu,
@@ -786,8 +1105,8 @@ navrh databaze, mozna use case, popis celkoveho reseni systemu,
 \chapter{Implementace}
 struktura portalu, viz 9193 str 26
 
-detaily v kapitolkach o jednotlivych problemech jako pocitani ruznych bodu na mape, reseni prodlev dat
-dodavanych z api, zdvojovani api apod.
+detaily v kapitolkach o jednotlivych problemech jako pocitani ruznych
+bodu na mape, reseni prodlev dat dodavanych z api, zdvojovani api apod.
 
 rozepsani detailneji nez v minule kapitole o tom kde je javascript,
 co dela, jak je implementovano ukladani, kresleni car na tu mapu
