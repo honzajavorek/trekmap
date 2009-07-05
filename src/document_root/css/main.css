@@ -1,12 +1,29 @@
-body {
-	font: 75% "Trebuchet MS", "Geneva CE", lucida, sans-serif;
-	color: #333;
-	background-color: #fff;
+/**
+ * Main stylesheet.
+ *
+ * (c) Jan Javorek, 2009 (http://www.javorek.net)
+ */
+
+/* layout ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+html, body {
+	height: 100%;
 }
 
-h1 {
-	font-size: 150%;
-	color: #165ca3;
+body {
+    font: 75% sans-serif;
+}
+
+#document {
+	width: 998px;
+}
+
+.wrapper {
+	padding: 0 2em;
+}
+
+.cleaner {
+	padding-top: 2em;
 }
 
 #spinner {
@@ -16,16 +33,404 @@ h1 {
 	z-index: 1000;
 }
 
-p.flash {
-	color: black;
-	background: #FFF9D7;
-	border: 1px solid #E2C822;
-	padding: 1em;
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+/* faux absolute positioning ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.clothesline {
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+.column {
+	position: relative;
+	float: left;
+	left: 100%;
+	overflow: hidden;
+}
+
+#left {
+	margin-left: -998px;
+	width: 250px;
+}
+
+#right {
+    margin-left: -733px;
+	width: 733px;
+}
+
+/* header ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+body {
+    background: #FFF url('../img/bar.png') 0 31px repeat-x;
+}
+
+#logo {
+	padding: 24px 0 5px 0;
+}
+
+#logo a {
+	color: #222;
+	display: block;
+	width: 206px; height: 43px;
+	text-decoration: none;
+	overflow: hidden;
+	text-align: center;
+	line-height: 43px;
+	position: relative;
+}
+
+#logo a:hover, #logo a:focus {
+	color: #197B30;
+}
+
+#logo span {
+	display: block;
+	width: 206px; height: 43px;
+	position: absolute; left: 0; top: 0;
+	background: url('../img/logo.png') center no-repeat;
+}
+
+/* menu ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#menu {
+	position: absolute; left: 275px; top: 31px;
+	font-family: 'Trebuchet MS', 'Geneva CE', lucida, sans-serif;
+}
+
+#menu li {
+	float: left;
+	margin-right: 15px;
+}
+
+#menu a {
+	display: block;
+	width: 75px; height: 29px;
+	font-weight: bold;
+	overflow: hidden;
+	text-align: center;
+	text-decoration: none;
+	line-height: 35px;
+	background: #222 url('../img/menu.png') center -29px no-repeat;
+	color: #EEE;
+}
+
+#menu .active a, #menu a:hover, #menu a:focus {
+    line-height: 38px;
+    background-position: center top;
+    color: #222;
+}
+
+/*#menu a:active {
+	line-height: 35px;
+    background-position: center bottom;
+    color: #EEE;
+}*/
+
+/* user ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#user {
+	position: absolute; right: 0; top: 0;
+	background: #222 url('../img/user.png') center no-repeat;
+	width: 260px; height: 60px;
+	color: #EEE;
+}
+
+#user h2 {
+	color: #EEE;
+	margin: 0; margin-top: 10px;
+	line-height: 150%;
+	font-weight: bold;
+}
+
+#user ul, #user li {
+	margin: 0; padding: 0;
+	display: inline;
+	word-spacing: 0.5em;
+}
+
+#user a {
+    color: #EEE;
+}
+
+#user li a {
+    font-size: 90%;
+}
+
+#user a:hover, #user a:focus {
+	color: #222;
+	background: #FFF;
+}
+
+#user img {
+	float: left;
+	margin: 0 10px 10px 35px;
+	width: 40px; height: 40px;
+}
+
+/* flashes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.flashes .flash {
+	margin: 0.5em 0; padding: 0.5em 2em;
+	text-align: center;
+}
+
+.flashes .note, .flashes .permanent, .flashes .note a, .flashes .permanent a {
+	background: #FFF799;
+	color: #A36209;
+}
+
+.flashes .note a:hover, .flashes .permanent a:hover, .flashes .note a:focus,
+.flashes .permanent a:focus {
+    background: #A36209;
+	color: #FFF799;
+}
+
+.flashes .error, .flashes .error a {
+	background: #FF9999;
+	color: #A30909;
+}
+
+.flashes .error a:hover, .flashes .error a:focus {
+    background: #A30909;
+	color: #FF9999;
+}
+
+/* corpus ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#corpus {
+	background: url('../img/footer.png') bottom repeat-x;
+	min-height: 100%;
+	padding: 0;
+	position: relative;
+	width: 100%;
+}
+
+#document {
+    padding-bottom: 200px;
+}
+
+/* footer ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.footer {
+	position: absolute; left: 0; bottom: 0;
+	width: 100%;
+	text-align: center;
+}
+
+.footer p {
+	margin: 0 auto; padding: 0;
+	font-size: 90%;
+	line-height: 35px;
+	width: 968px;
+	text-align: right;
+}
+
+.footer, .footer a {
+	color: #FFF;
+	text-decoration: none;
+}
+
+.footer a:hover, .footer a:focus {
+	background: #FFF;
+	color: #222;
+}
+
+/* links ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#links {
+	position: absolute; left: 0; bottom: 35px;
+	width: 100%; height: 104px;
+	overflow: hidden;
+	text-align: center;
+}
+
+#links .wrapper {
+    margin: 0 auto; padding: 1em 0;
+    line-height: 26px;
+    width: 968px;
+	text-align: left;
+}
+
+#links ul, #links li {
+	margin: 0; padding: 0;
+	
+}
+
+#links li {
+	float: left;
+	margin-right: 1em;
+}
+
+#links a {
+	font-size: 90%;
+	color: #595959;
+}
+
+#links a:hover, #links a:focus {
+	color: #E6E6E6;
+	background: #595959;
+}
+
+#links h3 {
+	float: left;
+	clear: both;
+	width: 8em;
+	font-weight: bold;
+	font-size: 120%;
+	color: #2165BA;
+}
+
+/* content ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+#content {
+	margin-top: 20px;
+}
+
+.article a {
+	color: #2165BA;
+}
+
+.article a:hover, .article a:focus {
+	color: #FFF;
+	background: #2165BA;
+}
+
+acronym:hover, abbr:hover {
+    color: #197B30;
+}
+
+.article h1, .article h2, .article h3, .article h4 {
+    font-family: 'Trebuchet MS', 'Geneva CE', lucida, sans-serif;
+    letter-spacing: 0.3pt;
+    clear: both;
+}
+
+.article h1 {
+	font-size: 2em;
+	line-height: 1.5em;
+	margin-bottom: 1em;
+	color: #2165BA;
+}
+
+.article h2 {
+    font-size: 1.5em;
+	line-height: 1.333em;
+	margin-bottom: 1em;
+    color: #197B30;
+}
+
+.article h3 {
+	font-weight: bold;
+	margin-bottom: 0.5em;
+    color: #222;
+}
+
+.article ul li {
+    background: url('../img/bullet.png') 0.3em 0 no-repeat;
+}
+
+.article img { margin: 1em; }
+.article img.float-left { float: left; margin-left: 0; }
+.article img.float-right { float: right; margin-right: 0; }
+
+small {
+	font-size: 80%;
+}
+
+small, .article small a {
+    color: #B4B09E;
+}
+
+.article small a:hover, .article small a:focus {
+    background: #B4B09E;
+}
+
+blockquote {
+	margin: 0 0 1em 0;
+	text-indent: 0;
+    border-left: 3px solid #E6E6E6;
+    padding-left: 1.5em;
+    font-style: italic;
+	color: #343434;
+}
+
+abbr, acronym {
+    font-variant: normal;
+	border-bottom: 1px dotted #000000;
+}
+
+del { text-decoration: line-through; }
+ins { text-decoration: underline; }
+sub, sup { font-size: 80%; }
+
+dfn, em, cite, var {
+	font-style: italic;
+}
+
+pre {
+	margin: 2em 0; padding: 0.5em 1.5em;
+    overflow: auto;
+    background: #eaf5b8;
+    border: 1px solid #d2dca5;
+}
+
+code, sample, kbd, tt {
+    margin: 0; padding: 0 0.2em;
+    background: #E6E6E6;
+	font-family: 'monospace font Firefox hack', Consolas, monospace;
+}
+
+pre code, pre sample {
+	padding: 0;
+}
+
+.eye-catcher {
+	background: #AAA;
+	color: #FFF;
+	margin: 1em; padding: 1em;
+	text-align: center;
+	font-size: 150%;
+}
+
+/* user gallery ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.article .user-gallery, .article .user-gallery li {
+	background: none;
+	margin: 0; padding: 0;
+}
+
+.user-gallery li {
+	float: left;
+	text-align: center;
+}
+
+.user-gallery img {
+	margin: 1em auto;
+}
+
+.article .user-gallery a {
+	background: none;
+	display: block;
+    width: 150px; height: 150px;
+    overflow: hidden;
+}
+
+.user-gallery a:hover strong, .user-gallery a:focus strong {
+	background: #2165BA;
+}
+
+/* map ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.map-large {
+	height: 400px;
+}
+
+#trekmap-altitude-chart {
 	margin: 1em 0;
 }
 
-a[href^="error:"] {
-	background: red;
-	color: white;
-	text-decoration: blink;
-}
+

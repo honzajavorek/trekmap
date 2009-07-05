@@ -1,5 +1,14 @@
 <h1>{$title}</h1>
-		
-@{? //$cloud->render() }
-		
 
+<ul class="user-gallery">
+{foreach $users as $user}
+	<li>
+	<a href="{link User:profile $user['id']}" title="{$user['fullname']} na TrekMap">
+		<img src="{$presenter->linkGravatar(80, $user['email'], $user['female'])}" alt="gravatar &mdash; {$user['fullname']}">
+		<strong>{$user['fullname']}</strong>
+	</a>
+	</li>
+{/foreach}
+</ul>
+
+<p class="cleaner">Počet všech uživatelů: <strong>{=count($users)}</strong></p>

@@ -14,19 +14,8 @@ class UserPresenter extends BasePresenter {
 	public function renderDefault() {
 		$this->template->title = 'Borci a borkyně';
 		
-		// TODO
-//		$cloud = new CloudControl('User:profile');
-//		
-//		$u = new Users;
-//		$result = $u->getAll()->select(array('characters', 'id', 'fullname'));
-//		
-//		$all = $result->fetchAll();
-//		foreach ($all as $item) {
-//			$cloud->addItem($item['characters'], $item['id'], $item['fullname']);
-//		}
-//
-//		$this->addComponent($cloud, 'cloud');
-//		$this->template->cloud = $cloud;
+		$u = new Users;
+		$this->template->users = $u->getAll()->orderBy('id', 'DESC')->fetchAll();
 	}
 	
 	/********************* view profile *********************/

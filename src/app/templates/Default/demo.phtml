@@ -1,14 +1,11 @@
-<h1>{$title}</h1>
-
+<div class="clothesline">
+<div class="column" id="left">
+<h1>Demo</h1>
 <p>Zde si můžeš vyzkoušet zaznamenávání trasy do mapy.
 Můžeš ji dokonce jednorázově uložit a získat na ni odkaz (bude fungovat i nezaregistrovaným).</p>
 
-<div id="trekmap" style="height: 300px;"></div>
-
 <div id="trekmap-menu"><button id="trekmap-toggle-mode">Změnit režim</button></div>
 <button id="trekmap-save">Uložit</button>
-
-<div id="trekmap-altitude-chart"></div>
 
 <p>Kilometrů: <strong id="trekmap-total-distance"></strong></p>
 
@@ -21,3 +18,12 @@ Můžeš ji dokonce jednorázově uložit a získat na ni odkaz (bude fungovat i
 	<label for="trekmap-altitude">Výškový profil:</label>
 	<input id="trekmap-altitude" type="checkbox" checked>
 </p>
+
+</div>
+<div class="column" id="right">
+
+<div id="trekmap" class="map-large"></div>
+<div id="trekmap-altitude-chart"></div>
+
+</div>
+</div>

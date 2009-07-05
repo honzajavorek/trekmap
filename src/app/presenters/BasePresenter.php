@@ -79,11 +79,15 @@ abstract class BasePresenter extends Presenter {
 	/**
 	 * Creates link to GRAVATAR.
 	 */
-	function linkGravatar($size, $email = NULL, $isFemale = FALSE) {
-		if (empty($email)) {
-			return Environment::getVariable('baseUri') . 'img/somebody.png';
+	function linkGravatar($size, $email = NULL, $isFemale = NULL) {
+		if ($email === NULL && $isFemale === NULL) { // guest
+			return Environment::getVariable('baseUri') . "img/user-somebody$size.png";
 		}
-		$default = Environment::getVariable('absoluteUri') . 'img/' . (($isFemale)? 'girl.png' : 'boy.png');
+		$genderImg = (($isFemale)? "user-girl$size.png" : "user-boy$size.png");
+		if ($email === NULL) { // unknown e-mail
+			return Environment::getVariable('baseUri') . 'img/' . $genderImg;
+		}
+		$default = Environment::getVariable('absoluteUri') . 'img/' . $genderImg;
 		return 'http://www.gravatar.com/avatar.php?gravatar_id='
 		. md5(trim($email))
 		. '&default='

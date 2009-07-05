@@ -1,28 +1,35 @@
 <h1>{$title}</h1>
 
+<h2>Co je to OpenID?</h2>
+{include '../@help.openid.phtml'}
+
+<h2>Gravatar</h2>
+{include '../@help.gravatar.phtml'}
+
 <h2>JavaScript</h2>
-<p>K tomu, aby TrekMap správně běžel, je třeba podpora pro jazyk JavaScript.</p>
+
+<p>K tomu, aby TrekMap správně běžel, je třeba podpora pro jazyk JavaScript. Jak si JavaScript zapnout?</p>
+
 <p class="eye-catcher">
 	<noscript>JavaScript nyní <strong>nefunguje</strong>.</noscript>
 	<script>document.write('JavaScript <strong>jede v pořádku</strong>!');</script>
 </p>
-<p>Jak si JavaScript zapnout?</p>
 
 <h3>Internet Explorer 6&nbsp;a vyšší</h3>
 
-<p><img src="{$baseUri}img/ie7.png" alt="Logo Internet Exploreru" class="float-right">
+<p><img src="{$baseUri}img/ie7.png" alt="Logo Internet Exploreru" class="float-left">
 Nabídka <kbd>Nástroje → Možnosti Internetu → Zabezpečení → Zóna:
 Internet → Vlastní úroveň → Skriptování → Aktivní skriptování
 →</kbd> zatrhnout <kbd>Povolit</kbd>.</p>
 
 <h3>Firefox 1.5&nbsp;a vyšší</h3>
 
-<p><img src="{$baseUri}img/firefox.png" alt="Logo Mozilla Firefoxu" class="float-right">
+<p><img src="{$baseUri}img/firefox.png" alt="Logo Mozilla Firefoxu" class="float-left">
 Nabídka <kbd>Nástroje → Možnosti… → Obsah →</kbd> zatrhnout
 <kbd>Povolit JavaScript</kbd>.</p>
 
 <h3>Opera 8.5&nbsp;a vyšší</h3>
 
-<p><img src="{$baseUri}img/opera.png" alt="Logo Opery" class="float-right">
+<p><img src="{$baseUri}img/opera.png" alt="Logo Opery" class="float-left">
 Nabídka <kbd>Nástroje → Nastavení… → Pokročilé volby → Obsah
 →</kbd> zatrhnout<kbd> Povolit JavaScript</kbd>.</p>

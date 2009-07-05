@@ -9,8 +9,20 @@
  */
 class DefaultPresenter extends BasePresenter {
 
+	public function actionDefault() {
+	    $user = Environment::getUser();
+		if ($user->isAuthenticated()) {
+			$this->setView('dashboard');
+		}
+	}
+
 	public function renderDefault() {
-		$this->template->title = 'Ahoj';
+		$this->template->title = 'Ahoj!';
+		// TODO
+	}
+	
+	public function renderDashboard() {
+	    $this->template->title = 'Ahoj!';
 		// TODO
 	}
 	
@@ -31,9 +43,11 @@ class DefaultPresenter extends BasePresenter {
 			$this->absoluteUrls = FALSE;
 			
 			$this->template->flashes[] = (object)array(
-				'type' => 'info',
+				'type' => 'permanent',
 				'message' => "Adresa této trasy je <strong><a href=\"$link\">$link</a></strong>. Odkaz je platný měsíc.",
 			);
+			
+			$this->template->title .= " [ $id ]";
 		}
 	}
 	

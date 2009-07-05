@@ -6,8 +6,12 @@
  * @package    Javorek
  */
 
+function apiMissing() {
+	return (undefined === window.MooTools || undefined === window.AMap);
+}
+
 // MooTools required, AMapy required
-if (undefined === window.MooTools || undefined === window.AMap) { throw new Error('MooTools and/or AMapy are undefined.'); }
+if (apiMissing()) { throw new Error('MooTools and/or AMapy are undefined.'); }
 // php is global variable with some basic config and info from server side
 if (!$defined(window.php)) { throw new Error('Global variable php is undefined.'); }
 
@@ -595,16 +599,6 @@ trekmap.distance = {
  */
 trekmap.altitude = {
 	/**
-	 * Weight of chart.
-	 */
-	width: 500,
-	
-	/**
-	 * Height of chart.
-	 */
-	height: 100,
-	
-	/**
 	 * Color of chart line.
 	 */
 	color: '#197B30',
@@ -782,7 +776,10 @@ trekmap.altitude = {
 			ds += (((trekmap.points[i].meters / ratio) * 100) / dMax).toFixed(4) + ',';
 		}
 
-		var w = trekmap.altitude.width, h = trekmap.altitude.height;
+		// size
+		var w = $('trekmap').getStyle('width').toInt();
+		var h = Math.ceil($('trekmap').getStyle('height').toInt() / 3);
+		
 		var uri = 'http://chart.apis.google.com/chart?chxt=x,y&chxr=0,0,' + dMax + '|1,' + altMin + ',' + altMax + '&cht=lxy&chd=t:' + ds.slice(0, -1) + '|' + alts.slice(0, -1) + '&chs=' + w + 'x' + h + '&chco=' + trekmap.altitude.color.slice(1) + '&chls=1,1,0';
 		$('trekmap-altitude-chart').setStyles({
 			width: w + 'px',

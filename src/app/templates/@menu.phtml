@@ -1,4 +1,4 @@
-<li><a href="{link Default:}">Ahoj!</a></li>
-<li><a href="{link Track:}">Trasy</a></li>
-<li><a href="{link User:}">Borci</a></li>
-<li><a href="{link Default:demo}">Zkusit</a></li>
+<li{if $presenter->backlink() == ':Default:default'} class="active"{/if}><a href="{link Default:}">Ahoj!</a></li>
+<li{if $presenter->getName() == 'Track'} class="active"{/if}><a href="{link Track:}">Trasy</a></li>
+<li{if $presenter->getName() == 'User'} class="active"{/if}><a href="{link User:}">Borci</a></li>
+<li{if $presenter->backlink() == ':Default:demo'} class="active"{/if}><a href="{link Default:demo}">Zkusit</a></li>

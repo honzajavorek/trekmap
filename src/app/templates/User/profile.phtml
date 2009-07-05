@@ -1,15 +1,17 @@
 <div class="vcard">
 <h1>{$t}<span class="fn n">{$fullname}</span></h1>
 
-<p><img class="photo" src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$fullname}" class="float-right">{!$bio}</p>
+<p><img class="float-left" src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$fullname}">{!$bio}</p>
 {if $identity && $identity->id == $url}
 <p><a href="{link Account:}">Chceš upravit tento text? Změnit obrázek?</a></p>
 {/if}
 
+<!--
 <h2>Recepty, na nichž se nejvíce podílel{$a}</h2>
 @{? //$characters->render() }
 
 <h2>Nejoblíbenější recepty, na nichž se podílel{$a}</h2>
 @{? //$popularity->render() }
+ -->
 
 </div>

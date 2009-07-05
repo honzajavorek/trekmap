@@ -6,6 +6,11 @@
 		{/if}
 		
 		<fieldset>
+			<legend>Veřejný profil</legend>
+			<p><a href="{link User:profile $identity->id}">Jak mě vidí ostatní?</a></p>
+		</fieldset>
+		
+		<fieldset>
 			<legend>Kdo jsem</legend>
 			<p>Tyto údaje jsou <strong>vždy při přihlášení</strong> synchronizovány s tvým OpenID. Pokud ve svém OpenID změníš jméno, změní se i tady. E-mail není nikde zveřejňován.</p>
 			<table>
@@ -19,7 +24,7 @@
 				</tr>
 				<tr>
 					<th>E-mail</th>
-					<td>{$email}</td>
+					<td>{if empty($email)}<em>nebyl poskytnut</em>{else}{$email}{/if}</td>
 				</tr>
 			</table>	
 		</fieldset>
@@ -47,18 +52,13 @@
 		
 		<fieldset>
 			<legend>Obrázek</legend>
-			<p>TrekMap podporuje tzv. <a href="http://www.gravatar.com/">gravatar</a>, což je <strong>obrázek navázaný na tvůj e-mail</strong>. Používá se různě po Internetu, ale hlavně asi na <a href="http://cs.wikipedia.org/wiki/Blog">blozích</a>. Když si na <a href="http://www.gravatar.com/">gravatar.com</a> zaregistruješ pod svůj e-mail obrázek, bude se ti zobrazovat i tady na TrekMap. V opačném případě se zobrazuje výchozí obrázek podle pohlaví.</p>
+			{include '../@help.gravatar.phtml'}
 			<table>
 				<tr>
 					<th>Aktuální obrázek</th>
 					<td><img src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$id->fullname}"></td>
 				</tr>
 			</table>
-		</fieldset>
-		
-		<fieldset>
-			<legend>Veřejný profil</legend>
-			<p><a href="{link User:profile $identity->id}">Jak mě vidí ostatní?</a></p>
 		</fieldset>
 		
 		{$form->render('end')}

@@ -141,8 +141,8 @@ class AccountPresenter extends BasePresenter {
 
 			// SimpleRegister
 			$sregRequest = Auth_OpenID_SRegRequest::build(
-			array('fullname', 'email'), // mandatory
-			array('gender')); // optional
+			array('fullname'), // mandatory
+			array('nickname', 'email', 'gender')); // optional
 
 			if ($sregRequest) {
 				$authRequest->addExtension($sregRequest);
@@ -210,14 +210,23 @@ class AccountPresenter extends BasePresenter {
 			    // info from Simple Registration
 			    $sregResp = Auth_OpenID_SRegResponse::fromSuccessResponse($response);
 			    $sreg = $sregResp->contents();
-			    if (empty($sreg['email']) || empty($sreg['fullname'])) {
-			        throw new AuthenticationException('OpenID neposkytlo e-mail nebo celé jméno. Obě jsou potřeba.');
+
+			    if (empty($sreg['fullname'])) {
+			        throw new AuthenticationException('OpenID neposkytlo celé jméno. Bez něj to bohužel nepůjde.');
 			    }
 	
 			    $identity = trim(str_replace(array('http://', 'https://'), '', $identity), '/'); // sanitize ID
-			    $email = $sreg['email'];
 			    $fullname = $sreg['fullname'];
 			    $female = (empty($sreg['gender']) || $sreg['gender'] == 'M')? 0 : 1;
+			    
+			    // email
+			    $email = NULL;
+				if (!empty($sreg['nickname']) && preg_match('~^[^@\s]+@[^@\s]+\.[a-z]{2,10}$~i', $sreg['nickname'])) {
+					// attempt to resolve email from nickname (seznam.cz)
+		    		$email = $sreg['nickname'];
+		    	} elseif(!empty($sreg['email'])) {
+		    		$email = $sreg['email'];
+		    	}
 			    
 				// success
 				$user = Environment::getUser();

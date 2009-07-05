@@ -1,0 +1,132 @@
+/**
+ * Little CSS framework.
+ *
+ * Reset stylesheet inspired by
+ * http://developer.yahoo.com/yui/reset/
+ *
+ * (c) Jan Javorek, 2009 (http://www.javorek.net)
+ */
+
+/* hidden elements ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+.hidden, hr {
+	position: absolute; left: -3800px;
+	visibility: hidden;
+	line-height: 0;
+	font-size: 0;
+}
+
+/* general elements ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+html,body,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,
+acronym,address,code,del,dfn,em,img,q,dl,dt,dd,ol,ul,li,form,label,
+legend,table,caption,tbody,tfoot,thead,tr,th,td {
+	margin: 0; padding: 0;
+	border: none;
+	font-style: inherit; font-weight: inherit;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
+object { margin: 0; padding: 0; }
+address,caption,cite,code,dfn,em,strong,th,var {
+	font-style: normal; font-weight: normal;
+}
+h1,h2,h3,h4,h5,h6 { font-size: 100%; font-weight: normal; }
+address { font-style: normal; }
+
+acronym, abbr {
+	border: 0;
+	border-bottom: #000 1px dotted;
+	cursor: help;
+	font-variant: normal;
+}
+
+img { display: block; }
+img, a img { border: none; }
+
+blockquote:before, blockquote:after, q:before, q:after { content: ''; }
+blockquote, q { quotes: '' ''; }
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+    font-size: inherit;
+	color: inherit;
+}
+caption, th { text-align: left; }
+caption { margin: 0.5em 0; }
+th, td { vertical-align: top; }
+
+a:link { text-decoration: underline; }
+a:link, a:link span, .button { cursor: pointer; }
+
+del { text-decoration: line-through; }
+ins { text-decoration: underline; }
+sub, sup { font-size: 80%; }
+
+dfn, em, cite, var { font-style: italic; }
+dt, caption, th, strong { font-weight: bold; }
+
+pre, code, kbd, samp, tt {
+	font-family: "Monospace font handling in Firefox hack", Consolas, monospace;
+	line-height: 100%;
+}
+pre {
+	margin: 2em 0; padding: 0.5em 1.5em;
+    overflow: auto;
+    background: #EEE;
+    border: 1px solid #DDD;
+}
+code, sample, kbd, tt {
+    margin: 0; padding: 0 0.2em;
+    background: #EEE;
+}
+pre code, pre sample { padding: 0; }
+
+ol { padding-left: 2em; }
+ol li { padding-left: 0; }
+dd { margin-left: 2em; }
+ul { list-style-type: none; }
+#content ul li { padding-left: 2em; }
+
+/* basic resets and positioning ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+html, body {
+	margin: 0; padding: 0;
+	width: 100%;
+    font-family: sans-serif;
+    cursor: default;
+    text-align: center;
+	background: #FFF;
+	color: #222;
+}
+
+body {
+    line-height: 1.5em;
+    font-size: 75%;
+}
+
+#document {
+	position: relative;
+    width: 100%;
+    margin: 0 auto; padding: 0;
+    text-align: left;
+}
+
+img.align-left { float: left; margin-left: 0; }
+img.align-right { float: right; margin-right: 0; }
+
+.cleaner { clear: both; }
+
+/* vertical rythm ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+p {
+	font-size: 1em;
+    line-height: 2em;
+    margin-bottom: 1em;
+}
+
+#content ul, ol, dl, table {
+	margin-bottom: 1em;
+}

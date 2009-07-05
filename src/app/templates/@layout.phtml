@@ -29,9 +29,11 @@
 	{/if}
 
 	<!-- stylesheets -->
+	<link rel="stylesheet" type="text/css" href="{$baseUri}css/framework.css" media="screen,projection,tv">
 	<link rel="stylesheet" type="text/css" href="{$baseUri}css/main.css" media="screen,projection,tv">
 	<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{$baseUri}css/ie.css" media="screen,projection,tv"><![endif]-->
 	<link rel="stylesheet" type="text/css" href="{$baseUri}css/print.css" media="print">
+	{if !Environment::isProduction()}<style type="text/css">/* debug mode */ a[href^="error:"] { background: red !important; color: white !important; text-decoration: blink !important; }</style>{/if}
 
 	<!-- javascript -->
 	{if !empty($scripts)}
@@ -49,72 +51,91 @@
 	<title>{$title} - TrekMap, mapuj svou trasu pro běh, kolo, běžky, in-line brusle!</title>
 </head>
 <body>
+	<div id="corpus">
 	<div id="document">
 		
-		<div class="header">
-			<strong><a href="{link Default:}" title="na úvodní stranu">TrekMap &mdash; mapuj svůj volný čas</a></strong>
+		<div class="header" id="logo">
+			<strong><a href="{link Default:}" title="na úvodní stranu">TrekMap &mdash; mapuj svůj volný čas<span></span></a></strong>
 		</div>
 		
-		<p>Přeskočit na <a href="#menu"
+		<p class="hidden">Přeskočit na <a href="#menu"
 		title="přeskočit na navigaci">menu ↓</a>.</p>
 
 		<hr>
 
 		<div class="flashes">
-		<noscript><p class="flash javascript">Máš vypnutý JavaScript. Bez něj TrekMap nejede, <a href="{link Default:help}">zapni si jej</a> prosím.</p></noscript>
-        {if !empty($flashes)}{foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}{/if}
+			<noscript><p class="flash error">Máš vypnutý JavaScript. Bez něj TrekMap nejede, <a href="{link Default:help}">zapni si jej</a> prosím.</p></noscript>
+			<script>if (undefined !== window.apiMissing && apiMissing()) { document.write('<p class="flash error">Omlouvám se, bohužel momentálně nefungují mapy poskytované společností Centrum Holdings. Zřejmě mají výpadek. <a href="{link $presenter->backlink()}">Zkus to znovu.</a></p>'); }</script>
+        	{if !empty($flashes)}{foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}{/if}
         </div>
 
+		<div class="article" id="content">
         {include $content}
+        </div>
         
         <hr>
 
-		<div class="nav">
-			<h2>Menu</h2>
+		<div class="nav" id="menu">
+			<h2 class="hidden">Menu</h2>
 			<ul>{include '@menu.phtml'}</ul>
 		</div>
 
 		<hr>
 
-		<div class="aside">
+		<div class="aside" id="user">
 {if isset($identity)}
-		<h2>{$identity->fullname}</h2>
-		<p><img src="{$presenter->linkGravatar(40, $identity->email, $identity->female)}" alt="gravatar &mdash; {$identity->fullname}"></p>
-		{include '@user.phtml'}
+		<h2><img src="{$presenter->linkGravatar(40, $identity->email, $identity->female)}" alt="gravatar &mdash; {$identity->fullname}">
+		<a href="{link User:profile $identity->id}">{$identity->fullname}</a></h2>
+		<ul>
+	        <li><a href="{link Account:}">Nastavení</a></li>
+			<li><a href="{link Account:logout $request}">Odhlásit</a></li>
+		</ul>
 {else}
-		<h2>Kolemjdoucí</h2>
-		<p><img src="{$presenter->linkGravatar(40)}" alt="kolemjdoucí"></p>
+		<h2><img src="{$presenter->linkGravatar(40)}" alt="kolemjdoucí">
+		Kolemjdoucí</h2>
 		<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>
 {/if}
-	
-		 	<hr>
-	
-			<div class="nav" id="menu">
-				<h2>Odkazy</h2>
-				
-				<h3>Ty</h3>
-				{if isset($identity)}<ul>{include '@user.phtml'}</ul>{else}<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>{/if}
-				
-				<h3>TrekMap</h3>
-				<ul>{include '@menu.phtml'}</ul>
-				
-				{if !empty($feeds)}
-				<h3>RSS</h3>
-				<ul>{foreach $feeds as $feed}<li><a href="{link $feed['link']}">{$feed['title']}</a></li>{/foreach}</ul>
-				{/if}
-			</div>
 		</div>
 
-		<hr>
+	</div>
 	
-		<div class="footer">
-		 	<p>{$copyright} <a href="http://honza.javorek.net/">Honza Javorek</a> &mdash;
-		 	<a href="{link Default:info}">O webu &amp; kontakt</a></p>
+	<hr>
+	
+	<div class="nav" id="links">
+	    <div class="wrapper">
+		<h2 class="hidden">Odkazy</h2>
+
+		<h3>Ty</h3>
+		{if isset($identity)}<ul>
+			<li><a href="{link Default:default}">Moje trasy</a></li>
+		    <li><a href="{link User:profile $identity->id}">Můj profil</a></li>
+            <li><a href="{link Account:}">Nastavení</a></li>
+			<li><a href="{link Account:logout $request}">Odhlásit</a></li>
+		</ul>{else}<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>{/if}
+
+		<h3>TrekMap</h3>
+		<ul>{include '@menu.phtml'}
+			<li><a href="{link Default:help}">Nápověda</a></li>
+			<li><a href="{link Default:info}">O webu &amp; kontakt</a></li>
+		</ul>
+
+		{if !empty($feeds)}
+		<h3>RSS</h3>
+		<ul>{foreach $feeds as $feed}<li><a href="{link $feed['link']}">{$feed['title']}</a></li>{/foreach}</ul>
+		{/if}
 		</div>
+	</div>
+	
+	<hr>
+	
+	<div class="footer">
+	 	<p>{$copyright} <a href="http://honza.javorek.net/">Honza Javorek</a> &mdash;
+	 	<a href="{link Default:info}">O webu &amp; kontakt</a></p>
+	</div>
 
-		<p>Zpět <a href="#document"
-		title="přeskočit na začátek">nahoru ↑</a>.</p>
-
+	<p class="hidden">Zpět <a href="#document"
+	title="přeskočit na začátek">nahoru ↑</a>.</p>
+	
 	</div>
 </body>
 </html>
