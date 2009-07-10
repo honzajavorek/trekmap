@@ -69,13 +69,18 @@ class AccountPresenter extends BasePresenter {
 		$this->template->female = $identity->female;
 		$form->addRadioList('female', 'Pohlaví', array(0 => 'chlapeček', 1 => 'holčička'))
 			->addRule(Form::FILLED, 'Když neznáš své pohlaví, tak se podívej dolů.')
-				->setValue($identity->female);
+			->setValue($identity->female);
 		$form->addSubmit('gender', 'Teď je to správně');
 
 		// bio
 		$form->addTextarea('description', 'Text', 40, 4)
 			->setValue($identity->description);
 		$form->addSubmit('bio', 'Uložit můj životní příběh');
+		
+		// place
+		$form->addText('place', 'Místo', NULL, 200)
+			->setValue($identity->place);
+		$form->addSubmit('geocoding', 'Uložit můj výchozí bod');
 		
 		// saving
 		$form->onSubmit[] = array($this, 'editUser');

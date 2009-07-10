@@ -85,7 +85,7 @@ $router[] = new Route('<presenter uzivatele|trasy>/<id [0-9]+>', array(
 	'action' => 'item',
 ));
 
-$router[] = new Route('<presenter ucet|uzivatele|trasy>/<action>/<id>', array(
+$router[] = new Route('<presenter xml|proxy|ucet|uzivatele|trasy>/<action>/<id>', array(
 	'action' => 'default',
 	'id' => NULL,
 ));

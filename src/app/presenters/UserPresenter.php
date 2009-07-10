@@ -41,7 +41,7 @@ class UserPresenter extends BasePresenter {
 			$this->template->bio = $row['description'];
 		}
 		
-		$this->template->url = $row['id'];
+		$this->template->id = $row['id'];
 		$this->template->email = $row['email'];
 		$this->template->female = $row['female'];
 		

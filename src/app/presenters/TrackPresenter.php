@@ -29,4 +29,30 @@ class TrackPresenter extends BasePresenter {
 //		$this->template->cloud = $cloud;
 	}
 	
+	/********************* view create *********************/
+	
+	public function renderCreate() {
+		$identity = Environment::getUser()->getIdentity();
+		
+		$this->template->title = 'Přidat novou trasu';
+		$this->template->scripts[] = 'trekmap'; // turn on the map scripts
+		$this->template->js['saveUri'] = $this->link('save!'); // link to signal
+		
+		// set place
+		$place = (string)$identity->place;
+		if (!empty($place)) {
+			$this->template->js['place'] = $place;
+		}
+	}
+	
+	public function handleSave($points) {
+//		$this->payload->uri = FALSE;
+//		if (!empty($points)) {
+//			$b = new Bookmarks;
+//			$id = $b->insert((string)$points);
+//			$this->payload->uri = $this->link($this->backlink(), $id);	
+//		}
+//		$this->terminate();
+	}
+	
 }

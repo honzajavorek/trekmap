@@ -35,7 +35,7 @@ class DefaultPresenter extends BasePresenter {
 			// load from database
 			$b = new Bookmarks;
 			$track = $b->fetch($id);
-			$this->template->js['autoload'] = $track; // track from db
+			$this->template->js['track'] = $track; // track from db
 			
 			// link
 			$this->absoluteUrls = TRUE;

@@ -173,9 +173,16 @@ body {
 
 /* flashes ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.flashes .flash {
-	margin: 0.5em 0; padding: 0.5em 2em;
+.flashes {
+	position: absolute; left: 0; top: 75px;
+	width: 100%;
 	text-align: center;
+}
+
+.flashes .flash {
+	display: inline;
+	padding: 0.3em 1em;
+	font-size: 100%;
 }
 
 .flashes .note, .flashes .permanent, .flashes .note a, .flashes .permanent a {
@@ -197,6 +204,10 @@ body {
 .flashes .error a:hover, .flashes .error a:focus {
     background: #A30909;
 	color: #FF9999;
+}
+
+.flashes small {
+	color: #000;
 }
 
 /* corpus ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -281,22 +292,22 @@ body {
 	width: 8em;
 	font-weight: bold;
 	font-size: 120%;
-	color: #2165BA;
+	color: #7C4A1F;
 }
 
 /* content ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 #content {
-	margin-top: 20px;
+	margin-top: 30px;
 }
 
 .article a {
-	color: #2165BA;
+	color: #7C4A1F;
 }
 
 .article a:hover, .article a:focus {
 	color: #FFF;
-	background: #2165BA;
+	background: #7C4A1F;
 }
 
 acronym:hover, abbr:hover {
@@ -312,8 +323,8 @@ acronym:hover, abbr:hover {
 .article h1 {
 	font-size: 2em;
 	line-height: 1.5em;
-	margin-bottom: 1em;
-	color: #2165BA;
+	margin-bottom: 0.5em;
+	color: #7C4A1F;
 }
 
 .article h2 {
@@ -398,14 +409,16 @@ pre code, pre sample {
 
 /* user gallery ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.article .user-gallery, .article .user-gallery li {
+#content .user-gallery, #content .user-gallery li {
 	background: none;
 	margin: 0; padding: 0;
 }
 
-.user-gallery li {
+#content .user-gallery li {
 	float: left;
+	border: 1px #E6E6E6 solid;
 	text-align: center;
+	margin-right: 1em;
 }
 
 .user-gallery img {
@@ -420,17 +433,28 @@ pre code, pre sample {
 }
 
 .user-gallery a:hover strong, .user-gallery a:focus strong {
-	background: #2165BA;
+	background: #7C4A1F;
 }
 
 /* map ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-.map-large {
+#trekmap {
 	height: 400px;
+	background: url('../img/loading.gif') center no-repeat;
 }
 
-#trekmap-altitude-chart {
+#tm-altitude-driver {
 	margin: 1em 0;
 }
 
+#trekmap {
+	border: 3px #222 solid;
+}
 
+#trekmap.editable {
+	border-style: dashed;
+}
+
+#trekmap a:hover, #trekmap a:focus {
+	color: #FFF !important;
+}

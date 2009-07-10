@@ -39,6 +39,15 @@
 		</fieldset>
 		
 		<fieldset>
+			<legend>Výchozí místo</legend>
+			<p>Podle tohoto místa se ti bude nastavovat mapa na výchozí pozici. Např. <em>Královo Pole, Brno</em> nebo <em>U Mostu, Varvažov</em>.</p>
+			<table>
+				<tr><th>{$form['place']->label}</th><td>{$form['place']->control}</td></tr>
+				<tr><td colspan="2">{$form['geocoding']->control}</td></tr>
+			</table>
+		</fieldset>
+		
+		<fieldset>
 			<legend>Něco málo o mně</legend>
 			<p>Sem můžeš napsat cokoli chceš. Příklad:</p>
 			<blockquote>
@@ -56,7 +65,7 @@
 			<table>
 				<tr>
 					<th>Aktuální obrázek</th>
-					<td><img src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$id->fullname}"></td>
+					<td><img width="80" height="80" src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$id->fullname}"></td>
 				</tr>
 			</table>
 		</fieldset>

@@ -2,6 +2,8 @@
 <html dir="ltr" lang="{$language}">
 <head profile="http://purl.org/uF/2008/03/">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=7"><!-- fixing Amapy.cz in IE8 -->
+	
 	<meta name="author" content="Honza Javorek, http://honza.javorek.net">
 	<meta name="copyright" content="{$copyright} Honza Javorek">
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,6 +39,7 @@
 
 	<!-- javascript -->
 	{if !empty($scripts)}
+	<script type="text/javascript" charset="utf-8" src="http://www.google.com/jsapi?key={=Environment::getVariable('google')}&amp;hl=cs&amp;sensor=false"></script>
 	<script type="text/javascript" charset="utf-8" src="http://amapy.atlas.cz/api/api.ashx?guid={=Environment::getVariable('amapy')}"></script>
 	{if !empty($js)}<script type="text/javascript">var php = {$js};</script>{/if}
 	{foreach $scripts as $script}<script type="text/javascript" charset="utf-8" src="{$baseUri}js/{$script}.js"></script>{/foreach}
@@ -65,7 +68,7 @@
 
 		<div class="flashes">
 			<noscript><p class="flash error">Máš vypnutý JavaScript. Bez něj TrekMap nejede, <a href="{link Default:help}">zapni si jej</a> prosím.</p></noscript>
-			<script>if (undefined !== window.apiMissing && apiMissing()) { document.write('<p class="flash error">Omlouvám se, bohužel momentálně nefungují mapy poskytované společností Centrum Holdings. Zřejmě mají výpadek. <a href="{link $presenter->backlink()}">Zkus to znovu.</a></p>'); }</script>
+			<script>if (undefined !== window.apiMissing && apiMissing()) { document.write('<p class="flash error">Je mi to líto, ale AMapy.cz mají zřejmě výpadek. <a href="{link $presenter->backlink()}">Zkus to prosím znovu.</a></p>'); }</script>
         	{if !empty($flashes)}{foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}{/if}
         </div>
 
@@ -84,7 +87,7 @@
 
 		<div class="aside" id="user">
 {if isset($identity)}
-		<h2><img src="{$presenter->linkGravatar(40, $identity->email, $identity->female)}" alt="gravatar &mdash; {$identity->fullname}">
+		<h2><img width="40" height="40" src="{$presenter->linkGravatar(40, $identity->email, $identity->female)}" alt="gravatar &mdash; {$identity->fullname}">
 		<a href="{link User:profile $identity->id}">{$identity->fullname}</a></h2>
 		<ul>
 	        <li><a href="{link Account:}">Nastavení</a></li>

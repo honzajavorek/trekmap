@@ -2,7 +2,7 @@
 <h1>{$t}<span class="fn n">{$fullname}</span></h1>
 
 <p><img class="float-left" src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$fullname}">{!$bio}</p>
-{if $identity && $identity->id == $url}
+{if isset($identity) && $identity->id == $id}
 <p><a href="{link Account:}">Chceš upravit tento text? Změnit obrázek?</a></p>
 {/if}
 

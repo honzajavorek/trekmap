@@ -5,6 +5,7 @@ variable.since = "2009"
 variable.robots = "all"
 variable.amapy = 
 variable.vyskopis = 
+variable.google = 
 
 service.Nette-Security-IAuthenticator = "Users"
 database.charset = "utf8"
