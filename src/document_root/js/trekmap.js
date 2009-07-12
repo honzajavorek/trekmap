@@ -8,7 +8,7 @@
 
 /* Compatibility ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-function debug(msg) { new Element('span').setText(msg.toString() + ' ').injectTop(document.body); }
+function debug(msg) { new Element('span').setText('' + msg + ' ').injectTop(document.body); }
 function apiMissing() { return (undefined === window.MooTools || undefined === window.AMap); }
 
 // MooTools required, AMapy required
@@ -214,30 +214,57 @@ var TrekMap = new Class({
 		var guard = new Element('div', {id: 'tm-lock'})
 			.setStyles({
 			 	position: 'absolute', top: 0, left: 0, 'z-index': 999,
+			 	background: 'transparent',
 			 	width: this.element.getStyle('width'), height: this.element.getStyle('height'),
-			 	cursor: 'not-allowed',
+			 	cursor: 'wait', //cursor: 'not-allowed',
 			 	display: 'none'
 			})
 			.injectInside(this.element);
-		new Fx.Style(guard, 'opacity').set(0.50);
+		new Fx.Style(guard, 'opacity').set(0.65);
 		return guard;
+	},
+	
+	displayGuard: function() {
+		this.guard.setStyle('display', 'block');
+		//(function() {
+			this.guard.setStyle('background', '#FFF');
+		//}).delay(1000, this);
+	},
+	
+	hideGuard: function() {
+		this.guard.setStyle('display', 'none').setStyle('background', 'transparent');
 	},
 	
 	lock: function() {
 		if (this.locked) return;
 		this.locked = true;
-		this.guard.setStyle('display', 'block');
+		this.displayGuard();
 	},
 	
 	unlock: function() {
 		if (!this.locked) return;
-		this.guard.setStyle('display', 'none');
+		this.hideGuard();
 		this.locked = false;
+	},
+	
+	/* helpers */
+	
+	findPoint: function(A, B, distance) {
+		// similarity of triangles
+		var k = distance / B.distanceFrom(A); // ratio
+		return new AGeoPoint(
+			(k * (B.x - A.x)) + A.x,
+			(k * (B.y - A.y)) + A.y,
+			ACoordinateSystem.S42
+		);
 	},
 	
 	/* listeners */
 	
 	clicked: function(object, point) {
+		if (this.locked) return false;
+		this.lock();
+		
 		if (this.editor.active) {
 			this.track.add(point);
 			this.track.redraw();
@@ -246,7 +273,9 @@ var TrekMap = new Class({
 	},
 	
 	zoomed: function(map) {
-		
+		if ($defined(this.track)) {
+			this.track.redraw();
+		}
 	}
 	
 });
@@ -496,12 +525,14 @@ var TMTrack = new Class({
 	},
 	
 	add: function(point, altitude) {
-		this.points.push({
+		var length = this.points.push({
 			coords: point,
 			alt: altitude
 		});
 		if (!altitude) {
-			this.altitude.determine(this.points.length - 1);
+			this.altitude.determine(this.points[length - 1]);
+		} else {
+			this.trekmap.unlock();
 		}
 	},
 	
@@ -510,10 +541,14 @@ var TMTrack = new Class({
 	},
 	
 	pop: function() {
-		if (this.points.length == 2) {
-	        this.points.pop();
+		var last = this.points[this.points.pop() - 1];
+		if ($defined(last) && $defined(last.segment)) {
+			delete last.segment;
 		}
-		return this.points.pop();
+		
+		if (this.points.length == 1) {
+	        this.pop();
+		}
 	},
 
 	empty: function() {
@@ -546,17 +581,17 @@ var TMTrack = new Class({
 		if (this.lines.back != null) { this.lines.back.remove(); }
 		// measure
 		this.meters = this.measure();
-		// milestones
+		
 		this.milestones.redraw();
-		// draw
 		this.draw();
+		this.altitude.chart.redraw();
 	},
 	
 	draw: function() {
 		if (!this.isLine()) return;
 
 		var A, B, breakpoint; // border points, breakpoint
-		var k, d; // ratio, distance
+		var d; // distance
 		var total = 0; // distance collector
 		var half = this.meters / 2; // half of the way
 		
@@ -576,15 +611,7 @@ var TMTrack = new Class({
 				forth.push(this.points[i].coords);
 			} else {
 				if (back.length < 1) {
-					// similarity of triangles
-					k = (d - (total - half)) / d; // ratio
-					// breakpoint
-					breakpoint = new AGeoPoint(
-						(k * (B.x - A.x)) + A.x,
-						(k * (B.y - A.y)) + A.y,
-						ACoordinateSystem.S42
-					);
-					
+					breakpoint = this.trekmap.findPoint(A, B, d - (total - half)); // breakpoint
 					forth.push(this.points[i].coords);
 					forth.push(breakpoint);
 					back.push(breakpoint);
@@ -636,7 +663,8 @@ var TMTrack = new Class({
 		var pts = [];
 		var tmp;
 		for (var i = 0; i < this.points.length; i++) {
-			tmp = this.points[i].convertTo(ACoordinateSystem.Geodetic);
+			tmp = this.points[i];
+			tmp.coords = tmp.coords.convertTo(ACoordinateSystem.Geodetic);
 			pts.push({
 				coords: {
 					x: tmp.coords.x + 0,
@@ -730,7 +758,7 @@ var TMMilestones = new Class({
 		
 		var i, j; // iterators
 		var A, B; // border points of segment
-		var d, n, k, distances, target, stone;
+		var d, n, distances, target, stone;
 		
 		for (i = 1; i < points.length; i++) { // iterating segments
 			A = points[i - 1].coords.convertTo(ACoordinateSystem.S42); // border point A
@@ -755,15 +783,7 @@ var TMMilestones = new Class({
 			
 			// now we have prepared distances of markers on this segment
 			for (j = 0; j < distances.length; j++) { // iterating distances
-				// similarity of triangles
-				k = distances[j] / d; // ratio
-				// point of marker
-				target = new AGeoPoint(
-					(k * (B.x - A.x)) + A.x,
-					(k * (B.y - A.y)) + A.y,
-					ACoordinateSystem.S42
-				);
-				
+				target = this.trekmap.findPoint(A, B, distances[j]); // point of marker
 				count++; // counting
 				
 				// stone
@@ -798,98 +818,331 @@ var TMMilestones = new Class({
 var TMAltitude = new Class({
 	type: 'TMAltitude',
 	trekmap: null,
-	
-	api: {
-		permanent: null,
-		temporary: null
-	},
-	
-	index: null, // index of point
-	
-	busy: false,
+	chart: null,
 	
 	initialize: function(map) {
 		this.trekmap = map;
+		this.chart = new TMAltitudeChart(map);
 	},
 	
-	determine: function(i) {
-		if (this.busy) return false;
-		this.index = i;
-		
-		var coords = this.trekmap.track.points[i].coords.convertTo(ACoordinateSystem.Geodetic);
-		this.trekmap.lock();
-//		try { // primary
-			this.askVyskopisCz(coords);
-//		} catch (error) { // alternative
-//			this.askGeoNames(coords);
-//		}
-	},
-	
-	askVyskopisCz: function(coords) {
-		this.busy = true;
+	getVyskopisCz: function() {
 		if (!$defined(window.php.vyskopis) || !php.vyskopis) throw new Error('API key for Vyskopis.cz is not defined.'); // vyskopis api key
-		
-//		var loader = new TMLoader('http://vyskopis.cz/api/getapi_v1.php?key=' + escape(php.vyskopis));
+		if (!$defined(this.getVyskopisCz.script)) {
+			this.getVyskopisCz.script = new TMRemoteScript('http://vyskopis.cz/api/getapi_v1.php?key=' + escape(php.vyskopis));
+		}
+		return this.getVyskopisCz.script;
+	},
+	
+	determine: function(point) { // click
+		try {
+			this.askVyskopisCz(point);
+		} catch (error) {
+			this.askGeoNames(point);
+		}
+	},
+	
+	determineBatch: function(points) { // altitude profile
+		try {
+			this.askVyskopisCzBatch(points);
+		} catch (error) {
+			this.askGeoNamesBatch(points);
+		}
+	},
+	
+	askVyskopisCz: function(point) {
+		this.getVyskopisCz().send(function (args) {
+			var coords = args[0].coords.convertTo(ACoordinateSystem.Geodetic);
+			topoGetAltitude(coords.x, coords.y, args[1], args[0], 3000);
+		}, [point, this.receive.bind(this)]);
+	},
+	
+	askVyskopisCzBatch: function(points) {
+		this.getVyskopisCz().send(function (args) {
+			var points = args[0];
+			var method = args[1];
+			var tmp = [];
+			for (var i = 0, c; i < points.length; i++) {
+				c = points[i].coords.convertTo(ACoordinateSystem.Geodetic);
+				tmp.push([c.x, c.y, method, points[i]]);
+			}
+			topoGetAltitudes(tmp, 3000);
+		}, [points, this.receive.bind(this)]);
+	},
+	
+	askGeoNames: function(point) {
+		var coords = point.coords.convertTo(ACoordinateSystem.Geodetic);
 		var uri = 'http://ws.geonames.org/gtopo30?lat=' + escape(coords.x) + '&lng=' + escape(coords.y);
-		new TMRemoteAjax(uri, this.receive.bind(this));
+		new TMRemoteAjax(uri).send(this.receive.bind(this), point);
+	},
+	
+	askGeoNamesBatch: function(points) {
+		for (var i = 0; i < points.length; i++) {
+			this.askGeoNames(points[i]);
+		}
+	},
+	
+	receive: function(result, point) {
+		if (!result) {
+			this.askGeoNames(point);
+		} else {
+			point.alt = new Number(result);
+			this.trekmap.unlock();
+		}
+	},
+	
+	
+});
+
+
+
+/* Altitude chart ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+var TMAltitudeChart = new Class({
+	type: 'TMAltitudeChart',
+	trekmap: null,
+	visible: false,
+	driver: null,
+	
+	initialize: function(map) {
+		this.trekmap = map;
+		this.trekmap.gui.altitudeToggle
+			.addEvent('click', this.toggle.bind(this))
+			.setProperty('checked', this.visible);
+		this.driver = this.trekmap.gui.altitudeDriver;
+	},
+	
+	replenish: function() {
+		var okay = true;
 		
-//		if (!$defined(window.topoGetAltitude)) {
-//			this.api.permanent = this.trekmap.appendScript(); // append script
-//		}
-//		var code = 'window.topoGetAltitude(' + coords.x + ', ' + coords.y + ', receive, null, 3000);'; // waits 3 seconds
-//		this.api.temporary = new Element('script', {type: 'text/javascript'}).setHTML(code).injectBefore(this.api.permanent);
-	},
-	
-	askGeoNames: function(coords) {
-		this.busy = true;
-//		var uri = 'http://ws.geonames.org/gtopo30JSON?lat=' + escape(coords.x) + '&lng=' + escape(coords.y) + '&callback=receive';
-//		this.api.temporary = this.trekmap.appendScript(uri);
-	},
-	
-	receive: function(result) {
-		alert(result);
-	},
-	
-	
-}); 
-
-
-
-/* API loader ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-
-var TREKMAP_CALLBACK_CONTAINER = [];
-
-var TMRemoteAjax = new Class({
-//	script: null,
-	callback: null,
-	
-	initialize: function(uri, callback) {
-		this.callback = callback;
-		var proxy = php.proxyUri + '?uri=' + escape(uri);
-		new Ajax(proxy, {
-			method: 'get',
-			onComplete: this.receive.bind(this)
-		}).request();
+		var turnovers = this.trekmap.track.points;
+		var A, B, d, interval;
+		for (var i = 0, j; i < turnovers.length - 1; i++) {
+			if (!$defined(turnovers[i].segment)) { // replenish segment
+				okay = false;
+				
+				turnovers[i].segment = [];
+				A = turnovers[i].coords.convertTo(ACoordinateSystem.S42);
+				B = turnovers[i + 1].coords.convertTo(ACoordinateSystem.S42);
+				d = B.distanceFrom(A);
+				
+				interval = Math.round(d / 200);
+				interval = Math.max(interval, 50); // minimum interval 50 meters
+				
+				j = interval;
+				while (j <= d) {
+					turnovers[i].segment.push({
+						coords: this.trekmap.findPoint(A, B, j),
+						alt: null
+					});
+					j += interval;
+				}
+				this.trekmap.track.altitude.determineBatch(turnovers[i].segment);
+			} else { // checking
+				for (j = 0; j < turnovers[i].segment.length; j++) {
+					if (!$defined(turnovers[i].segment[j].alt) || !turnovers[i].segment[j].alt) {
+						okay = false;
+					}
+				}
+			}
+		}
 		
-//		var callback = this.prepareCallback();
-//		uri.replace('%c', callback); // callback replacement
-//		this.script = new Element('script', {src: new String(uri), type: 'text/javascript'})
-//			.injectTop(document.body);
+		if (okay) {
+			return true;
+		} else {
+			(function() { // waiting until replenished, recursion
+				this.draw();
+			}).delay(250, this);
+			return false;
+		}
 	},
 	
-	prepareCallback: function() {
-//		TREKMAP_CALLBACK_CONTAINER.push(this.receive.bind(this));
-//		return 'TREKMAP_CALLBACK_CONTAINER[' + TREKMAP_CALLBACK_CONTAINER.length - 1 + ']';
+	dilute: function(points) {
+		// 150 points is max
+		var ratio = Math.ceil(points.length / 100);
+		if (ratio < 2) return points;
+		var pts = [];
+		for (var i = 0, result; i < points.length; i = i + ratio) {
+			// max altitude
+			result = 0;
+			for (var j = 0; j < ratio; j++) {
+				if ($defined(points[i + j])) {
+					result = Math.max(result, points[i + j].alt);
+				}
+			}
+						
+			// replacing point
+			points[i].alt = result;
+			pts.push(points[i]);
+		}
+		return pts;
 	},
 	
-	receive: function(result) {
-		this.callback(eval(result));
+	draw: function() {
+		if (!this.replenish()) return; // waiting until replenished
+
+		// preparing points
+		var points = [];
+		var turnovers = this.trekmap.track.points;
+		for (var i = 0, j; i < turnovers.length - 1; i++) {
+			// adding points from segment to chart
+			points.push(turnovers[i]);
+			points = points.concat(turnovers[i].segment);
+		}
+		points.push(turnovers[i]);
+		
+		// thin up the array
+		points = this.dilute(points);
+		
+		// declarations and inits
+		var m, ds = '', dMax = 0, alts = '', altMax = 0, altMin = 10000;
+		
+		// size
+		var w = this.trekmap.gui.altitudeDriver.getStyle('width').toInt();
+		var h = this.trekmap.gui.altitudeDriver.getStyle('height').toInt();
+		
+		// searching for maximum altitude and maximum kilometers
+		for (i = 0; i < points.length; i++) {
+			altMax = Math.max(altMax, points[i].alt);
+			altMin = Math.min(altMin, points[i].alt);
+		}
+		
+		// check
+		if (isNaN(altMax) || isNaN(altMin)) {
+			(function() { // waiting until replenished, recursion
+				this.draw();
+			}).delay(10, this);
+			return;
+		}
+		
+		// lets continue
+		altMax = Math.ceil(altMax / 100) * 100;
+		altMin = Math.floor(altMin / 100) * 100;
+		dMax = (this.trekmap.track.meters / TREKMAP_DISTANCE_RATIO).toFixed(4);
+		
+		// percents of altitude and percents of kilometers
+		for (i = 0; i < points.length; i++) {
+			m = (i != 0)? m + points[i].coords.distanceFrom(points[i - 1].coords) : 0; // meters
+			alts += (((points[i].alt - altMin) * 100) / (altMax - altMin)).toFixed(1) + ',';
+			ds += (((m / TREKMAP_DISTANCE_RATIO) * 100) / dMax).toFixed(1) + ',';
+		}
+		
+		// chart
+		var uri = 'http://chart.apis.google.com/chart?chxt=x,y&chxr=0,0,' + dMax + '|1,' + altMin + ',' + altMax + '&cht=lxy&chd=t:' + ds.slice(0, -1) + '|' + alts.slice(0, -1) + '&chs=' + w + 'x' + h + '&chco=' + TREKMAP_GREEN.slice(1) + '&chls=1,1,0';
+		// debug(uri);
+		this.trekmap.gui.altitudeDriver.setStyle('background', "url('" + uri + "') center no-repeat");
+	},
+	
+	redraw: function() {
+		if (!this.visible || !this.trekmap.track.isLine()) {
+			this.trekmap.gui.altitudeDriver.setStyle('display', 'none');
+			return;
+		};
+		
+		// loading
+		this.trekmap.gui.altitudeDriver.setStyles({
+			display: 'block',
+			width: $('trekmap').getStyle('width').toInt() + 'px',
+			height: Math.ceil($('trekmap').getStyle('height').toInt() / 3) + 'px',
+			background: "url('" + php.baseUri + "img/loading.gif') center no-repeat"
+		});
+		
+		this.draw();
+	},
+	
+	toggle: function() {
+		this.visible = !this.visible;
+		this.redraw();
 	}
 });
 
-//appendScript: function(uri) {
-//		return new Element('script', {src: new String(uri)}).injectTop(document.body);
-//	},
+
+
+/* API loaders ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+var TREKMAP_REMOTE_SCRIPT_CONTAINER = [];
+
+var TMRemoteScriptThread = new Class({
+	type: 'TMRemoteScriptThread',
+	index: -1,
+	master: null,
+	script: null,
+	
+	callback: null,
+	args: null,
+	
+	initialize: function(master) {
+		this.master = master;
+	},
+	
+	send: function(callback, args) {
+		this.callback = callback;
+		this.args = args;
+		
+		this.script = new Element('script', {type: 'text/javascript'})
+			.setHTML('TREKMAP_REMOTE_SCRIPT_CONTAINER[' + this.master.index + '].threads[' + this.index + '].launch();')
+			.injectBefore(this.master.script);
+	},
+	
+	launch: function() {
+		this.callback(this.args);
+		(function() { // waiting until operation is closed
+			this.master.terminate(this.index);
+		}).delay(1000, this);
+	}
+});
+
+var TMRemoteScript = new Class({
+	type: 'TMRemoteScript',
+	index: -1,
+	
+	script: null,
+	threads: [],
+	
+	initialize: function(uri) {
+		this.script = new Element('script', {src: new String(uri), type: 'text/javascript'})
+			.injectTop(document.body);
+		this.index = TREKMAP_REMOTE_SCRIPT_CONTAINER.push(this) - 1;
+	},
+	
+	send: function(callback, args) {
+		// prepare thread
+		var i = this.threads.push(new TMRemoteScriptThread(this)) - 1;
+		var thread = this.threads[i];
+		thread.index = i;
+		// send via thread
+		thread.send(callback, args);
+	},
+	
+	terminate: function(threadIndex) {
+		this.threads[threadIndex].script.remove();
+		delete this.threads[threadIndex];
+	}
+});
+
+var TMRemoteAjax = new Class({
+	type: 'TMRemoteAjax',
+	callback: null,
+	proxy: null,
+	args: [],
+	
+	initialize: function(uri) {
+		this.proxy = php.proxyUri + '?uri=' + escape(uri);
+	},
+	
+	send: function(callback, args) {
+		this.callback = callback;
+		this.args = args || [];
+		new Ajax(this.proxy, {
+			method: 'get',
+			onComplete: this.receive.bind(this)
+		}).request();
+	},
+	
+	receive: function(result) {
+		this.callback(eval(result), this.args);
+	}
+});
+
 
 
 /* Run ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
