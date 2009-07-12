@@ -28,14 +28,15 @@ class DefaultPresenter extends BasePresenter {
 	
 	public function renderDemo($id = NULL) {
 		$this->template->title = 'Demo';
-		$this->template->scripts[] = 'trekmap'; // turn on the map scripts
-		$this->template->js['saveUri'] = $this->link('save!'); // link to signal
 		
-		if ($id) { // autoload
+		// map
+		if ($id) { // saved track
+			$map = new TrekMap(TrekMap::VIEW);
+			
 			// load from database
 			$b = new Bookmarks;
 			$track = $b->fetch($id);
-			$this->template->js['track'] = $track; // track from db
+			$map->setTrack($track); // track from db
 			
 			// link
 			$this->absoluteUrls = TRUE;
@@ -48,7 +49,19 @@ class DefaultPresenter extends BasePresenter {
 			);
 			
 			$this->template->title .= " [ $id ]";
+		} else {
+			$map = new TrekMap(TrekMap::DEMO);
+			
+			if (Environment::getUser()->isAuthenticated()) {
+				$place = Environment::getUser()->getIdentity()->place;
+				if (!empty($place)) {
+					$map->setPlace($place);
+				}
+			}
 		}
+		
+		$this->addComponent($map, 'map');
+		$this->template->map = $map;
 	}
 	
 	public function handleSave($points) {

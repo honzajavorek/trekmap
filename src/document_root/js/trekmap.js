@@ -141,8 +141,10 @@ var TrekMap = new Class({
 		milestonesToggle: null, // onclick toggles milestones
 		editorToggle: null, // onclick toggles editor, if button, images are applied
 		altitudeToggle: null, // onclick toggles altitude chart
+		centerToggle: null, // onclick toggles automatic centering of map
 		
 		saveButton: null,
+		focusButton: null,
 		resetButton: null,
 		undoButton: null,
 		finishLoopButton: null,
@@ -173,6 +175,7 @@ var TrekMap = new Class({
 			// loading
 			if ($defined(window.php.track)) { // prepared track to display
 				this.track.decode(window.php.track);
+				this.track.focus();
 		    } else if ($defined(window.php.place)) { // auto focus
 		    	this.geocoding.set(window.php.place);
 		    }
@@ -263,9 +266,9 @@ var TrekMap = new Class({
 	
 	clicked: function(object, point) {
 		if (this.locked) return false;
-		this.lock();
 		
 		if (this.editor.active) {
+			this.lock();
 			this.track.add(point);
 			this.track.redraw();
 			this.editor.redraw();
@@ -293,6 +296,7 @@ var TMEditor = new Class({
 	
 	controls: [
 		'save',
+		'focus',
 		'reset',
 		'undo',
 		'finishLoop',
@@ -302,35 +306,37 @@ var TMEditor = new Class({
 	initialize: function(map) {
 		this.trekmap = map;
 		
-		// toggle button
-		this.toggleButton = this.trekmap.gui.editorToggle
-			.empty()
-			.addEvent('click', this.toggle.bind(this));
-		
-		// init images
-		var size = 32;
-		this.img[0] = new Element('img', {
-			src: window.php.baseUri + 'img/design.png',
-			width: size, height: size,
-			alt: 'Upravovat', title: 'Upravovat trasu'
-		})
-			.setStyles('margin: 0; padding: 0; border: none; display: block;')
-			.injectInside(this.toggleButton);
+		if ($defined(this.trekmap.gui.editorToggle)) {
+			// toggle button
+			this.toggleButton = this.trekmap.gui.editorToggle
+				.empty()
+				.addEvent('click', this.toggle.bind(this));
 			
-		this.img[1] = new Element('img', {
-			src: window.php.baseUri + 'img/view.png',
-			width: size, height: size,
-			alt: 'Prohlížet', title: 'Prohlížet trasu'
-		})
-			.setStyles('margin: 0; padding: 0; border: none; display: none;')
-			.injectInside(this.toggleButton);
-			
-		this.toggleButton.setProperty('title', this.img[0].getProperty('title'));
+			// init images
+			var size = 32;
+			this.img[0] = new Element('img', {
+				src: window.php.baseUri + 'img/design.png',
+				width: size, height: size,
+				alt: 'Upravovat', title: 'Upravovat trasu'
+			})
+				.setStyles('margin: 0; padding: 0; border: none; display: block;')
+				.injectInside(this.toggleButton);
+				
+			this.img[1] = new Element('img', {
+				src: window.php.baseUri + 'img/view.png',
+				width: size, height: size,
+				alt: 'Prohlížet', title: 'Prohlížet trasu'
+			})
+				.setStyles('margin: 0; padding: 0; border: none; display: none;')
+				.injectInside(this.toggleButton);
+				
+			this.toggleButton.setProperty('title', this.img[0].getProperty('title'));
+		}
 		
 		// other controls
 		for (var i = 0, btn; i < this.controls.length; i++) {
 			btn = this.controls[i];
-			if ($defined(this[btn])) {
+			if ($defined(this.trekmap.gui[btn + 'Button']) && $defined(this[btn])) {
 				this.trekmap.gui[btn + 'Button']
 					.addEvent('click', this[btn].bind(this));
 			}
@@ -349,11 +355,13 @@ var TMEditor = new Class({
 	redraw: function() {
 		for (var i = 0, btn, disabled; i < this.controls.length; i++) {
 			btn = this.controls[i];
-			if ($defined(this[btn])) {
-				disabled = !this.active || !this[btn + 'Validator']();
-				this.trekmap.gui[btn + 'Button'].disabled = disabled;
+			if ($defined(this.trekmap.gui[btn + 'Button'])) {
+				if ($defined(this[btn]) && $defined(this[btn + 'Validator'])) {
+					disabled = !this.active || !this[btn + 'Validator']();
+					this.trekmap.gui[btn + 'Button'].disabled = disabled;
+				}
+				this.applyActivity(this.trekmap.gui[btn + 'Button']);
 			}
-			this.applyActivity(this.trekmap.gui[btn + 'Button']);
 		}
 	},
 	
@@ -363,6 +371,15 @@ var TMEditor = new Class({
 	},
 	
 	/* controls */
+	
+	focusValidator: function() {
+		return this.trekmap.track.isLine();
+	},
+	focus: function() {
+		if (this.focusValidator()) {
+			this.trekmap.track.focus();
+		}
+	},
 	
 	resetValidator: function() {
 		return this.trekmap.track.isLine();
@@ -410,6 +427,39 @@ var TMEditor = new Class({
 			this.redraw();
 		}
 	},
+	
+	saveValidator: function () {
+		if (this.trekmap.track.isLine()) {
+			if ($defined(window.php.autoload)) {
+				return (this.trekmap.track.encode() != window.php.autoload);
+			}
+			return true;
+		}
+		return false;
+	},
+	saveRedirect: function(payload) {
+		try {
+			payload = Json.evaluate(payload);
+			if (!payload) throw new Error('No response.');
+			if (!$defined(payload.uri)) throw new Error('No URI in response.');
+			window.location.replace(new String(payload.uri));
+		} catch (error) {
+			this.trekmap.unlock();
+			new Flash('Uložení selhalo. <small>' + error.toString() + '</small>', 'error');
+		}
+	},
+	save: function() {
+		if (this.saveValidator()) {
+			this.trekmap.lock();
+
+			// send request
+			new Ajax(window.php.saveUri, {
+				method: 'get',
+				data: { points: this.trekmap.track.encode() },
+				onComplete: this.saveRedirect.bind(this)
+			}).request();
+		}
+	}
 });
 
 
@@ -502,6 +552,28 @@ var TMTrack = new Class({
 	},
 	meters: 0,
 	
+	start: {
+		icon: new AIcon({
+			imageSrc: php.baseUri + 'img/start.png',
+			shadowSrc: null,
+			fastRollover: false,
+			imageSize: new ASize(16, 16),
+			iconOffset: new APoint(8, 8),
+		}),
+		marker: null
+	},
+	
+	finish: {
+		icon: new AIcon({
+			imageSrc: php.baseUri + 'img/finish.png',
+			shadowSrc: null,
+			fastRollover: false,
+			imageSize: new ASize(16, 16),
+			iconOffset: new APoint(8, 8),
+		}),
+		marker: null
+	},
+	
 	initialize: function(map) {
 		this.trekmap = map;
 		this.milestones = new TMMilestones(map);
@@ -533,6 +605,9 @@ var TMTrack = new Class({
 			this.altitude.determine(this.points[length - 1]);
 		} else {
 			this.trekmap.unlock();
+		}
+		if ($defined(this.trekmap.gui.centerToggle) && this.trekmap.gui.centerToggle.getProperty('checked')) {
+			this.focus(this.points[length - 1].coords);
 		}
 	},
 	
@@ -636,6 +711,34 @@ var TMTrack = new Class({
 			opacity: 1
 		});
 		this.trekmap.map.addOverlay(this.lines.back);
+		
+		// start/finish
+		if ($defined(this.start.marker)) this.start.marker.remove();
+		if ($defined(this.finish.marker)) this.finish.marker.remove();
+		
+		this.start.marker = new AMarker(this.points[0].coords, { icon: this.start.icon });
+		this.finish.marker = new AMarker(this.points[this.points.length - 1].coords, { icon: this.finish.icon });
+		
+		this.trekmap.map.addOverlay(this.start.marker);
+		this.trekmap.map.addOverlay(this.finish.marker);
+	},
+	
+	focus: function(coords) {
+		if (!coords) { // focus all the track
+			var bounds = [];
+			for (var i = 0; i < this.points.length; i++) {
+				bounds.push(this.points[i].coords);
+			}
+			
+			if (this.trekmap.map.getCurrentScale() <= 500000) {
+				this.trekmap.map.setMapType(A_TOURISTIC_CART_MAP.displayName);
+			}
+			this.trekmap.map.update();
+			this.trekmap.map.setBestZoomAndCenter(bounds);
+		} else {
+			this.trekmap.map.update();
+			this.trekmap.map.moveTo(coords, 500);
+		}
 	},
 	
 	measure: function() { // in meters
@@ -710,11 +813,11 @@ var TMMilestones = new Class({
 		opacity: 0.65
 	}),
 	dot: new AIcon({
-		imageSrc: php.baseUri + 'img/dot.gif', // TODO
+		imageSrc: php.baseUri + 'img/dot.gif',
 		shadowSrc: null,
 		fastRollover: false,
-		imageSize: new ASize(22, 27),
-		iconOffset: new APoint(0, 0),
+		imageSize: new ASize(4, 4),
+		iconOffset: new APoint(2, 2),
 	}),
 	
 	initialize: function(map) {

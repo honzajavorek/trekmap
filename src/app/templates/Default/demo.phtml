@@ -1,31 +1,6 @@
 <h1>Demo</h1>
 
-<div class="clothesline">
-<div class="column" id="left">
-
-<p class="eye-catcher"><strong id="trekmap-total-distance"></strong> Km</p>
-
-<div id="trekmap-menu"><button id="trekmap-toggle-mode">Změnit režim</button></div>
-<button id="trekmap-save">Uložit</button>
-
-<p>
-	<label for="trekmap-milestones">Zobrazovat kilometráž:</label>
-	<input id="trekmap-milestones" type="checkbox" checked>
-</p>
-
-<p>
-	<label for="trekmap-altitude">Výškový profil:</label>
-	<input id="trekmap-altitude" type="checkbox" checked>
-</p>
-
-</div>
-<div class="column" id="right">
-
-<div id="trekmap" class="map-large"></div>
-<div id="trekmap-altitude-chart"></div>
-
-</div>
-</div>
-
 <p>Zde si můžeš vyzkoušet zaznamenávání trasy do mapy.
 Můžeš ji dokonce jednorázově <strong>uložit a získat na ni odkaz</strong> (bude fungovat i nezaregistrovaným).</p>
+
+@{? $map->render() }
