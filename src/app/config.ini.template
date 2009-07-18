@@ -1,15 +1,16 @@
 [common]
-variable.superadmin = 
-variable.email = 
+variable.superadmin = "littlemaple.myopenid.com"
+variable.email = "honza@javorek.net"
 variable.since = "2009"
 variable.robots = "all"
-variable.amapy = 
-variable.vyskopis = 
-variable.google = 
+variable.salt = *****HIDDEN*****
+
+variable.amapy = *****HIDDEN*****
+variable.google = *****HIDDEN*****
 
 service.Nette-Security-IAuthenticator = "Users"
 database.charset = "utf8"
-database.driver = "mysql"
+database.driver = "mysqli"
 
 [common.set!]
 date.timezone = "Europe/Prague"
@@ -17,13 +18,18 @@ iconv.internal_encoding = "%encoding%"
 mbstring.internal_encoding = "%encoding%"
 
 [production < common]
-database.host = 
-database.username = 
-database.password = 
-database.database = 
+database.host = "localhost"
+database.username = *****HIDDEN*****
+database.password = *****HIDDEN*****
+database.database = *****HIDDEN*****
+
+variable.vyskopis = "AUDMQPERZDCHQPT"
 
 [development < production]
-database.host = 
-database.username = 
-database.password = 
-database.database = 
+database.host = "localhost"
+database.username = *****HIDDEN*****
+database.password = *****HIDDEN*****
+database.database = *****HIDDEN*****
+
+variable.vyskopis = *****HIDDEN*****
+

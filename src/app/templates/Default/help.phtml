@@ -1,12 +1,18 @@
 <h1>{$title}</h1>
 
-<h2>Co je to OpenID?</h2>
+<ul class="nav toc">
+    <li><a href="#openid">Co je to OpenID?</a> &darr;</li>
+    <li><a href="#gravatar">Gravatar</a> &darr;</li>
+    <li><a href="#javascript">JavaScript</a> &darr;</li>
+</ul>
+
+<h2 id="openid">Co je to OpenID?</h2>
 {include '../@help.openid.phtml'}
 
-<h2>Gravatar</h2>
+<h2 id="gravatar">Gravatar</h2>
 {include '../@help.gravatar.phtml'}
 
-<h2>JavaScript</h2>
+<h2 id="javascript">JavaScript</h2>
 
 <p>K tomu, aby TrekMap správně běžel, je třeba podpora pro jazyk JavaScript. Jak si JavaScript zapnout?</p>
 
@@ -15,21 +21,18 @@
 	<script>document.write('JavaScript <strong>jede v pořádku</strong>!');</script>
 </p>
 
-<h3>Internet Explorer 6&nbsp;a vyšší</h3>
-
-<p><img src="{$baseUri}img/ie7.png" alt="Logo Internet Exploreru" class="float-left">
-Nabídka <kbd>Nástroje → Možnosti Internetu → Zabezpečení → Zóna:
+<h3><img src="{$baseUri}img/browser-ie7.png" alt="Logo Internet Exploreru" class="float-left">
+Internet Explorer 6&nbsp;a vyšší</h3>
+<p>Nabídka <kbd>Nástroje → Možnosti Internetu → Zabezpečení → Zóna:
 Internet → Vlastní úroveň → Skriptování → Aktivní skriptování
 →</kbd> zatrhnout <kbd>Povolit</kbd>.</p>
 
-<h3>Firefox 1.5&nbsp;a vyšší</h3>
-
-<p><img src="{$baseUri}img/firefox.png" alt="Logo Mozilla Firefoxu" class="float-left">
-Nabídka <kbd>Nástroje → Možnosti… → Obsah →</kbd> zatrhnout
+<h3><img src="{$baseUri}img/browser-firefox.png" alt="Logo Mozilla Firefoxu" class="float-left">
+Firefox 1.5&nbsp;a vyšší</h3>
+<p>Nabídka <kbd>Nástroje → Možnosti… → Obsah →</kbd> zatrhnout
 <kbd>Povolit JavaScript</kbd>.</p>
 
-<h3>Opera 8.5&nbsp;a vyšší</h3>
-
-<p><img src="{$baseUri}img/opera.png" alt="Logo Opery" class="float-left">
-Nabídka <kbd>Nástroje → Nastavení… → Pokročilé volby → Obsah
+<h3><img src="{$baseUri}img/browser-opera.png" alt="Logo Opery" class="float-left">
+Opera 8.5&nbsp;a vyšší</h3>
+<p>Nabídka <kbd>Nástroje → Nastavení… → Pokročilé volby → Obsah
 →</kbd> zatrhnout<kbd> Povolit JavaScript</kbd>.</p>

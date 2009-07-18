@@ -1,75 +1,89 @@
-		<h1>{$title}</h1>
-		
-		{$form->render('begin')}
-		{if $form->getErrors()}
-		{$form->render('errors')}
-		{/if}
-		
-		<fieldset>
-			<legend>Veřejný profil</legend>
-			<p><a href="{link User:profile $identity->id}">Jak mě vidí ostatní?</a></p>
-		</fieldset>
-		
-		<fieldset>
-			<legend>Kdo jsem</legend>
-			<p>Tyto údaje jsou <strong>vždy při přihlášení</strong> synchronizovány s tvým OpenID. Pokud ve svém OpenID změníš jméno, změní se i tady. E-mail není nikde zveřejňován.</p>
-			<table>
-				<tr>
-					<th>OpenID</th>
-					<td><a href="http://{$username}">{$username}</a></td>
-				</tr>
-				<tr>
-					<th>Celé jméno</th>
-					<td>{$fullname}</td>
-				</tr>
-				<tr>
-					<th>E-mail</th>
-					<td>{if empty($email)}<em>nebyl poskytnut</em>{else}{$email}{/if}</td>
-				</tr>
-			</table>	
-		</fieldset>
-		
-		<fieldset>
-			<legend>Holčička nebo chlapeček?</legend>
-			{if $ova && !$female}<p class="remark">Jedno z tvých jmen končí na -ová, ale podle nastavení jsi muž. Kde udělali soudruzi z NDR chybu?</p>{/if}
-			<table>
-				<tr><th>{$form['female']->label}</th><td>{$form['female']->control}</td></tr>
-				<tr><td colspan="2">{$form['gender']->control}</td></tr>
-			</table>
-		</fieldset>
-		
-		<fieldset>
-			<legend>Výchozí místo</legend>
-			<p>Podle tohoto místa se ti bude nastavovat mapa na výchozí pozici. Např. <em>Královo Pole, Brno</em> nebo <em>U Mostu, Varvažov</em>.</p>
-			<table>
-				<tr><th>{$form['place']->label}</th><td>{$form['place']->control}</td></tr>
-				<tr><td colspan="2">{$form['geocoding']->control}</td></tr>
-			</table>
-		</fieldset>
-		
-		<fieldset>
-			<legend>Něco málo o mně</legend>
-			<p>Sem můžeš napsat cokoli chceš. Příklad:</p>
-			<blockquote>
-				<p>Původem jsem Keňan. Jsem vysoký blondýn s dlouhýma nohama a pevnými boky. Už když jsem jako malý při hrách běhal s ostatními dětmi, zjistil jsem, že na mé nadzvukové rychlosti nikdo nemá. Stal jsem se běžcem a TrekMap se svou evidencí tras je proto pro mě dnes nepostradatelný!</p>
-			</blockquote>
-			<table>
-				<tr><th>{$form['description']->label}</th><td>{$form['description']->control}</td></tr>
-				<tr><td colspan="2">{$form['bio']->control}</td></tr>
-			</table>
-		</fieldset>
-		
-		<fieldset>
-			<legend>Obrázek</legend>
-			{include '../@help.gravatar.phtml'}
-			<table>
-				<tr>
-					<th>Aktuální obrázek</th>
-					<td><img width="80" height="80" src="{$presenter->linkGravatar(80, $email, $female)}" alt="gravatar &ndash; {$id->fullname}"></td>
-				</tr>
-			</table>
-		</fieldset>
-		
-		{$form->render('end')}
-		
+<h1>{$title}</h1>
+
+<ul class="nav toc">
+    <li><a href="#info">Kdo jsem</a> &darr;</li>
+    <li><a href="#gender">Pohlaví</a> &darr;</li>
+    <li><a href="#place">Výchozí místo</a> &darr;</li>
+    <li><a href="#description">Něco málo o mně</a> &darr;</li>
+    <li><a href="#energy">Pro výpočet výkonu</a> &darr;</li>
+    <li><a href="#avatar">Obrázek</a> &darr;</li>
+</ul>
+
+<div class="dialogue">
+{$form->render('begin')}
+
+<fieldset>
+	<legend id="info">Kdo jsem</legend>
+	<p>Tyto údaje jsou <strong>vždy při přihlášení</strong> synchronizovány s tvým OpenID. Pokud ve svém OpenID změníš jméno, změní se i tady. E-mail není nikde zveřejňován.</p>
+	<table>
+		<tr>
+			<th>OpenID</th>
+			<td><a href="http://{$username}">{$username}</a></td>
+		</tr>
+		<tr>
+			<th>Celé jméno</th>
+			<td>{$fullname}</td>
+		</tr>
+		<tr>
+			<th>E-mail</th>
+			<td>{if empty($email)}<em>nebyl poskytnut</em>{else}{$email}{/if}</td>
+		</tr>
+	</table>	
+</fieldset>
+
+<fieldset>
+	<legend id="gender">Holčička nebo chlapeček?</legend>
+	{if $ova && !$female}<p class="remark">Jedno z tvých jmen končí na -ová, ale podle nastavení jsi muž. Kde udělali soudruzi z NDR chybu?</p>{/if}
+	<table>
+		<tr><th>{$form['female']->label}</th><td>{$form['female']->control}</td></tr>
+		<tr><td colspan="2">{$form['gender']->control}</td></tr>
+	</table>
+</fieldset>
+
+<fieldset>
+	<legend id="place">Výchozí místo</legend>
+	<p>Podle tohoto místa se ti bude nastavovat mapa na výchozí pozici. Např. <em>Královo Pole, Brno</em> nebo <em>U Mostu, Varvažov</em>. Údaj se <strong>zobrazuje na tvém profilu</strong>, takže možná není nejlepší nápad zadat kompletní adresu.</p>
+	<table>
+		<tr><th>{$form['place']->label}</th><td>{$form['place']->control}</td></tr>
+		<tr><td colspan="2">{$form['geocoding']->control}</td></tr>
+	</table>
+</fieldset>
+
+<fieldset>
+	<legend id="description">Něco málo o mně</legend>
+	<p>Sem můžeš napsat cokoli chceš. Příklad:</p>
+	<blockquote>
+		<p>Původem jsem Keňan. Jsem vysoký blondýn s dlouhýma nohama a pevnými boky. Už když jsem jako malý při hrách běhal s ostatními dětmi, zjistil jsem, že na mé nadzvukové rychlosti nikdo nemá. Stal jsem se běžcem a TrekMap se svou evidencí tras je proto pro mě dnes nepostradatelný!</p>
+	</blockquote>
+	<table>
+		<tr><th>{$form['description']->label}</th><td>{$form['description']->control}</td></tr>
+		<tr><td colspan="2">{$form['bio']->control}</td></tr>
+	</table>
+</fieldset>
+
+<fieldset>
+	<legend id="energy">Pro výpočet výkonu</legend>
+	<p>Tyto údaje jsou potřebné k výpočtu tvého výkonu, energie a dalších statistik. Nejsou nikde zveřejňovány.</p>
+	<table>
+		<tr><th>{$form['weight']->label}</th><td>{$form['weight']->control}</td></tr>
+		<tr><th>{$form['height']->label}</th><td>{$form['height']->control}</td></tr>
+		<tr><th><a href="http://cs.wikipedia.org/wiki/Index_t%C4%9Blesn%C3%A9_hmotnosti">BMI</a>, orientační</th><td>{$template->bmi($identity->weight, $identity->height)}</td></tr>
+		<tr><td colspan="2">{$form['energy']->control}</td></tr>
+	</table>
+</fieldset>
+
+<fieldset>
+	<legend id="avatar">Obrázek</legend>
+	{include '../@help.gravatar.phtml'}
+	<table>
+		<tr>
+			<th>Aktuální obrázek</th>
+			<td><img width="80" height="80" src="{$template->gravatar(80, $email, $female)}" alt="gravatar &ndash; {$id->fullname}" class="avatar-preview"></td>
+		</tr>
+	</table>
+</fieldset>
+
+{$form->render('end')}
+</div>
+
 

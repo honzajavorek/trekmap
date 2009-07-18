@@ -1,3 +1,20 @@
-<h1>{$title}</h1>
+<div class="column sidecol">
 
-@{? $map->render() }
+<h1>{if isset($name)}{$name}{else}{$title}{/if}</h1>
+
+{? $map->render('controls') }
+
+<p class="go"><strong>&laquo;</strong> <a href="{link Default:}" class="confirm">Zrušit tvorbu trasy</a></p>
+
+</div>
+<div class="column widecol">
+
+{? $map->render('map') }
+
+<fieldset id="tm-description-driver">
+	<legend>{$form['desc']->label}</legend>
+	{$form['desc']->control}
+</fieldset>
+
+</div>
+

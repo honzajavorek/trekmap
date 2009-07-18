@@ -52,6 +52,7 @@ class AccountPresenter extends BasePresenter {
 
 		$user = Environment::getUser();
 		$identity = $user->getIdentity();
+		$defaults = (array)$identity->getData();
 		
 		// gender check
 		$names = preg_split('~[ \\-,]+~', $identity->fullname);
@@ -68,35 +69,51 @@ class AccountPresenter extends BasePresenter {
 		// gender
 		$this->template->female = $identity->female;
 		$form->addRadioList('female', 'Pohlaví', array(0 => 'chlapeček', 1 => 'holčička'))
-			->addRule(Form::FILLED, 'Když neznáš své pohlaví, tak se podívej dolů.')
-			->setValue($identity->female);
+			->addRule(Form::FILLED, 'Když neznáš své pohlaví, tak se podívej dolů.');
 		$form->addSubmit('gender', 'Teď je to správně');
 
 		// bio
-		$form->addTextarea('description', 'Text', 40, 4)
-			->setValue($identity->description);
+		$form->addTextarea('description', 'Text', 40, 10);
 		$form->addSubmit('bio', 'Uložit můj životní příběh');
 		
+		// energy
+		$form->addText('height', 'Výška v cm', 4, 4)
+			->addCondition(Form::FILLED)
+				->addRule(Form::NUMERIC, 'Výška musí být číslo')
+				->addRule(Form::RANGE, 'Výška musí být mezi %d a %d cm', array(140, 250));
+		$form->addText('weight', 'Váha v kg', 4, 4)
+			->addCondition(Form::FILLED)
+				->addRule(Form::NUMERIC, 'Váha musí být číslo')
+				->addRule(Form::RANGE, 'Váha musí být mezi %d a %d kg', array(40, 200));
+		$form->addSubmit('energy', 'Uložit');
+		
 		// place
-		$form->addText('place', 'Místo', NULL, 200)
-			->setValue($identity->place);
+		$form->addText('place', 'Místo', 40, 200);
 		$form->addSubmit('geocoding', 'Uložit můj výchozí bod');
 		
 		// saving
 		$form->onSubmit[] = array($this, 'editUser');
 		$this->template->form = $form;
+		
+		// defaults
+		$form->setDefaults((array)$defaults);
 	}
 	
 	public function editUser(AppForm $form) {
+		$this->authenticate();
 		$data = $form->getValues();
-
-		$user = Environment::getUser();
-		$identity = $user->getIdentity();
+		
+		if (!$data['height']) $data['height'] = NULL;
+		if (!$data['weight']) $data['weight'] = NULL;
 		
 		$u = new Users;
-		$u->update($identity->id, $data);
+		$u->update(Environment::getUser()->getIdentity()->id, $data);
 		
-		$user->authenticate($identity->username, NULL);
+		foreach ($data as $i => $v) {
+			Environment::getUser()->getIdentity()->{$i} = $v;
+		}
+		
+		$this->flashMessage('Vše bylo v pořádku uloženo!');
 	}
 	
 	public function renderDefault() {
@@ -109,8 +126,10 @@ class AccountPresenter extends BasePresenter {
 		$this->template->female = $identity->female;
 		
 		// title
-		$title = ($identity->female)?  'Borkyně ' : 'Borec ';
-		$this->template->title = $title . $identity->fullname;
+		$this->template->title = $identity->fullname;
+		
+		// layout
+		$this->template->cssLayout .= ' layout-strip';
 	}
 	
 	/********************* view login *********************/

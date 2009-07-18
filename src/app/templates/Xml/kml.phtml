@@ -1,0 +1,36 @@
+{contentType application/vnd.google-earth.kml+xml; charset=utf-8}
+<<?php ?>?xml version="1.0" encoding="utf-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom" xml:lang="cs-CZ">
+		<Document>
+			<name>{$name}</name>
+			<description>{$description}</description>
+			<atom:author>
+				<atom:name>{$authorname}</atom:name>
+				<atom:uri>{link Track:user $author}</atom:uri>
+			</atom:author>
+			<atom:link href="{link Track:item $id}" />
+			<Style id="TrekMap">
+				<LineStyle>
+					<color>ffed1c24</color>
+					<width>3</width>
+				</LineStyle>
+				<PolyStyle>
+					<color>ffed1c24</color>
+				</PolyStyle>
+			</Style>
+			<Placemark>
+				<name>{$name}</name>
+				<description>{$description}</description>
+				<styleUrl>#TrekMap</styleUrl>
+				<LineString>
+					<extrude>1</extrude>
+					<tessellate>1</tessellate>
+					<coordinates>
+					{foreach $coordinates as $c}
+						{$c['lng']},{$c['lat']}
+					{/foreach}
+					</coordinates>
+				</LineString>
+			</Placemark>
+		</Document>
+</kml>

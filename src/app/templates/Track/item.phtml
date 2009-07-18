@@ -1,0 +1,57 @@
+<div class="column sidecol">
+
+<h1>{$title|truncate:35}</h1>
+
+<blockquote>{$track['description']}</blockquote>
+
+{if isset($identity)}
+<fieldset class="dialogue">
+<legend>Akce</legend>
+<ul class="actions">
+{if $isMine}
+	{if $identity->id == $track['author']}<li class="edit"><a href="{link Track:edit $track['id'], $request}">Upravit</a></li>{/if}
+	<li class="delete"><a href="{link delete! $track['id']}" class="confirm" title="Tímto přijdeš o všechny výkony na této trase a pokud ji nemá nikdo jiný, trasa se kompletně smaže ze systému.">Odebrat</a></li>
+{else}
+    <li class="add"><a href="{link add! $track['id']}">Přidat</a></li>
+{/if}
+</ul>
+</fieldset>
+{/if}
+
+{? $map->render('controls') }
+
+<fieldset>
+<legend>Info</legend>
+<table>
+	<tr><th>Autor{=($track['authorfemale'])? 'ka' : ''}</th><td><a href="{plink Track:user $track['author']}">{$track['authorname']}</a></td></tr>
+	<tr><th>Vytvořeno</th><td><abbr title="{$track['created']|microformat:'date'}">{$track['created']|timeAgoInWords}</abbr></td></tr>
+</table>
+</fieldset>
+
+</div>
+<div class="column widecol">
+
+{? $map->render('map') }
+
+{if $isMine}
+{$form->render('begin')}
+
+<fieldset class="create dialogue">
+	<legend>Přidat svůj výkon</legend>
+	{if isset($identity) && !$identity->weight}<p>Pokud v <a href="{link Account:}">nastavení</a> nevyplníš alespoň svou váhu, <strong>nespočítá se ti spotřebovaná energie</strong> v kJ.</p>{/if}
+	{$form['achieved']->label} {$form['achieved']->control}
+	{$form['activity']->label} {$form['activity']->control}
+	{$form['time']->label} {$form['time']->control}
+	{$form['laps']->label} {$form['laps']->control}
+
+	{$form['btn']->control}
+</fieldset>
+
+{$form->render('end')}
+{/if}
+
+{? $achievements->render() }
+
+<p class="figure"><small><a href="{$presenter->link('Xml:rss?id=achievements-by-track&param=' . $track['id'])}">RSS</a></small></p>
+
+</div>

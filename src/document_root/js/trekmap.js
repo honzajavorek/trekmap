@@ -23,9 +23,8 @@ if (undefined === window.GMap2) { google.load('maps', '2'); }
 /* TrekMap constants ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 var TREKMAP_GREEN = '#197B30';
-var TREKMAP_BROWN = '#7C4A1F';
+var TREKMAP_RED = '#ED1C24';
 var TREKMAP_BLACK = '#222';
-var TREKMAP_GREY = '#666';
 
 var TREKMAP_DISTANCE_RATIO = 1000; // 1 km = 1000 m
 var TREKMAP_DISTANCE_LABEL = 'km'
@@ -41,19 +40,18 @@ var Flash = new Class({
 	initialize: function(html, type) {
 		$$('.flashes').empty();
 		
-		type = type || 'note';
+		type = type || 'info';
 		this.element = new Element('p')
 			.addClass('flash')
-			.addClass('temporary')
 			.addClass(type)
 			.setHTML(html)
 			.injectTop($$('.flashes')[0]);
 		
-		if (type == 'note') {
+		if (type == 'info') {
 			this.element
 				.setStyle('cursor', 'pointer')
 				.addEvent('click', this.hide.bind(this));
-			this.hide.delay(3000, this);
+			this.hide.delay(5000, this);
 		}
 	},
 	
@@ -65,6 +63,8 @@ var Flash = new Class({
 
 
 /* Amapy.cz ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+AMapAssets.css = []; // removing styles, CSS expected in external file
 
 var TrekMapTypeControl = AMapTypeControl.extend({
 	mapPartInit: function(map, el) {
@@ -137,6 +137,9 @@ var TrekMap = new Class({
 		distanceDriver: null, // place where to display km
 		geocodingDriver: null, // area with text input and button
 		altitudeDriver: null, // altitude chart element
+		descriptionDriver: null, // track description area (searching for textarea inside)
+		articulationDriver: null, // difference between min and max altitude
+		altitudeDifferenceDriver: null, // number of meters going upstairs
 		
 		milestonesToggle: null, // onclick toggles milestones
 		editorToggle: null, // onclick toggles editor, if button, images are applied
@@ -144,7 +147,7 @@ var TrekMap = new Class({
 		centerToggle: null, // onclick toggles automatic centering of map
 		
 		saveButton: null,
-		focusButton: null,
+		previewButton: null,
 		resetButton: null,
 		undoButton: null,
 		finishLoopButton: null,
@@ -162,20 +165,23 @@ var TrekMap = new Class({
 		this.element = new Element('div') // main map element
 			.setStyles('width: 100%; height: 100%; position: relative;')
 			.injectTop($(el));
+		$(el).setStyle('height', window.getHeight() - $(el).getTop() - 15); // auto height
+
 		this.guard = this.prepareGuard(); // preparing a guard for locking
 		for (element in this.gui) { // autoloading of gui elements
 			this.gui[element] = $('tm-' + element.hyphenate());
 		}
 		if (this.initMap()) {
 			// controls
-			this.editor = new TMEditor(this);
-			this.geocoding = new TMGeocoding(this);
 			this.track = new TMTrack(this);
+			this.geocoding = new TMGeocoding(this);
+			this.editor = new TMEditor(this);
 		
 			// loading
 			if ($defined(window.php.track)) { // prepared track to display
 				this.track.decode(window.php.track);
 				this.track.focus();
+				this.editor.redraw();
 		    } else if ($defined(window.php.place)) { // auto focus
 		    	this.geocoding.set(window.php.place);
 		    }
@@ -258,7 +264,7 @@ var TrekMap = new Class({
 		return new AGeoPoint(
 			(k * (B.x - A.x)) + A.x,
 			(k * (B.y - A.y)) + A.y,
-			ACoordinateSystem.S42
+			ACoordinateSystem.Geodetic
 		);
 	},
 	
@@ -269,7 +275,7 @@ var TrekMap = new Class({
 		
 		if (this.editor.active) {
 			this.lock();
-			this.track.add(point);
+			this.track.add(point.convertTo(ACoordinateSystem.Geodetic));
 			this.track.redraw();
 			this.editor.redraw();
 		}
@@ -295,12 +301,12 @@ var TMEditor = new Class({
 	img: [],
 	
 	controls: [
-		'save',
-		'focus',
+		'preview',
 		'reset',
 		'undo',
 		'finishLoop',
-		'sameWayBack'
+		'sameWayBack',
+		'save'
 	],
 	
 	initialize: function(map) {
@@ -315,7 +321,7 @@ var TMEditor = new Class({
 			// init images
 			var size = 32;
 			this.img[0] = new Element('img', {
-				src: window.php.baseUri + 'img/design.png',
+				src: window.php.baseUri + 'img/icon-design.png',
 				width: size, height: size,
 				alt: 'Upravovat', title: 'Upravovat trasu'
 			})
@@ -323,7 +329,7 @@ var TMEditor = new Class({
 				.injectInside(this.toggleButton);
 				
 			this.img[1] = new Element('img', {
-				src: window.php.baseUri + 'img/view.png',
+				src: window.php.baseUri + 'img/icon-view.png',
 				width: size, height: size,
 				alt: 'Prohlížet', title: 'Prohlížet trasu'
 			})
@@ -345,7 +351,7 @@ var TMEditor = new Class({
 	},
 	
 	toggle: function() {
-		this.img[new Number(!this.active)].setStyle('display', 'block');
+		this.img[new Number(!this.active)].setStyle('display', 'inline');
 		this.img[new Number(this.active)].setStyle('display', 'none');
 		this.toggleButton.setProperty('title', this.img[new Number(!this.active)].getProperty('title'));
 		this.active = !this.active;
@@ -353,30 +359,33 @@ var TMEditor = new Class({
 	},
 	
 	redraw: function() {
-		for (var i = 0, btn, disabled; i < this.controls.length; i++) {
+		for (var i = 0, btn, detached, disabled; i < this.controls.length; i++) {
 			btn = this.controls[i];
 			if ($defined(this.trekmap.gui[btn + 'Button'])) {
+				detached = this.trekmap.gui[btn + 'Button'].hasClass('detached');
 				if ($defined(this[btn]) && $defined(this[btn + 'Validator'])) {
-					disabled = !this.active || !this[btn + 'Validator']();
+					disabled = (!this.active && !detached) || !this[btn + 'Validator']();
 					this.trekmap.gui[btn + 'Button'].disabled = disabled;
+					new Fx.Style($$('#' + this.trekmap.gui[btn + 'Button'].getProperty('id') + ' img')[0], 'opacity').set((disabled)? 0.2 : 1);
 				}
-				this.applyActivity(this.trekmap.gui[btn + 'Button']);
+				if (!detached) {
+					this.applyActivity(this.trekmap.gui[btn + 'Button']);
+				}
 			}
 		}
 	},
 	
 	applyActivity: function(el) {
-		// new Fx.Style(el, 'opacity').set((this.active)? 1 : 0.5);
-		el.setStyle('display', (this.active)? 'block' : 'none')
+		el.setStyle('display', (this.active)? 'inline' : 'none')
 	},
 	
 	/* controls */
 	
-	focusValidator: function() {
+	previewValidator: function() {
 		return this.trekmap.track.isLine();
 	},
-	focus: function() {
-		if (this.focusValidator()) {
+	preview: function() {
+		if (this.previewValidator()) {
 			this.trekmap.track.focus();
 		}
 	},
@@ -385,7 +394,7 @@ var TMEditor = new Class({
 		return this.trekmap.track.isLine();
 	},
 	reset: function() {
-		if (this.resetValidator()) {
+		if (this.resetValidator() && window.confirm('Opravdu smazat všechny body?')) {
 			this.trekmap.track.empty();
 			this.trekmap.track.redraw();
 			this.redraw();
@@ -418,7 +427,7 @@ var TMEditor = new Class({
 		return !this.trekmap.track.isLoop();
 	},
 	sameWayBack: function() {
-		if (this.resetValidator()) {
+		if (this.sameWayBackValidator()) {
 			var pts = this.trekmap.track.clone();
 			pts.pop();
 			pts.reverse();
@@ -429,13 +438,7 @@ var TMEditor = new Class({
 	},
 	
 	saveValidator: function () {
-		if (this.trekmap.track.isLine()) {
-			if ($defined(window.php.autoload)) {
-				return (this.trekmap.track.encode() != window.php.autoload);
-			}
-			return true;
-		}
-		return false;
+		return this.trekmap.track.isLine();
 	},
 	saveRedirect: function(payload) {
 		try {
@@ -450,12 +453,47 @@ var TMEditor = new Class({
 	},
 	save: function() {
 		if (this.saveValidator()) {
+			// description check
+			var desc = this.trekmap.gui.descriptionDriver;
+			if ($defined(desc)) {
+				var textarea = $$('#' + desc.getProperty('id') + ' textarea')[0];
+				if (!textarea.value && !window.confirm('Chybí ' + $$('#' + desc.getProperty('id') + ' label')[0].getText().toLowerCase() + '. Opravdu uložit?')) {
+					return;
+				} else {
+					this.trekmap.track.description = textarea.value;
+				}
+			} else {
+				this.trekmap.track.description = '';
+			}
+			
+			// go
 			this.trekmap.lock();
 
+			// name check
+			if (window.php.mode != 'demo') {
+				if ($defined(window.php.name)) { // set by php
+					this.trekmap.track.name = window.php.name;
+				}
+				// else prompt
+				while (!this.trekmap.track.name) {
+					this.trekmap.track.name = window.prompt('Zadej název nové trasy:', '')
+				}
+				
+				// little validation
+				if (this.trekmap.track.name.length < 3 || this.trekmap.track.name.length > 100) {
+					window.alert('Název musí mít od 3 do 100 znaků.');
+					return;
+				}
+				if (this.trekmap.track.description != '' && (this.trekmap.track.description.length < 3 || this.trekmap.track.description.length > 400)) {
+					window.alert('Popis musí mít od 3 do 400 znaků.');
+					return;
+				}
+			}
+			
 			// send request
 			new Ajax(window.php.saveUri, {
 				method: 'get',
-				data: { points: this.trekmap.track.encode() },
+				data: { track: this.trekmap.track.encode() },
 				onComplete: this.saveRedirect.bind(this)
 			}).request();
 		}
@@ -480,21 +518,22 @@ var TMGeocoding = new Class({
 	
 	initialize: function(map) {
 		this.trekmap = map;
-		
-		var wrapper = this.trekmap.gui.geocodingDriver.getProperty('id');
-		this.textfield = $$("#" + wrapper + " input[type='text']")[0];
-		
-		// searching for a first 'button' element inside of the wrapper
-		var types = ["input[type='submit']", "input[type='button']", "input[type='image']", "button"];
-		for (var i = 0, el; this.button == null && i < types.length; i++) {
-			el = $$('#' + wrapper + ' ' + types[i]);
-			if (el) { this.button = el[0]; }
+		if ($defined(this.trekmap.gui.geocodingDriver)) {
+			var wrapper = this.trekmap.gui.geocodingDriver.getProperty('id');
+			this.textfield = $$("#" + wrapper + " input[type='text']")[0];
+			
+			// searching for a first 'button' element inside of the wrapper
+			var types = ["input[type='submit']", "input[type='button']", "input[type='image']", "button"];
+			for (var i = 0, el; this.button == null && i < types.length; i++) {
+				el = $$('#' + wrapper + ' ' + types[i]);
+				if (el) { this.button = el[0]; }
+			}
+			
+			// events
+			var enter = function(event) { event = new Event(event); if (event.key == 'enter') { this.search(); } }
+			this.textfield.addEvent('keydown', enter.bind(this));
+			this.button.addEvent('click', this.search.bind(this));
 		}
-		
-		// events
-		var enter = function(event) { event = new Event(event); if (event.key == 'enter') { this.search(); } }
-		this.textfield.addEvent('keydown', enter.bind(this));
-		this.button.addEvent('click', this.search.bind(this));
 	},
 	
 	set: function(place) {
@@ -552,25 +591,30 @@ var TMTrack = new Class({
 	},
 	meters: 0,
 	
+	name: '',
+	description: '',
+	
 	start: {
-		icon: new AIcon({
-			imageSrc: php.baseUri + 'img/start.png',
-			shadowSrc: null,
-			fastRollover: false,
-			imageSize: new ASize(16, 16),
-			iconOffset: new APoint(8, 8),
-		}),
+		icon: A_GREEN_FLAG,
+//		new AIcon({
+//			imageSrc: php.baseUri + 'img/marker-start.png',
+//			shadowSrc: null,
+//			fastRollover: false,
+//			imageSize: new ASize(16, 16),
+//			iconOffset: new APoint(8, 8),
+//		}),
 		marker: null
 	},
 	
 	finish: {
-		icon: new AIcon({
-			imageSrc: php.baseUri + 'img/finish.png',
-			shadowSrc: null,
-			fastRollover: false,
-			imageSize: new ASize(16, 16),
-			iconOffset: new APoint(8, 8),
-		}),
+		icon: A_RED_FLAG,
+//		new AIcon({
+//			imageSrc: php.baseUri + 'img/marker-finish.png',
+//			shadowSrc: null,
+//			fastRollover: false,
+//			imageSize: new ASize(16, 16),
+//			iconOffset: new APoint(8, 8),
+//		}),
 		marker: null
 	},
 	
@@ -623,11 +667,15 @@ var TMTrack = new Class({
 		
 		if (this.points.length == 1) {
 	        this.pop();
+	        this.start.marker.remove();
+	        this.finish.marker.remove();
 		}
 	},
 
 	empty: function() {
 		this.points = [];
+		this.start.marker.remove();
+	    this.finish.marker.remove();
 	},
 	
 	close: function() { // closes track into a loop
@@ -655,15 +703,33 @@ var TMTrack = new Class({
 		if (this.lines.forth != null) { this.lines.forth.remove(); }
 		if (this.lines.back != null) { this.lines.back.remove(); }
 		// measure
-		this.meters = this.measure();
+		this.meters = this.measure(this.points);
+		this.displayDistance(this.meters);
 		
 		this.milestones.redraw();
 		this.draw();
+		this.altitude.update();
 		this.altitude.chart.redraw();
+		
+		// debug
+//		var markers = [];
+//		for (var i = 0; i < this.points.length; i++) {
+//			markers.push(new AMarker(this.points[i].coords, {
+//	            label       : this.points[i].alt,
+//	            maxZoom     : 1
+//	        }));
+//		}
+//		this.trekmap.map.addMarkers(markers);
 	},
 	
 	draw: function() {
-		if (!this.isLine()) return;
+		if (!this.isLine()) {
+			if (!this.isEmpty()) {
+				this.start.marker = new AMarker(this.points[0].coords, { icon: this.start.icon });
+				this.trekmap.map.addOverlay(this.start.marker);
+			}
+			return;
+		}
 
 		var A, B, breakpoint; // border points, breakpoint
 		var d; // distance
@@ -675,8 +741,8 @@ var TMTrack = new Class({
 		
 		for (var i = 0; i < this.points.length; i++) {
 			if (i + 1 != this.points.length) { // if it isn't last point
-				A = this.points[i].coords.convertTo(ACoordinateSystem.S42);
-				B = this.points[i + 1].coords.convertTo(ACoordinateSystem.S42);
+				A = this.points[i].coords;
+				B = this.points[i + 1].coords;
 				
 				d = B.distanceFrom(A);
 				total += d;
@@ -698,7 +764,7 @@ var TMTrack = new Class({
 		
 		// way forth
 		this.lines.forth = new APolyline(forth, {
-			color: TREKMAP_BLACK,
+			color: TREKMAP_GREEN,
 			weight: '4px',
 			opacity: 1
 		});
@@ -706,7 +772,7 @@ var TMTrack = new Class({
 		
 		// way back
 		this.lines.back = new APolyline(back, {
-			color: TREKMAP_GREY,
+			color: TREKMAP_RED,
 			weight: '4px',
 			opacity: 1
 		});
@@ -719,8 +785,8 @@ var TMTrack = new Class({
 		this.start.marker = new AMarker(this.points[0].coords, { icon: this.start.icon });
 		this.finish.marker = new AMarker(this.points[this.points.length - 1].coords, { icon: this.finish.icon });
 		
-		this.trekmap.map.addOverlay(this.start.marker);
-		this.trekmap.map.addOverlay(this.finish.marker);
+		this.trekmap.map.addOverlay(this.finish.marker); // finish first
+		this.trekmap.map.addOverlay(this.start.marker); // start second, to be always visible
 	},
 	
 	focus: function(coords) {
@@ -729,36 +795,54 @@ var TMTrack = new Class({
 			for (var i = 0; i < this.points.length; i++) {
 				bounds.push(this.points[i].coords);
 			}
-			
+			this.trekmap.map.setBestZoomAndCenter(bounds);
 			if (this.trekmap.map.getCurrentScale() <= 500000) {
 				this.trekmap.map.setMapType(A_TOURISTIC_CART_MAP.displayName);
 			}
 			this.trekmap.map.update();
-			this.trekmap.map.setBestZoomAndCenter(bounds);
 		} else {
-			this.trekmap.map.update();
 			this.trekmap.map.moveTo(coords, 500);
+			this.trekmap.map.update();
 		}
 	},
 	
-	measure: function() { // in meters
+	measure: function(points) { // in meters
 		var meters = 0;
 		if (this.isLine()) {
-			for(var i = 0; i < this.points.length; i++) { // checking if all points have meters
-				if (!$defined(this.points[i].meters)) { // if not set from before
-					this.points[i].meters = (i != 0)?
-						 this.points[i - 1].meters + this.points[i].coords.distanceFrom(this.points[i - 1].coords)
-						 : this.points[i].meters = 0;
+			for(var i = 0; i < points.length; i++) { // checking if all points have meters
+				if (!$defined(points[i].meters)) { // if not set from before
+					points[i].meters = (i != 0)?
+						 points[i - 1].meters + points[i].coords.distanceFrom(points[i - 1].coords)
+						 : 0;
 				}
 			}
-			meters = this.points[this.points.length - 1].meters; // the last one
+			meters = points[points.length - 1].meters; // the last one
 		}
-		this.displayDistance(meters);
 		return meters;
 	},
 	
 	displayDistance: function(meters) {
 		this.trekmap.gui.distanceDriver.setText((meters / TREKMAP_DISTANCE_RATIO).toFixed(2));
+	},
+	
+	dilute: function(points, max) {
+		var ratio = Math.ceil(points.length / max);
+		if (ratio < 2) return points;
+		var pts = [];
+		for (var i = 0, result; i < points.length; i = i + ratio) {
+			// max altitude
+			result = 0;
+			for (var j = 0; j < ratio; j++) {
+				if ($defined(points[i + j])) {
+					result = Math.max(result, points[i + j].alt);
+				}
+			}
+
+			// replacing point
+			points[i].alt = result;
+			pts.push(points[i]);
+		}
+		return pts;
 	},
 	
 	/* encode to JSON */
@@ -767,7 +851,7 @@ var TMTrack = new Class({
 		var tmp;
 		for (var i = 0; i < this.points.length; i++) {
 			tmp = this.points[i];
-			tmp.coords = tmp.coords.convertTo(ACoordinateSystem.Geodetic);
+			tmp.coords = tmp.coords;
 			pts.push({
 				coords: {
 					x: tmp.coords.x + 0,
@@ -776,18 +860,33 @@ var TMTrack = new Class({
 				alt: tmp.alt + 0
 			});
 		}
-		return Json.toString(pts);
+		var result = Json.toString({
+			name: '' + this.name,
+			description: '' + this.description,
+			points: pts,
+			length: 0 + this.meters,
+			altitude: this.altitude.altDiff,
+			articulation: this.altitude.articulation
+		});
+		if (result.length > 1500) { // URL too long
+			this.points = this.dilute(this.points, this.points.length - 1); // cut some points
+			return this.encode();
+		}
+		return result;
 	},
 	
 	/* decode from JSON */
 	decode: function(data) {
 		this.points = [];
-		var pts = Json.evaluate(data);
-		for (var i = 0; i < pts.length; i++) {
-			this.points.push({
-				coords: new AGeoPoint(pts[i].coords.x + 0, pts[i].coords.y + 0, ACoordinateSystem.Geodetic).convertTo(ACoordinateSystem.S42),
-				alt: pts[i].alt + 0
-			});
+		var track = Json.evaluate(data);
+		for (var i = 0, p; i < track.points.length; i++) {
+			p = { coords: new AGeoPoint(0 + new Number(track.points[i].coords.x), 0 + new Number(track.points[i].coords.y), ACoordinateSystem.Geodetic) };
+			if ($defined(track.points[i].alt) && track.points[i].alt) {
+				p.alt = 0 + new Number(track.points[i].alt);
+			} else {
+				this.altitude.determine(p);
+			}
+			this.points.push(p);
 		}
 	}
 });
@@ -864,8 +963,8 @@ var TMMilestones = new Class({
 		var d, n, distances, target, stone;
 		
 		for (i = 1; i < points.length; i++) { // iterating segments
-			A = points[i - 1].coords.convertTo(ACoordinateSystem.S42); // border point A
-			B = points[i].coords.convertTo(ACoordinateSystem.S42); // border point B
+			A = points[i - 1].coords; // border point A
+			B = points[i].coords; // border point B
 
 			d = B.distanceFrom(A); // segment distance in meters
 			distances = []; // milestone distances
@@ -923,9 +1022,122 @@ var TMAltitude = new Class({
 	trekmap: null,
 	chart: null,
 	
+	articulation: 0,
+	articulationDriver: null,
+	altDiff: 0,
+	altDiffDriver: null,
+	
 	initialize: function(map) {
 		this.trekmap = map;
 		this.chart = new TMAltitudeChart(map);
+		
+		if (this.trekmap.gui.articulationDriver) {
+			this.articulationDriver = this.trekmap.gui.articulationDriver;
+		}
+		if (this.trekmap.gui.altitudeDifferenceDriver) {
+			this.altDiffDriver = this.trekmap.gui.altitudeDifferenceDriver;
+		}
+	},
+	
+	update: function() {
+		this.replenish(function() { // when replenished
+			this.articulation = this.calculateArticulation();
+			if (this.articulationDriver) {
+				this.articulationDriver.setText(this.articulation);
+			}
+			
+			this.altDiff = this.calculateAltDiff();
+			if (this.altDiffDriver) {
+				this.altDiffDriver.setText(this.altDiff);
+			}
+		}, this);
+	},
+	
+	calculateAltDiff: function() { // in Czech: "prevyseni"
+		if (!this.trekmap.track.isLine()) return 0;
+		var altDiff = 0;
+		var points = this.getAllPoints();
+		for (var i = 0, diff; i < points.length - 1; i++) {
+			diff = points[i + 1].alt - points[i].alt;
+			if (diff > 0) { // upwards
+				altDiff += diff;
+			}
+		}
+		return altDiff;
+	},
+	
+	calculateArticulation: function() { // in Czech: "clenitost"
+		if (!this.trekmap.track.isLine()) return 0;
+		var min = 10000, max = 0;
+		var points = this.getAllPoints();
+		for (var i = 0; i < points.length; i++) {
+			min = Math.min(min, points[i].alt);
+			max = Math.max(max, points[i].alt);
+		}
+		var art = max - min;
+		return (art < 0)? 0 : art;
+	},
+	
+	getAllPoints: function() {
+		// preparing points
+		var points = [];
+		var turnovers = this.trekmap.track.points;
+		for (var i = 0, j; i < turnovers.length - 1; i++) {
+			// adding points from segment to chart
+			points.push(turnovers[i]);
+			points = points.concat(turnovers[i].segment);
+		}
+		if (turnovers[i]) points.push(turnovers[i]);
+		this.trekmap.track.measure(points);
+		return points;
+	},
+	
+	replenish: function(callback, bindTo) {
+		var okay = true;
+		
+		var turnovers = this.trekmap.track.points;
+		var A, B, d, interval;
+		for (var i = 0, j; i < turnovers.length - 1; i++) {
+			if (!$defined(turnovers[i].segment)) { // replenish segment
+				okay = false;
+				
+				turnovers[i].segment = [];
+				A = turnovers[i].coords;
+				B = turnovers[i + 1].coords;
+				d = B.distanceFrom(A);
+				
+				interval = Math.round(d / 200);
+				interval = Math.max(interval, 50); // minimum interval 50 meters
+				
+				j = interval;
+				while (j <= d) {
+					turnovers[i].segment.push({
+						coords: this.trekmap.findPoint(A, B, j),
+						alt: null
+					});
+					j += interval;
+				}
+				if (turnovers[i].segment.length > 0) {
+					this.determineBatch(turnovers[i].segment);
+				}
+			} else { // checking
+				for (j = 0; j < turnovers[i].segment.length; j++) {
+					if (!$defined(turnovers[i].segment[j].alt) || !turnovers[i].segment[j].alt) {
+						okay = false;
+					}
+				}
+			}
+		}
+		
+		if (okay) {
+			callback.apply(bindTo);
+			return true;
+		} else {
+			(function() { // waiting until replenished, recursion
+				this.replenish(callback, bindTo);
+			}).delay(250, this);
+			return false;
+		}
 	},
 	
 	getVyskopisCz: function() {
@@ -954,7 +1166,7 @@ var TMAltitude = new Class({
 	
 	askVyskopisCz: function(point) {
 		this.getVyskopisCz().send(function (args) {
-			var coords = args[0].coords.convertTo(ACoordinateSystem.Geodetic);
+			var coords = args[0].coords;
 			topoGetAltitude(coords.x, coords.y, args[1], args[0], 3000);
 		}, [point, this.receive.bind(this)]);
 	},
@@ -965,7 +1177,7 @@ var TMAltitude = new Class({
 			var method = args[1];
 			var tmp = [];
 			for (var i = 0, c; i < points.length; i++) {
-				c = points[i].coords.convertTo(ACoordinateSystem.Geodetic);
+				c = points[i].coords;
 				tmp.push([c.x, c.y, method, points[i]]);
 			}
 			topoGetAltitudes(tmp, 3000);
@@ -973,7 +1185,7 @@ var TMAltitude = new Class({
 	},
 	
 	askGeoNames: function(point) {
-		var coords = point.coords.convertTo(ACoordinateSystem.Geodetic);
+		var coords = point.coords;
 		var uri = 'http://ws.geonames.org/gtopo30?lat=' + escape(coords.x) + '&lng=' + escape(coords.y);
 		new TMRemoteAjax(uri).send(this.receive.bind(this), point);
 	},
@@ -1014,93 +1226,18 @@ var TMAltitudeChart = new Class({
 		this.driver = this.trekmap.gui.altitudeDriver;
 	},
 	
-	replenish: function() {
-		var okay = true;
-		
-		var turnovers = this.trekmap.track.points;
-		var A, B, d, interval;
-		for (var i = 0, j; i < turnovers.length - 1; i++) {
-			if (!$defined(turnovers[i].segment)) { // replenish segment
-				okay = false;
-				
-				turnovers[i].segment = [];
-				A = turnovers[i].coords.convertTo(ACoordinateSystem.S42);
-				B = turnovers[i + 1].coords.convertTo(ACoordinateSystem.S42);
-				d = B.distanceFrom(A);
-				
-				interval = Math.round(d / 200);
-				interval = Math.max(interval, 50); // minimum interval 50 meters
-				
-				j = interval;
-				while (j <= d) {
-					turnovers[i].segment.push({
-						coords: this.trekmap.findPoint(A, B, j),
-						alt: null
-					});
-					j += interval;
-				}
-				this.trekmap.track.altitude.determineBatch(turnovers[i].segment);
-			} else { // checking
-				for (j = 0; j < turnovers[i].segment.length; j++) {
-					if (!$defined(turnovers[i].segment[j].alt) || !turnovers[i].segment[j].alt) {
-						okay = false;
-					}
-				}
-			}
-		}
-		
-		if (okay) {
-			return true;
-		} else {
-			(function() { // waiting until replenished, recursion
-				this.draw();
-			}).delay(250, this);
-			return false;
-		}
-	},
-	
-	dilute: function(points) {
-		// 150 points is max
-		var ratio = Math.ceil(points.length / 100);
-		if (ratio < 2) return points;
-		var pts = [];
-		for (var i = 0, result; i < points.length; i = i + ratio) {
-			// max altitude
-			result = 0;
-			for (var j = 0; j < ratio; j++) {
-				if ($defined(points[i + j])) {
-					result = Math.max(result, points[i + j].alt);
-				}
-			}
-						
-			// replacing point
-			points[i].alt = result;
-			pts.push(points[i]);
-		}
-		return pts;
-	},
-	
 	draw: function() {
-		if (!this.replenish()) return; // waiting until replenished
-
-		// preparing points
-		var points = [];
-		var turnovers = this.trekmap.track.points;
-		for (var i = 0, j; i < turnovers.length - 1; i++) {
-			// adding points from segment to chart
-			points.push(turnovers[i]);
-			points = points.concat(turnovers[i].segment);
-		}
-		points.push(turnovers[i]);
+		var points = this.trekmap.track.altitude.getAllPoints();
 		
 		// thin up the array
-		points = this.dilute(points);
+		points = this.trekmap.track.dilute(points, 100);
 		
 		// declarations and inits
-		var m, ds = '', dMax = 0, alts = '', altMax = 0, altMin = 10000;
+		var i, ds = '', dMax = 0, alts = '', altMax = 0, altMin = 10000;
 		
 		// size
 		var w = this.trekmap.gui.altitudeDriver.getStyle('width').toInt();
+		w = (w > 1000)? 1000 : w;
 		var h = this.trekmap.gui.altitudeDriver.getStyle('height').toInt();
 		
 		// searching for maximum altitude and maximum kilometers
@@ -1109,10 +1246,10 @@ var TMAltitudeChart = new Class({
 			altMin = Math.min(altMin, points[i].alt);
 		}
 		
-		// check
+		// last check
 		if (isNaN(altMax) || isNaN(altMin)) {
 			(function() { // waiting until replenished, recursion
-				this.draw();
+				this.replenish(draw, this);
 			}).delay(10, this);
 			return;
 		}
@@ -1120,17 +1257,16 @@ var TMAltitudeChart = new Class({
 		// lets continue
 		altMax = Math.ceil(altMax / 100) * 100;
 		altMin = Math.floor(altMin / 100) * 100;
-		dMax = (this.trekmap.track.meters / TREKMAP_DISTANCE_RATIO).toFixed(4);
+		dMax = this.trekmap.track.meters;
 		
-		// percents of altitude and percents of kilometers
+		// percents of altitude and percents of meters
 		for (i = 0; i < points.length; i++) {
-			m = (i != 0)? m + points[i].coords.distanceFrom(points[i - 1].coords) : 0; // meters
 			alts += (((points[i].alt - altMin) * 100) / (altMax - altMin)).toFixed(1) + ',';
-			ds += (((m / TREKMAP_DISTANCE_RATIO) * 100) / dMax).toFixed(1) + ',';
+			ds += ((points[i].meters * 100) / dMax).toFixed(1) + ',';
 		}
-		
+
 		// chart
-		var uri = 'http://chart.apis.google.com/chart?chxt=x,y&chxr=0,0,' + dMax + '|1,' + altMin + ',' + altMax + '&cht=lxy&chd=t:' + ds.slice(0, -1) + '|' + alts.slice(0, -1) + '&chs=' + w + 'x' + h + '&chco=' + TREKMAP_GREEN.slice(1) + '&chls=1,1,0';
+		var uri = 'http://chart.apis.google.com/chart?chxt=x,y&chxr=0,0,' + (dMax / TREKMAP_DISTANCE_RATIO).toFixed(1) + '|1,' + altMin + ',' + altMax + '&cht=lxy&chd=t:' + ds.slice(0, -1) + '|' + alts.slice(0, -1) + '&chs=' + w + 'x' + h + '&chco=' + TREKMAP_GREEN.slice(1) + '&chls=1,1,0';
 		// debug(uri);
 		this.trekmap.gui.altitudeDriver.setStyle('background', "url('" + uri + "') center no-repeat");
 	},
@@ -1149,7 +1285,7 @@ var TMAltitudeChart = new Class({
 			background: "url('" + php.baseUri + "img/loading.gif') center no-repeat"
 		});
 		
-		this.draw();
+		this.trekmap.track.altitude.replenish(this.draw, this);
 	},
 	
 	toggle: function() {

@@ -1,6 +1,12 @@
+<div class="column sidecol">
+
 <h1>Demo</h1>
 
-<p>Zde si můžeš vyzkoušet zaznamenávání trasy do mapy.
-Můžeš ji dokonce jednorázově <strong>uložit a získat na ni odkaz</strong> (bude fungovat i nezaregistrovaným).</p>
+{? $map->render('controls') }
 
-@{? $map->render() }
+</div>
+<div class="column widecol">
+
+{? $map->render('map') }
+
+</div>

@@ -1,0 +1,51 @@
+<div id="achievements" class="figure">
+{if $component->count}
+
+
+<table>
+<tr>
+	<th>Borec</th>
+	<th>Kdy?</th>
+	<th>Aktivita</th>
+	<th>Čas</th>
+	<th class="number">Kola</th>
+	<th class="number">Převýšení</th>
+	<th class="number">km</th>
+	<th class="number">km/h</th>
+	<th class="number">min/km</th>
+	<th class="number">kJ</th>
+	<th><span class="hidden">Úpravy</span></th>
+</tr>
+{foreach $achievements as $ach}
+
+<tr{if $component->isMine($ach['user'])} class="mine"{/if} id="achievement{$ach['id']}">
+	<td>
+        <img src="{$template->gravatar(25, $ach['useremail'], $ach['userfemale'])}" alt="Gravatar &ndash; {$ach['username']}">
+	    {if !$component->isMine($ach['user'])}<a href="{plink Track:user $ach['user']}">{/if}
+			{$ach['username']}
+		{if !$component->isMine($ach['user'])}</a>{/if}
+	</td>
+	<td><abbr title="{$ach['achieved']|microformat:'date'}">{$ach['achieved']|dateAgoInWords}</abbr></td>
+	<td>{$ach['activity']}</td>
+	<td>{$ach['time']}</td>
+	<td class="number">{$ach['laps']}</td>
+	<td class="number">{$ach['altitude']}&nbsp;m</td>
+	<td class="number">{$ach['distance']|round:2}</td>
+	<td class="number">{$ach['speed']|round:2}</td>
+	<td class="number">{$ach['pace']|round:2}</td>
+	<td class="number">{if $component->isMine($ach)}
+		{if $ach['energy']}{$ach['energy']|round:2}{else}&ndash;{/if}
+	{/if}</td>
+	<td>{if $component->isMine($ach['user'])}<a href="{link delete $ach['id']}" class="confirm">Smazat</a>{/if}</td>
+</tr>
+
+{/foreach}
+</table>
+
+
+{else}
+<p class="empty">
+	Na této trase nebyly nalezeny žádné výkony.
+</p>
+{/if}
+</div>

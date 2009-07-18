@@ -1,0 +1,29 @@
+<div class="track">
+	<div class="wrapper">
+	<h2><a href="{plink Track:item $track['id']}" title="{$track['name']}">{$track['name']|truncate:40}</a> &mdash; <strong class="km">{$track['length']|km}</strong></h2>
+	
+	{if isset($identity)}
+	<ul class="nav tools">
+	{if $isMine}
+		{if $identity->id == $track['author']}<li class="edit"><a href="{plink Track:edit $track['id'], $request}">Upravit</a></li>{/if}
+		<li class="delete"><a href="{link delete! $track['id']}" class="confirm" title="Tímto přijdeš o všechny výkony na této trase a pokud ji nemá nikdo jiný, trasa se kompletně smaže ze systému.">Odebrat</a></li>
+	{else}
+	    <li class="add"><a href="{link add! $track['id']}">Přidat</a></li>
+	{/if}
+	</ul>
+	{/if}
+	
+	<p class="meta"><small>
+        {if isset($identity) && $identity->id == $track['author']}
+        Tuto trasu jsem vytvořil{=($track['authorfemale'])? 'a' : ''}
+        {else}
+		<a href="{plink Track:user $track['author']}">{$track['authorname']}</a>,
+		{/if}
+		<abbr title="{$track['created']|microformat:'date'}">{$track['created']|timeAgoInWords}</abbr>.</small></p>
+	<p class="preview"><a href="{plink Track:item $track['id']}" title="{$track['name']}"><img src="{$template->staticMap(180, 180, $track['points'])}" alt="Trasa {$track['name']}"></a></p>
+	{if !empty($track->description)}
+		<blockquote class="desc">{$track['description']|truncate:300}</blockquote>
+	{/if}
+	<p class="go"><a href="{plink Track:item $track['id']}#achievements" title="Výkony na trase">{=(int)$track['achievements']} {$track['achievements']|plural:'výkon':'výkony':'výkonů'}</a> <strong>&raquo;</strong></p>
+	</div>
+</div>

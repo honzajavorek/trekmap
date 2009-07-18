@@ -1,0 +1,20 @@
+<h1>{$title}</h1>
+
+<ul class="nav users">
+{foreach $users as $user}
+	<li>
+	<a href="{link Track:user $user['id']}" title="{$user['fullname']} na TrekMap">
+		<img width="80" height="80" src="{$template->gravatar(80, $user['email'], $user['female'])}" alt="Gravatar &mdash; {$user['fullname']}">
+		<strong>{$user['fullname']}</strong>
+	</a>
+	</li>
+{/foreach}
+</ul>
+
+<p class="cleaner">
+{if empty($identity)}
+<a href="{link Account:login}">Staň se <strong>{=count($users) + 1}. borcem</strong>!</a> Nemusíš se ani registrovat.
+{else}
+Počet všech borců: <strong>{=count($users)}</strong>.
+{/if}
+</p>

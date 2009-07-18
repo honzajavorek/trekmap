@@ -1,0 +1,22 @@
+<h1>{$title}</h1>
+
+{$form->render('begin')}
+{if $form->getErrors()}
+{$form->render('errors')}
+{/if}
+
+<fieldset>
+	<legend>Jméno a popis</legend>
+	<p>V rámci trasy můžeš změnit jen název a popis. <strong>Změna bodů trasy</strong> bohužel není možná, protože všechny tvé výkony se vážou k její současné podobě a potom by ztratily smysl.</p>
+	<table>
+		<tr><th>{$form['name']->label}</th><td>{$form['name']->control}</td></tr>
+		<tr><th>{$form['description']->label}</th><td>{$form['description']->control}</td></tr>
+		<tr><td colspan="2">{$form['btn']->control}</td></tr>
+	</table>
+</fieldset>
+
+<p class="go"><strong>&laquo;</strong> <a href="{link back! $id, $request}" class="confirm">Nic neměnit</a></p>
+
+{$form->render('end')}
+
+

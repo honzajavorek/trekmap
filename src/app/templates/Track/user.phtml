@@ -1,0 +1,46 @@
+
+<div class="vcard">
+
+<div class="clothesline">
+<div class="column widecol">
+
+<h1><img src="{$template->gravatar(40, $user['email'], $user['female'])}" alt="Gravatar &ndash; {$user['fullname']}" class="photo"> <span class="fn n">{$user['fullname']}</span>{if !empty($user['place'])} <small>({$user['place']})</small>{/if}</h1>
+
+{if $isMyProfile}
+{$form->render('begin')}
+
+<fieldset class="create dialogue" id="new-track">
+	<legend>Vytvořit novou trasu</legend>
+	<table>
+		<tr><th>{$form['name']->label}</th><td>{$form['name']->control}</td></tr>
+		<tr><th>{$form['toggle']->label}</th><td>{$form['toggle']->control}<span id="import-file">{$form['file']->control}</span></td></tr>
+		<tr><td colspan="2" class="figure">{$form['btn']->control}</td></tr>
+	</table>
+</fieldset>
+
+{$form->render('end')}
+{/if}
+
+{? $tracks->render() }
+
+</div>
+<div class="column sidecol">
+
+{if !empty($user['description'])}
+<h2>Info</h2>
+<p>{$user['description']}</p>
+{/if}
+
+<h2>Statistiky</h2>
+TODO
+
+<h2>RSS</h2>
+<ul>
+	<li class="rss"><a href="{link Xml:user, $user['id']}">Výkony</a></li>
+	<li class="rss"><a href="{link Xml:comments, $user['id']}">Komentáře</a></li>
+</ul>
+
+</div>
+</div>
+
+</div>

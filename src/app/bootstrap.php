@@ -68,26 +68,33 @@ $router = $application->getRouter();
 
 Route::setStyleProperty('presenter', Route::FILTER_TABLE, array(
         'ucet' => 'Account',
-        'uzivatele' => 'User',
         'trasy' => 'Track',
+		'export' => 'Xml',
 ));
 
 Route::setStyleProperty('action', Route::FILTER_TABLE, array(
         'vytvorit' => 'create',
         'upravit' => 'edit',
+		'borci' => 'users',
+		'borec' => 'user',
 		'demo' => 'demo',
         'info' => 'info',
-		'moje' => 'my',
+		'trasa' => 'item',
 		'napoveda' => 'help',
+		'hledam' => 'results',
 ));
 
-$router[] = new Route('<presenter uzivatele|trasy>/<id [0-9]+>', array(
-	'action' => 'item',
+$router[] = new Route('<action borec|trasa>/<id [0-9]+>', array(
+	'presenter' => 'Track',
 ));
 
-$router[] = new Route('<presenter xml|proxy|ucet|uzivatele|trasy>/<action>/<id>', array(
+$router[] = new Route('<presenter proxy|ucet|trasy>/<action>/<id>', array(
 	'action' => 'default',
 	'id' => NULL,
+));
+
+$router[] = new Route('<presenter export>/<id>.<action kml|gpx|rss> ? param=<param>', array(
+	'param' => NULL,
 ));
 
 $router[] = new Route('<action>/<id>', array(
@@ -96,7 +103,7 @@ $router[] = new Route('<action>/<id>', array(
 	'id' => NULL,
 ));
 
-//RoutingDebugger::run();
+// RoutingDebugger::run();
 
 /*
  * Run the application!

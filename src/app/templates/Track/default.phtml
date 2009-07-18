@@ -1,5 +1,19 @@
 <h1>{$title}</h1>
-		
-@{? //$cloud->render() }
-		
 
+{$form->render('begin')}
+
+<fieldset class="search dialogue">
+	<legend>{$form['s']->label}</legend>
+	<p class="figure">
+	{$form['s']->control}
+	</p>
+	<p class="figure">
+	{$form['btn']->control}
+	</p>
+</fieldset>
+
+<p class="figure">Nejnovější trasy: {foreach $tracks as $track}
+<a href="{link Track:item $track['id']}">{$track['name']}</a>,
+{/foreach}&hellip;<br><small><a rel="alternate" href="{link Xml:rss?id=tracks}">RSS</a></small></p>
+
+{$form->render('end')}

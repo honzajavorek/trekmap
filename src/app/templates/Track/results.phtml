@@ -1,0 +1,20 @@
+<div class="clothesline">
+<div class="column sidecol">
+
+{$form->render('begin')}
+<fieldset class="search dialogue">
+	<legend>{$form['s']->label}</legend>
+	{$form['s']->control} {$form['btn']->control}
+</fieldset>
+{$form->render('end')}
+
+<p class="figure"><small><a href="{$presenter->link('Xml:rss?id=search&param=' . $point)}">RSS</a></small></p>
+
+</div>
+<div class="column widecol">
+
+<h1>{$title} <small>(nalezeno: {$tracks->count})</small></h1>
+{? $tracks->render() }
+
+</div>
+</div>

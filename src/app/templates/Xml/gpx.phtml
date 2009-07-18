@@ -1,0 +1,25 @@
+{contentType text/xml; charset=utf-8}
+<<?php ?>?xml version="1.0" encoding="utf-8"?>
+<gpx xmlns="http://www.topografix.com/GPX/1/1" version="1.1" creator="{$absoluteUri}" xml:lang="cs-CZ">
+	<metadata>
+		<name>TrekMap: {$name}</name>
+		<author>
+			<name>{$authorname}</name>
+			<link href="{link Track:user $author}">{$authorname}</link>
+		</author>
+		<link href="{link Track:item $id}">TrekMap: {$name}</link>
+	</metadata>
+	<trk>
+		<name>{$name}</name>
+		<desc>{$description}</desc>
+		<src>{$absoluteUri}</src>
+		<link href="{link Track:item $id}">TrekMap: {$name}</link>
+		<number>{$id}</number>
+		<trkseg>
+			{foreach $coordinates as $c}
+			<trkpt lat="{$c['lat']}" lon="{$c['lng']}"></trkpt>
+			{/foreach}
+		</trkseg>
+	</trk>
+</gpx>
+

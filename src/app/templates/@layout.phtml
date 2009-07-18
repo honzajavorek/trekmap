@@ -2,6 +2,7 @@
 <html dir="ltr" lang="{$language}">
 <head profile="http://purl.org/uF/2008/03/">
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
 	<meta http-equiv="X-UA-Compatible" content="IE=7"><!-- fixing Amapy.cz in IE8 -->
 	
 	<meta name="author" content="Honza Javorek, http://honza.javorek.net">
@@ -19,23 +20,23 @@
 
 	<!-- agents, robots -->
 	<meta http-equiv="imagetoolbar" content="no">
-	{if isset($robots)}<meta name="robots" content="{$robots}">{/if}
+	{if isset($metaRobots)}<meta name="robots" content="{$metaRobots}">{/if}
 
 	<!-- description -->
-	<meta name="keywords" lang="{$language}" content="trekmap{if !empty($keywords)},{= implode(',', $keywords)}{/if}">
-	<meta name="description" content="{$description}">
+	<meta name="keywords" lang="{$language}" content="trekmap{if !empty($metaKeywords)},{= implode(',', $metaKeywords)}{/if}">
+	<meta name="description" content="{$metaDescription}">
 
 	{if !empty($feeds)}
 	<!-- feeds -->
-	{foreach $feeds as $feed}<link rel="alternate" type="application/rss+xml" title="{$feed['title']}" href="{link $feed['link']}">{/foreach}
+	{foreach $feeds as $feed}<link rel="alternate" type="application/rss+xml" title="{$feed['title']}" href="{$feed['link']}">{/foreach}
 	{/if}
 
 	<!-- stylesheets -->
 	<link rel="stylesheet" type="text/css" href="{$baseUri}css/framework.css" media="screen,projection,tv">
 	<link rel="stylesheet" type="text/css" href="{$baseUri}css/main.css" media="screen,projection,tv">
 	<!--[if lte IE 7]><link rel="stylesheet" type="text/css" href="{$baseUri}css/ie.css" media="screen,projection,tv"><![endif]-->
-	<link rel="stylesheet" type="text/css" href="{$baseUri}css/print.css" media="print">
-	{if !Environment::isProduction()}<style type="text/css">/* debug mode */ a[href^="error:"] { background: red !important; color: white !important; text-decoration: blink !important; }</style>{/if}
+	<link rel="stylesheet" type="text/css" href="{$baseUri}css/amapy.css" media="screen,projection,tv">
+	{if !Environment::isProduction()}<style type="text/css">/* debug mode */ a[href^="error:"] { background: #9E0B0E !important; color: white !important; text-decoration: blink !important; }</style>{/if}
 
 	<!-- javascript -->
 	{if !empty($scripts)}
@@ -53,10 +54,9 @@
 	
 	<title>{$title} - TrekMap, mapuj svou trasu pro běh, kolo, běžky, in-line brusle!</title>
 </head>
-<body>
-	<div id="corpus">
+<body class="{$cssLayout}">
 	<div id="document">
-		
+
 		<div class="header" id="logo">
 			<strong><a href="{link Default:}" title="na úvodní stranu">TrekMap &mdash; mapuj svůj volný čas<span></span></a></strong>
 		</div>
@@ -68,77 +68,86 @@
 
 		<div class="flashes">
 			<noscript><p class="flash error">Máš vypnutý JavaScript. Bez něj TrekMap nejede, <a href="{link Default:help}">zapni si jej</a> prosím.</p></noscript>
-			<script>if (undefined !== window.apiMissing && apiMissing()) { document.write('<p class="flash error">Je mi to líto, ale AMapy.cz mají zřejmě výpadek. <a href="{link $presenter->backlink()}">Zkus to prosím znovu.</a></p>'); }</script>
+			<script type="text/javascript">/* <![CDATA[ */if (undefined !== window.apiMissing && apiMissing()) { document.write('<p class="flash error">Je mi to líto, ale AMapy.cz mají zřejmě výpadek. <a href="{link $presenter->backlink()}">Zkus to prosím znovu.<\/a><\/p>'); }/* ]]> */</script>
         	{if !empty($flashes)}{foreach $flashes as $flash}<p class="flash {$flash->type}">{!$flash->message}</p>{/foreach}{/if}
         </div>
 
 		<div class="article" id="content">
-        {include $content}
+		<div id="content-wrapper">{include $content}</div>
         </div>
         
         <hr>
 
 		<div class="nav" id="menu">
 			<h2 class="hidden">Menu</h2>
-			<ul>{include '@menu.phtml'}</ul>
+			<ul>
+				{if isset($identity)}
+					<li><a href="{link Track:user $identity->id}">Můj profil</a></li>
+				{else}
+					<li><a href="{link Default:}">Ahoj!</a></li>
+				{/if}
+				<li><a href="{link Track:}">Trasy</a></li>
+				<li><a href="{link Default:users}">Borci</a></li>
+				{if !isset($identity)}<li><a href="{link Default:demo}">Demo</a></li>{/if}
+			</ul>
 		</div>
 
 		<hr>
 
 		<div class="aside" id="user">
+		<h2 class="hidden">Uživatel</h2>
+		<ul class="nav">
 {if isset($identity)}
-		<h2><img width="40" height="40" src="{$presenter->linkGravatar(40, $identity->email, $identity->female)}" alt="gravatar &mdash; {$identity->fullname}">
-		<a href="{link User:profile $identity->id}">{$identity->fullname}</a></h2>
-		<ul>
-	        <li><a href="{link Account:}">Nastavení</a></li>
-			<li><a href="{link Account:logout $request}">Odhlásit</a></li>
-		</ul>
+		<li>Přihlášen{if $identity->female}a{/if} jako <a href="{link Track:user $identity->id}">{$identity->fullname}</a></li>
+		<li><a href="{link Account:}">Nastavení</a></li>
+		<li><a href="{link Account:logout $request}">Odhlásit</a></li>
 {else}
-		<h2><img src="{$presenter->linkGravatar(40)}" alt="kolemjdoucí">
-		Kolemjdoucí</h2>
-		<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>
+		<li><a href="{link Account:login $request}">Přihlásit</a></li>
 {/if}
+        </ul>
 		</div>
 
-	</div>
-	
-	<hr>
-	
-	<div class="nav" id="links">
-	    <div class="wrapper">
-		<h2 class="hidden">Odkazy</h2>
+		<div class="cleaner"><hr></div>
 
-		<h3>Ty</h3>
-		{if isset($identity)}<ul>
-			<li><a href="{link Default:default}">Moje trasy</a></li>
-		    <li><a href="{link User:profile $identity->id}">Můj profil</a></li>
-            <li><a href="{link Account:}">Nastavení</a></li>
-			<li><a href="{link Account:logout $request}">Odhlásit</a></li>
-		</ul>{else}<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>{/if}
+        <div class="footer">
+		<div class="nav" id="links">
+		    <div class="wrapper">
+			<h2 class="hidden">Odkazy</h2>
 
-		<h3>TrekMap</h3>
-		<ul>{include '@menu.phtml'}
-			<li><a href="{link Default:help}">Nápověda</a></li>
-			<li><a href="{link Default:info}">O webu &amp; kontakt</a></li>
-		</ul>
+			<h3>Já</h3>
+			{if isset($identity)}<ul>
+			    <li><a href="{link Track:user $identity->id}">Profil</a></li>
+	            <li><a href="{link Account:}">Nastavení</a></li>
+				<li><a href="{link Account:logout $request}">Odhlásit</a></li>
+			</ul>{else}<ul><li><a href="{link Account:login $request}">Přihlásit</a></li></ul>{/if}
 
-		{if !empty($feeds)}
-		<h3>RSS</h3>
-		<ul>{foreach $feeds as $feed}<li><a href="{link $feed['link']}">{$feed['title']}</a></li>{/foreach}</ul>
-		{/if}
+			<h3>TrekMap</h3>
+			<ul>
+				{if !isset($identity)}<li><a href="{link Default:}">Ahoj!</a></li>{/if}
+				<li><a href="{link Track:}">Trasy</a></li>
+				<li><a href="{link Default:users}">Borci</a></li>
+				<li><a href="{link Default:demo}">Demo</a></li>
+				<li><a href="{link Default:help}">Nápověda</a></li>
+				<li><a href="{link Default:info}">O webu</a></li>
+			</ul>
+
+			{if !empty($feeds)}
+			<h3>RSS</h3>
+			<ul>
+			{foreach $feeds as $feed}<li><a rel="alternate" href="{$feed['link']}">{$feed['title']}</a></li>{/foreach}</ul>
+			{/if}
+			</div>
 		</div>
-	</div>
-	
-	<hr>
-	
-	<div class="footer">
-	 	<p>{$copyright} <a href="http://honza.javorek.net/">Honza Javorek</a> &mdash;
-	 	<a href="{link Default:info}">O webu &amp; kontakt</a></p>
-	</div>
 
-	<p class="hidden">Zpět <a href="#document"
-	title="přeskočit na začátek">nahoru ↑</a>.</p>
-	
+		<hr>
+
+		<div id="copyright">
+		 	<p>{$copyright} <a href="http://honza.javorek.net/">Honza Javorek</a></p>
+		</div>
+
+		<div class="cleaner"><p class="hidden">Zpět <a href="#document"
+		title="přeskočit na začátek">nahoru ↑</a>.</p></div>
+		</div>
 	</div>
 </body>
 </html>

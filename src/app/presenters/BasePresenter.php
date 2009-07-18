@@ -11,17 +11,20 @@ abstract class BasePresenter extends Presenter {
 
 	protected function createTemplate() {
 		$template = parent::createTemplate();
+		$template->registerHelperLoader('ExtraTemplateHelpers::loader');
 		$template->registerFilter('CurlyBracketsFilter::invoke');
-		
 		return $template;
 	}
 	
 	protected function startup() {
 		$this->template->language = 'cs';
-		$this->template->robots = Environment::getVariable('robots');
-		$this->template->description = ''; // TODO
-		$this->template->keywords = array(); // TODO
 		$this->template->copyright = '© ' . ((date('Y') == Environment::getVariable('since'))? date('Y') : Environment::getVariable('since') . '-' . date('Y'));
+		
+		$this->template->metaRobots = Environment::getVariable('robots');
+		$this->template->metaDescription = ''; // TODO
+		$this->template->metaKeywords = array(); // TODO
+		
+		$this->template->cssLayout = 'layout-basic';
 
 		// absolute uri
 		Environment::setVariable('absoluteUri', Environment::getHttpRequest()->uri->hostUri . Environment::getVariable('baseUri'));
@@ -36,63 +39,55 @@ abstract class BasePresenter extends Presenter {
 			$this->template->identity = $user->getIdentity();	
 		}
 		
+		// feeds
+		$this->template->feeds = array();
+		
 		// scripts
 		$this->template->js = array(
 			'baseUri' => Environment::getVariable('baseUri'),
 			'absoluteUri' => Environment::getVariable('absoluteUri'),
 			'proxyUri' => $this->link(':Proxy:default'),
 		);
-		$this->template->scripts = array();
+		$this->template->scripts = array(
+			'helpers',
+		);
 	}
-
-	/********************* helpers *********************/
+	
+	public function beforeRender() {
+		// form errors into flash messages
+		$forms = $this->getComponents(FALSE, 'AppForm');
+		foreach ($forms as $form) {
+			$errors = $form->getErrors();
+			$errors = implode(' ', $errors);
+			if (strlen($errors)) {
+				$this->flashMessage($errors, 'error');
+			}
+		}
+	}
 	
 	/**
 	 * Authentication and basic authorization.
 	 *
 	 * @param bool $admin Whether common user can see the page or must have an admin flag.
 	 */
-	protected function authenticate($onlyAdmin = FALSE) {
+	public function authenticate($onlyAdmin = FALSE) {
 		// user authentication
 		$user = Environment::getUser();
 		$authorized = ($onlyAdmin)? $user->isInRole('admin') : TRUE;
 
 		if (!$user->isAuthenticated() && $authorized) {
 			if ($user->getSignOutReason() === User::INACTIVITY) {
-				$this->flashMessage('Odhlásili jsme tě, protože jsi se nehýbal/a moc dlouho.');
+				$this->flashMessage('Proběhlo odhlášení z důvodu nečinnosti.');
 			}
 			$this->redirect('Account:login', $this->backlink());
 		}
 	}
 	
-	/**
-	 * Is the current user admin?
-	 *
-	 * @return bool
-	 */
-	public function isAdmin() {
-		$user = Environment::getUser();
-		return $user->isInRole('admin');
-	}
-	
-	
-	/**
-	 * Creates link to GRAVATAR.
-	 */
-	function linkGravatar($size, $email = NULL, $isFemale = NULL) {
-		if ($email === NULL && $isFemale === NULL) { // guest
-			return Environment::getVariable('baseUri') . "img/user-somebody$size.png";
-		}
-		$genderImg = (($isFemale)? "user-girl$size.png" : "user-boy$size.png");
-		if ($email === NULL) { // unknown e-mail
-			return Environment::getVariable('baseUri') . 'img/' . $genderImg;
-		}
-		$default = Environment::getVariable('absoluteUri') . 'img/' . $genderImg;
-		return 'http://www.gravatar.com/avatar.php?gravatar_id='
-		. md5(trim($email))
-		. '&default='
-		. urlencode($default)
-		. '&size=' . (int)$size;
+	public function permalink() {
+		$this->absoluteUrls = TRUE;
+		$link = $this->link($this->backlink(), $this->params);
+		$this->absoluteUrls = FALSE;
+		return $link;
 	}
 	
 }

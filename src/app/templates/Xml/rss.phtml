@@ -1,16 +1,21 @@
-{contentType application/rss+xml; charset=utf-8}
+<?php // {contentType application/rss+xml; charset=utf-8} ?>
 <<?php ?>?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
 	<channel>
-		<title>{$title}</title>
-		<link>{link Xml:rss}</link>
-		<description>{$description}</description>
+		<title>{$data['title']}</title>
+		<link>{link Xml:rss $data['params']}</link>
+		<description>{$data['description']}</description>
 		<language>cs</language>
+		<pubDate>{$data['pubDate']}</pubDate>
 
-		{foreach $items as $item}<item>
-		{foreach $item as $key => $value}
-	<{!$key}>{$value}</{!$key}>
-		{/foreach}</item>
+		{foreach $data['items'] as $item}
+		<item>
+			{foreach $item as $key => $value}
+				<{!$key}{if $key == 'guid'} isPermaLink="true"{/if}>
+					{$value}
+				</{!$key}>
+			{/foreach}
+		</item>
 		{/foreach}
 		
 	</channel>

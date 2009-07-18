@@ -4,22 +4,14 @@
  * (c) Jan Javorek, 2009 (http://www.javorek.net)
  */
 
-#corpus {
-	_height: 100%;
-}
-
-#links ul {
-	width: 70%;
-}
-
-.cleaner {
-	padding-top: 0.5em;
-}
-
-#user img {
-    _margin-left: 17px;
-}
-
 #lbOverlay {
 	position: absolute; left: -100%; bottom: 0;
+}
+
+input.button, button {
+    width: 0;
+}
+
+.track .desc {
+	_height: 6.3em;
 }

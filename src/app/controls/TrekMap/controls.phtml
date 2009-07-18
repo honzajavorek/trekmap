@@ -1,0 +1,56 @@
+<fieldset class="stats">
+	<legend>Statistika</legend>
+	<table>
+	    <tr><th>Vzdálenost</th><td><strong id="tm-distance-driver">0</strong> km</td></tr>
+	    <tr><th>Převýšení</th><td><strong id="tm-altitude-difference-driver">0</strong> m</td></tr>
+	    <tr><th>Členitost</th><td><strong id="tm-articulation-driver">0</strong> m</td></tr>
+	</table>
+</fieldset>
+
+{if $mode != TrekMap::VIEW}
+<fieldset id="tm-geocoding-driver" class="geocoding">
+	<legend>Hledání místa</legend>
+	<input type="text">
+	<button>Najít</button>
+</fieldset>
+{/if}
+
+{if $mode != TrekMap::VIEW}
+<fieldset class="editor">
+	<legend>Tvorba trasy</legend>
+	<div class="figure"><button id="tm-editor-toggle">Změnit režim</button></div>
+	
+	<button id="tm-reset-button" title="Vymazat"><img src="{$baseUri}img/icon-reset.png" alt="Vymazat"></button>
+	<button id="tm-undo-button" title="Zpět"><img src="{$baseUri}img/icon-undo.png" alt="Zpět"></button>
+	<button id="tm-finish-loop-button" title="Spojit do okruhu"><img src="{$baseUri}img/icon-finishloop.png" alt="Spojit do okruhu"></button>
+	<button id="tm-same-way-back-button" title="Stejnou cestou zpět"><img src="{$baseUri}img/icon-samewayback.png" alt="Stejnou cestou zpět"></button>
+	<button id="tm-preview-button" class="detached" title="Vidět celou trasu"><img src="{$baseUri}img/icon-preview.png" alt="Vidět celou trasu"></button>
+	<button id="tm-save-button" class="detached" title="Uložit"><img src="{$baseUri}img/icon-save.png" alt="Uložit"></button>
+</fieldset>
+{/if}
+
+<fieldset class="settings">
+	<legend>Zobrazení</legend>
+	
+	<table>
+		<tr><th>
+			<label for="tm-milestones-toggle">Zobrazovat kilometráž:</label>
+		</th><td>
+			<input id="tm-milestones-toggle" type="checkbox" checked>
+		</td></tr>
+		
+		{if $mode != TrekMap::VIEW}
+		<tr><th>
+			<label for="tm-center-toggle">Automaticky centrovat:</label>
+		</th><td>
+			<input id="tm-center-toggle" type="checkbox">
+		</td></tr>
+		{/if}
+	
+		<tr><th>
+			<label for="tm-altitude-toggle">Výškový profil:</label>
+		</th><td>
+			<input id="tm-altitude-toggle" type="checkbox">
+		</td></tr>
+	</table>
+</fieldset>
