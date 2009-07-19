@@ -8,7 +8,7 @@
 
 /* Compatibility ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-function debug(msg) { new Element('span').setText('' + msg + ' ').injectTop(document.body); }
+function debug(msg) { new Element('span').setText('' + msg + ' ').injectInside(document.body); }
 function apiMissing() { return (undefined === window.MooTools || undefined === window.AMap); }
 
 // MooTools required, AMapy required
@@ -54,7 +54,6 @@ var Flash = new Class({
 			this.hide.delay(5000, this);
 		}
 	},
-	
 	hide: function() {
 		this.element.remove();
 	}
@@ -190,9 +189,14 @@ var TrekMap = new Class({
 			this.map.addMapPart(new TrekMapTypeControl());
 			this.map.addMapPart(new TrekMapLayerControl([A_CYCLE_MAP, A_TOURISTIC_MAP]));
 			this.map.addMapPart(new TrekMapCompassControl());
+			
+			// layers
+			this.layers.push(new TMPanoramio(this.map));
+			this.layers.push(new TMWikipedia(this.map));
+			this.layers.push(new TMTopoNames(this.map));
+			this.layers.push(new TMWebCams(this.map));
 		}
 	},
-	
 	initMap: function() {
 		if (window.opera) {
 			new Flash('Prohlížeč Opera bohužel není službou AMapy.cz podporován.', 'error');
@@ -202,12 +206,12 @@ var TrekMap = new Class({
 			showAtlasLogo: false,
 			mapCursor: 'crosshair',
 			onClick: this.clicked.bind(this), // f(object, point)
-			onScaleChanged: this.zoomed.bind(this) // f(map)
+			onScaleChanged: this.zoomed.bind(this), // f(map)
+			onUpdateEnd: this.refreshLayers.bind(this) // for layers
 		});
 		this.map.loadMaps(); // f(null, null, A_TOURISTIC_CART_MAP.displayName)
 		return true;
 	},
-	
 	redraw: function() {
 		this.map.update();
 		this.track.redraw();
@@ -232,24 +236,20 @@ var TrekMap = new Class({
 		new Fx.Style(guard, 'opacity').set(0.65);
 		return guard;
 	},
-	
 	displayGuard: function() {
 		this.guard.setStyle('display', 'block');
 		//(function() {
 			this.guard.setStyle('background', '#FFF');
 		//}).delay(1000, this);
 	},
-	
 	hideGuard: function() {
 		this.guard.setStyle('display', 'none').setStyle('background', 'transparent');
 	},
-	
 	lock: function() {
 		if (this.locked) return;
 		this.locked = true;
 		this.displayGuard();
 	},
-	
 	unlock: function() {
 		if (!this.locked) return;
 		this.hideGuard();
@@ -280,10 +280,19 @@ var TrekMap = new Class({
 			this.editor.redraw();
 		}
 	},
-	
 	zoomed: function(map) {
 		if ($defined(this.track)) {
 			this.track.redraw();
+		}
+	},
+	
+	/* layers */
+	
+	layers: [],
+
+	refreshLayers: function() {
+		for (var i = 0; i < this.layers.length; i++) {
+			this.layers[i].redraw();
 		}
 	}
 	
@@ -299,7 +308,6 @@ var TMEditor = new Class({
 	active: false,
 	toggleButton: null,
 	img: [],
-	
 	controls: [
 		'preview',
 		'reset',
@@ -349,7 +357,6 @@ var TMEditor = new Class({
 		}
 		this.redraw();
 	},
-	
 	toggle: function() {
 		this.img[new Number(!this.active)].setStyle('display', 'inline');
 		this.img[new Number(this.active)].setStyle('display', 'none');
@@ -357,7 +364,6 @@ var TMEditor = new Class({
 		this.active = !this.active;
 		this.redraw();
 	},
-	
 	redraw: function() {
 		for (var i = 0, btn, detached, disabled; i < this.controls.length; i++) {
 			btn = this.controls[i];
@@ -374,7 +380,6 @@ var TMEditor = new Class({
 			}
 		}
 	},
-	
 	applyActivity: function(el) {
 		el.setStyle('display', (this.active)? 'inline' : 'none')
 	},
@@ -507,10 +512,8 @@ var TMEditor = new Class({
 var TMGeocoding = new Class({
 	type: 'TMGeocoding',
 	trekmap: null,
-	
 	textfield: null,
 	button: null,
-	
 	bounds: { // Czech Republic
 		sw: [48.5525, 12.091389],
 		ne: [51.055556, 18.858889]
@@ -535,22 +538,18 @@ var TMGeocoding = new Class({
 			this.button.addEvent('click', this.search.bind(this));
 		}
 	},
-	
 	set: function(place) {
 		this.locate(place, this.focus.bind(this));
 	},
-	
 	search: function() {
 		var place = this.textfield.getProperty('value');
 		this.locate(place, this.focus.bind(this));
 	},
-	
 	focus: function(point) {
 		this.trekmap.map.zoomTo(64000, point, false);
 		this.trekmap.redraw();
 		this.trekmap.map.setMapType(A_TOURISTIC_CART_MAP.displayName);
 	},
-	
 	locate: function(place, callback) {
 		if (!place) return false;
 		
@@ -590,7 +589,6 @@ var TMTrack = new Class({
 		back: null
 	},
 	meters: 0,
-	
 	name: '',
 	description: '',
 	
@@ -605,7 +603,6 @@ var TMTrack = new Class({
 //		}),
 		marker: null
 	},
-	
 	finish: {
 		icon: A_RED_FLAG,
 //		new AIcon({
@@ -617,29 +614,24 @@ var TMTrack = new Class({
 //		}),
 		marker: null
 	},
-	
 	initialize: function(map) {
 		this.trekmap = map;
 		this.milestones = new TMMilestones(map);
 		this.altitude = new TMAltitude(map);
 		this.displayDistance(0);
 	},
-	
 	isLine: function() {
 		return (this.points.length > 1);
 	},
-	
 	isEmpty: function() {
 		return (this.points.length <= 0);
 	},
-	
 	isLoop: function() { // whether first point is the same as the last one
 		if (!this.isEmpty()) {
 			return (this.points[0].coords == this.points[this.points.length - 1].coords);
 		}
 		return true;
 	},
-	
 	add: function(point, altitude) {
 		var length = this.points.push({
 			coords: point,
@@ -654,11 +646,9 @@ var TMTrack = new Class({
 			this.focus(this.points[length - 1].coords);
 		}
 	},
-	
 	append: function(points) {
 		this.points = this.points.concat(points);
 	},
-	
 	pop: function() {
 		var last = this.points[this.points.pop() - 1];
 		if ($defined(last) && $defined(last.segment)) {
@@ -671,13 +661,11 @@ var TMTrack = new Class({
 	        this.finish.marker.remove();
 		}
 	},
-
 	empty: function() {
 		this.points = [];
 		this.start.marker.remove();
 	    this.finish.marker.remove();
 	},
-	
 	close: function() { // closes track into a loop
 		var p = { coords: this.points[0].coords };
 		if ($defined(this.points[0].alt)) {
@@ -685,7 +673,6 @@ var TMTrack = new Class({
 		}
 	    this.points.push(p);
 	},
-	
 	clone: function() { // clones 
 		var pts = [], p;
 		for (var i = 0; i < this.points.length; i++) {
@@ -697,7 +684,6 @@ var TMTrack = new Class({
 		}
 		return pts;
 	},
-	
 	redraw: function() {
 		// clear lines
 		if (this.lines.forth != null) { this.lines.forth.remove(); }
@@ -721,7 +707,6 @@ var TMTrack = new Class({
 //		}
 //		this.trekmap.map.addMarkers(markers);
 	},
-	
 	draw: function() {
 		if (!this.isLine()) {
 			if (!this.isEmpty()) {
@@ -788,7 +773,6 @@ var TMTrack = new Class({
 		this.trekmap.map.addOverlay(this.finish.marker); // finish first
 		this.trekmap.map.addOverlay(this.start.marker); // start second, to be always visible
 	},
-	
 	focus: function(coords) {
 		if (!coords) { // focus all the track
 			var bounds = [];
@@ -805,7 +789,6 @@ var TMTrack = new Class({
 			this.trekmap.map.update();
 		}
 	},
-	
 	measure: function(points) { // in meters
 		var meters = 0;
 		if (this.isLine()) {
@@ -820,11 +803,9 @@ var TMTrack = new Class({
 		}
 		return meters;
 	},
-	
 	displayDistance: function(meters) {
 		this.trekmap.gui.distanceDriver.setText((meters / TREKMAP_DISTANCE_RATIO).toFixed(2));
 	},
-	
 	dilute: function(points, max) {
 		var ratio = Math.ceil(points.length / max);
 		if (ratio < 2) return points;
@@ -845,7 +826,8 @@ var TMTrack = new Class({
 		return pts;
 	},
 	
-	/* encode to JSON */
+	/* encode/decode JSON */
+	
 	encode: function() {
 		var pts = [];
 		var tmp;
@@ -874,8 +856,6 @@ var TMTrack = new Class({
 		}
 		return result;
 	},
-	
-	/* decode from JSON */
 	decode: function(data) {
 		this.points = [];
 		var track = Json.evaluate(data);
@@ -899,7 +879,6 @@ var TMMilestones = new Class({
 	type: 'TMMilestones',
 	trekmap: null,
 	stones: [],
-	
 	label: new AIcon({
 		imageSrc: null,
 		shadowSrc: null,
@@ -916,14 +895,13 @@ var TMMilestones = new Class({
 		shadowSrc: null,
 		fastRollover: false,
 		imageSize: new ASize(4, 4),
-		iconOffset: new APoint(2, 2),
+		iconOffset: new APoint(2, 2)
 	}),
 	
 	initialize: function(map) {
 		this.trekmap = map;
 		this.trekmap.gui.milestonesToggle.addEvent('click', this.redraw.bind(this));
 	},
-	
 	detectInterval: function() {
 		var scale = Math.ceil(this.trekmap.map.getCurrentScale() / 100000);
 		if (scale < 2) interval = 1;
@@ -933,23 +911,19 @@ var TMMilestones = new Class({
 		else interval = 50;
 		return interval * TREKMAP_DISTANCE_RATIO; // in meters
 	},
-	
 	isActive: function() {
 		return this.trekmap.track.isLine() && this.trekmap.gui.milestonesToggle.checked;
 	},
-	
 	empty: function() {
 		for (var i = 0; i < this.stones.length; i++) {
 			this.stones[i][0].remove();
 			this.stones[i][1].remove();
 		}
 	},
-	
 	redraw: function() {
 		this.empty();
 		this.draw();
 	},
-	
 	draw: function() {
 		if (!this.isActive()) return;
 		var interval = this.detectInterval();
@@ -995,7 +969,7 @@ var TMMilestones = new Class({
 						label: Math.round(count * (interval / TREKMAP_DISTANCE_RATIO)) + ' ' + TREKMAP_DISTANCE_LABEL
 					}),
 					new AMarker(target, {
-						icon: this.dot,
+						icon: this.dot
 					})
 				];
 				
@@ -1021,7 +995,6 @@ var TMAltitude = new Class({
 	type: 'TMAltitude',
 	trekmap: null,
 	chart: null,
-	
 	articulation: 0,
 	articulationDriver: null,
 	altDiff: 0,
@@ -1038,7 +1011,6 @@ var TMAltitude = new Class({
 			this.altDiffDriver = this.trekmap.gui.altitudeDifferenceDriver;
 		}
 	},
-	
 	update: function() {
 		this.replenish(function() { // when replenished
 			this.articulation = this.calculateArticulation();
@@ -1052,7 +1024,6 @@ var TMAltitude = new Class({
 			}
 		}, this);
 	},
-	
 	calculateAltDiff: function() { // in Czech: "prevyseni"
 		if (!this.trekmap.track.isLine()) return 0;
 		var altDiff = 0;
@@ -1065,7 +1036,6 @@ var TMAltitude = new Class({
 		}
 		return altDiff;
 	},
-	
 	calculateArticulation: function() { // in Czech: "clenitost"
 		if (!this.trekmap.track.isLine()) return 0;
 		var min = 10000, max = 0;
@@ -1077,7 +1047,6 @@ var TMAltitude = new Class({
 		var art = max - min;
 		return (art < 0)? 0 : art;
 	},
-	
 	getAllPoints: function() {
 		// preparing points
 		var points = [];
@@ -1091,7 +1060,6 @@ var TMAltitude = new Class({
 		this.trekmap.track.measure(points);
 		return points;
 	},
-	
 	replenish: function(callback, bindTo) {
 		var okay = true;
 		
@@ -1139,7 +1107,6 @@ var TMAltitude = new Class({
 			return false;
 		}
 	},
-	
 	getVyskopisCz: function() {
 		if (!$defined(window.php.vyskopis) || !php.vyskopis) throw new Error('API key for Vyskopis.cz is not defined.'); // vyskopis api key
 		if (!$defined(this.getVyskopisCz.script)) {
@@ -1147,7 +1114,6 @@ var TMAltitude = new Class({
 		}
 		return this.getVyskopisCz.script;
 	},
-	
 	determine: function(point) { // click
 		try {
 			this.askVyskopisCz(point);
@@ -1155,22 +1121,15 @@ var TMAltitude = new Class({
 			this.askGeoNames(point);
 		}
 	},
-	
 	determineBatch: function(points) { // altitude profile
-		try {
-			this.askVyskopisCzBatch(points);
-		} catch (error) {
-			this.askGeoNamesBatch(points);
-		}
+		this.askVyskopisCzBatch(points);
 	},
-	
 	askVyskopisCz: function(point) {
 		this.getVyskopisCz().send(function (args) {
 			var coords = args[0].coords;
 			topoGetAltitude(coords.x, coords.y, args[1], args[0], 3000);
 		}, [point, this.receive.bind(this)]);
 	},
-	
 	askVyskopisCzBatch: function(points) {
 		this.getVyskopisCz().send(function (args) {
 			var points = args[0];
@@ -1183,29 +1142,29 @@ var TMAltitude = new Class({
 			topoGetAltitudes(tmp, 3000);
 		}, [points, this.receive.bind(this)]);
 	},
-	
 	askGeoNames: function(point) {
 		var coords = point.coords;
-		var uri = 'http://ws.geonames.org/gtopo30?lat=' + escape(coords.x) + '&lng=' + escape(coords.y);
+		var uri = 'http://ws.geonames.org/gtopo30JSON?lat=' + escape(coords.x) + '&lng=' + escape(coords.y);
 		new TMRemoteAjax(uri).send(this.receive.bind(this), point);
 	},
-	
 	askGeoNamesBatch: function(points) {
 		for (var i = 0; i < points.length; i++) {
 			this.askGeoNames(points[i]);
 		}
 	},
-	
 	receive: function(result, point) {
 		if (!result) {
 			this.askGeoNames(point);
 		} else {
-			point.alt = new Number(result);
+			if (typeof(result) == 'object') {
+				point.alt = result.gtopo30;
+			} else {
+				point.alt = new Number(result);
+			}
+			
 			this.trekmap.unlock();
 		}
-	},
-	
-	
+	}
 });
 
 
@@ -1225,7 +1184,6 @@ var TMAltitudeChart = new Class({
 			.setProperty('checked', this.visible);
 		this.driver = this.trekmap.gui.altitudeDriver;
 	},
-	
 	draw: function() {
 		var points = this.trekmap.track.altitude.getAllPoints();
 		
@@ -1249,7 +1207,7 @@ var TMAltitudeChart = new Class({
 		// last check
 		if (isNaN(altMax) || isNaN(altMin)) {
 			(function() { // waiting until replenished, recursion
-				this.replenish(draw, this);
+				this.trekmap.track.altitude.replenish(this.draw, this);
 			}).delay(10, this);
 			return;
 		}
@@ -1270,7 +1228,6 @@ var TMAltitudeChart = new Class({
 		// debug(uri);
 		this.trekmap.gui.altitudeDriver.setStyle('background', "url('" + uri + "') center no-repeat");
 	},
-	
 	redraw: function() {
 		if (!this.visible || !this.trekmap.track.isLine()) {
 			this.trekmap.gui.altitudeDriver.setStyle('display', 'none');
@@ -1287,12 +1244,318 @@ var TMAltitudeChart = new Class({
 		
 		this.trekmap.track.altitude.replenish(this.draw, this);
 	},
-	
 	toggle: function() {
 		this.visible = !this.visible;
 		this.redraw();
 	}
 });
+
+
+
+/* Layers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
+var TMLayerIcon = AIcon.extend({
+	initialize: function(filename) {
+		this.parent({
+			imageSrc: php.baseUri + 'img/'+filename+'.png',
+			shadowSrc: null,
+			fastRollover: false,
+			imageSize: new ASize(22, 22),
+			iconOffset: new APoint(11, 11)
+		});
+	}
+});
+
+var TMLayer = new Class({
+	type: 'TMLayer',
+	active: false,
+	map: null,
+	markers: {},
+	icon: new TMLayerIcon('marker-general'),
+	
+	initialize: function(map) {
+		this.map = map;
+	},
+	fetch: function() {
+		; // abstract
+	},
+	setToggleDriver: function(el) {
+		el = $(el);
+		el.addEvent('click', this.toggle.bind(this));
+		this.active = el.checked;
+	},
+	redraw: function() {
+		if (this.active) this.fetch();
+	},
+	draw: function() {
+		var i;
+		if (this.active) for (i in this.markers) this.markers[i].show();
+		else for (i in this.markers) this.markers[i].hide();
+	},
+	createMarker: function(lng, lat, text, bubble) {
+		text = text || null;
+		bubble = bubble || {};
+		var hash = 'hash' + lng + ';' + lat;
+		if (!$defined(this.markers[hash])) {
+			var marker = new AMarker(new AGeoPoint(lng, lat), {
+				title: text,
+				icon: this.icon,
+				clickable: true && text
+			});
+			if (text) marker.addEvent('onClick', function() { marker.showBubble(text, bubble); });
+			this.markers[hash] = marker;
+			return marker;
+		}
+		return false;
+	},
+    toggle: function() {
+		this.active = !this.active;
+		if (!this.active) {
+			this.draw();
+		} else {
+			this.redraw();
+		}
+    }
+});
+
+var TMPanoramio = TMLayer.extend({
+	icon: new TMLayerIcon('marker-photo'),
+	markers: {},
+	
+	initialize: function(map) {
+		this.parent(map);
+		this.setToggleDriver($('tm-photos-toggle'));
+	},
+	fetch: function() {
+		var bounds = this.map.getGeoBounds();
+		bounds.southWest = bounds.southWest.convertTo(ACoordinateSystem.Geodetic);
+		bounds.northEast = bounds.northEast.convertTo(ACoordinateSystem.Geodetic);
+		
+		var uri = 'http://www.panoramio.com/map/get_panoramas.php' +
+		'?order=popularity' +
+		'&set=public' +
+		'&from=0&to=100' +
+		'&minx=' +
+		escape(bounds.southWest.y) +
+		'&miny=' +
+		escape(bounds.southWest.x) +
+		'&maxx=' +
+		escape(bounds.northEast.y) +
+		'&maxy=' +
+		escape(bounds.northEast.x) +
+		'&size=small';
+		
+		new TMRemoteAjax(uri).send(this.receive.bind(this));
+	},
+	receive: function(data) {
+		var markers = [];
+		if (!$defined(data.photos)) return;
+		for (var i = 0, photo, marker; i < data.photos.length; i++) {
+			photo = data.photos[i];
+			marker = this.createMarker(photo.latitude, photo.longitude,
+				'<a href="'+photo.photo_url+'" style="width: 100%;text-align: center;" target="_blank"><img style="width: '+photo.width+'px;height: '+photo.height+'px;margin: 0 auto;margin-bottom: 1em;" src="'+photo.photo_file_url+'"></a>',
+				{
+					footerContent: '<small style="padding: 0.5em;"><a href="http://www.panoramio.com" target="_blank">Panoramio</a> &mdash; autor: <a href="'+photo.owner_url+'" target="_blank">'+photo.owner_name+'</a></small>',
+					width: photo.width + 70,
+					maxHeight: photo.height + 200
+				}
+			);
+			if (marker != false) markers.push(marker);
+		}
+		this.map.addMarkers(markers);
+		this.draw();
+	}
+});
+
+
+
+var TMWikipedia = TMLayer.extend({
+	icon: new TMLayerIcon('marker-wikipedia'),
+	markers: {},
+	
+	initialize: function(map) {
+		this.parent(map);
+		this.setToggleDriver($('tm-wikipedia-toggle'));
+	},
+	fetch: function() {
+		var center = this.map.getGeoCenter().convertTo(ACoordinateSystem.Geodetic);
+        var radius = this.map.getCurrentScale() / 15000;
+        
+        var uri = 'http://ws.geonames.org/findNearbyWikipedia' +
+        '?lat=' +
+        escape(center.x) +
+        '&lng=' +
+        escape(center.y) +
+        '&radius=' +
+        escape(radius) +
+        '&maxRows=50' +
+        '&country=CZ' +
+        '&lang=cs';
+		
+		new TMRemoteAjax(uri).send(this.receive.bind(this));
+	},
+	receive: function(data) {
+		var markers = [];
+		if (!$defined(data.entry)) return;
+		for (var i = 0, entry, marker; i < data.entry.length; i++) {
+			entry = data.entry[i];
+			marker = this.createMarker(entry.lat, entry.lng,
+				'<h3><a href="'+entry.wikipediaUrl+'" target="_blank">'+entry.title+'</a></h3>',
+				{
+					footerContent: '<small style="padding: 0.5em;"><a href="http://www.geonames.org" target="_blank">GeoNames</a></small>'
+				} 
+			);
+			if (marker != false) markers.push(marker);
+		}
+		this.map.addMarkers(markers);
+		this.draw();
+	}
+});
+
+
+
+var TMWebCams = TMLayer.extend({
+	icon: new TMLayerIcon('marker-webcam'),
+	markers: {},
+	
+	initialize: function(map) {
+		this.parent(map);
+		this.setToggleDriver($('tm-webcams-toggle'));
+	},
+	fetch: function() {
+		var center = this.map.getGeoCenter().convertTo(ACoordinateSystem.Geodetic);
+		var radius = this.map.getCurrentScale() / 10000;
+        
+        var uri = 'http://api.webcams.travel/rest' +
+        '?lat=' +
+        escape(center.x) +
+        '&lng=' +
+        escape(center.y) +
+		'&radius=' +
+        escape(radius) +
+		'&unit=km' +
+        '&format=json' +
+		'&per_page=50' +
+		'&devid=68eef132bbeee006f6976d66daa96d5c' +
+		'&method=wct.webcams.list_nearby';
+		
+		new TMRemoteAjax(uri).send(this.receive.bind(this));
+	},
+	receive: function(data) {
+		var markers = [];
+		var width = 128, height = 96;
+		if (!$defined(data.webcams)) return;
+		for (var i = 0, entry, marker; i < data.webcams.webcam.length; i++) {
+			entry = data.webcams.webcam[i];
+			marker = this.createMarker(entry.latitude, entry.longitude,
+				'<strong>'+entry.title+'</strong><br><a href="'+entry.url+'" style="width: 100%;text-align: center;" target="_blank"><img style="width: '+width+'px;height: '+height+'px;margin: 0 auto;margin-bottom: 1em;" src="'+entry.thumbnail_url+'"></a>',
+				{
+					footerContent: '<small style="padding: 0.5em;"><a href="http://cz.webcams.travel/" target="_blank">Webcams.travel</a></small>',
+					width: width + 70,
+					maxHeight: height + 200
+				}
+			);
+			if (marker != false) markers.push(marker);
+		}
+		this.map.addMarkers(markers);
+		this.draw();
+	}
+});
+
+
+
+var TMTopoNames = TMLayer.extend({
+	icon: new AIcon({
+		imageSrc: null,
+		shadowSrc: null,
+		fastRollover: false,
+		imageSize: null,
+		iconOffset: new APoint(0, 0),
+		labelStyle: 'display: inline; white-space: nowrap; padding: 2px 5px; float: left; text-align: left; background-color: #393939; color: #FFF; font: bold 9px sans-serif;',
+		labelOffset: new APoint(0, 0),
+		className: 'poi',
+		opacity: 0.65
+	}),
+	markers: {},
+	
+	initialize: function(map) {
+		this.parent(map);
+		this.setToggleDriver($('tm-toponames-toggle'));
+	},
+	createMarker: function(lng, lat, label) {
+		var hash = 'hash' + lng + ';' + lat;
+		if (!$defined(this.markers[hash])) {
+			var marker = new AMarker(new AGeoPoint(lng, lat), {
+				label: label,
+				icon: this.icon
+			});
+			this.markers[hash] = marker;
+			return marker;
+		}
+		return false;
+	},
+	fetch: function() {
+		var center = this.map.getGeoCenter().convertTo(ACoordinateSystem.Geodetic);
+        var radius = this.map.getCurrentScale() / 15000;
+        
+        var uri = 'http://ws.geonames.org/findNearbyJSON' +
+        '?lat=' +
+        escape(center.x) +
+        '&lng=' +
+        escape(center.y) +
+		'&radius=' +
+		escape(radius) +
+		'&maxRows=50';
+		
+		new TMRemoteAjax(uri).send(this.receive.bind(this));
+	},
+	receive: function(data) {
+		var markers = [];
+		if (!$defined(data.geonames)) return;
+		for (var i = 0, entry, marker; i < data.geonames.length; i++) {
+			entry = data.geonames[i];
+			marker = this.createMarker(entry.lat, entry.lng, entry.name);
+			if (marker != false) markers.push(marker);
+		}
+		this.map.addMarkers(markers);
+		this.draw();
+	}
+});
+
+
+
+//var TMWeather = TMLayer.extend({
+//	icon: new TMLayerIcon('weather-clear'),
+//	
+//	initialize: function(map) {
+//		this.parent(map);
+//		this.setToggleDriver($('tm-weather-toggle'));
+//	},
+//	fetch: function() {
+//		var center = this.map.getGeoCenter().convertTo(ACoordinateSystem.Geodetic);
+//        
+//		var uri = 'http://ws.geonames.org/findNearByWeatherJSON' +
+//        '?lat=' +
+//        escape(center.x) +
+//        '&lng=' +
+//        escape(center.y) +
+//		'&lang=cs';
+//		alert(uri);
+//		new TMRemoteAjax(uri).send(this.receive.bind(this));
+//	},
+//	receive: function(data) {
+//		if (!$defined(data.weatherObservation)) return;
+//		var entry = data.weatherObservation;
+//		var marker = this.createMarker(entry.lat, entry.lng,
+//			'<h3><a href="'+entry.wikipediaUrl+'" target="_blank">'+entry.title+'</a></h3>',
+//			{
+//				footerContent: '<small style="padding: 0.5em;"><a href="http://www.geonames.org" target="_blank">GeoNames</a></small>'
+//			} 
+//		);
+//		if (marker != false) this.map.addMarkers([marker]);
+//		this.draw();
+//	}
+//});
 
 
 
@@ -1305,23 +1568,24 @@ var TMRemoteScriptThread = new Class({
 	index: -1,
 	master: null,
 	script: null,
-	
 	callback: null,
 	args: null,
 	
 	initialize: function(master) {
 		this.master = master;
 	},
-	
 	send: function(callback, args) {
 		this.callback = callback;
 		this.args = args;
 		
-		this.script = new Element('script', {type: 'text/javascript'})
-			.setHTML('TREKMAP_REMOTE_SCRIPT_CONTAINER[' + this.master.index + '].threads[' + this.index + '].launch();')
-			.injectBefore(this.master.script);
+		if (window.gecko) {
+            this.script = new Element('script', {type: 'text/javascript'})
+				.setHTML('TREKMAP_REMOTE_SCRIPT_CONTAINER[' + this.master.index + '].threads[' + this.index + '].launch();')
+				.injectBefore(this.master.script);
+		} else {
+			TREKMAP_REMOTE_SCRIPT_CONTAINER[this.master.index].threads[this.index].launch();
+		}
 	},
-	
 	launch: function() {
 		this.callback(this.args);
 		(function() { // waiting until operation is closed
@@ -1333,16 +1597,14 @@ var TMRemoteScriptThread = new Class({
 var TMRemoteScript = new Class({
 	type: 'TMRemoteScript',
 	index: -1,
-	
 	script: null,
 	threads: [],
-	
+
 	initialize: function(uri) {
 		this.script = new Element('script', {src: new String(uri), type: 'text/javascript'})
 			.injectTop(document.body);
 		this.index = TREKMAP_REMOTE_SCRIPT_CONTAINER.push(this) - 1;
 	},
-	
 	send: function(callback, args) {
 		// prepare thread
 		var i = this.threads.push(new TMRemoteScriptThread(this)) - 1;
@@ -1351,9 +1613,10 @@ var TMRemoteScript = new Class({
 		// send via thread
 		thread.send(callback, args);
 	},
-	
 	terminate: function(threadIndex) {
-		this.threads[threadIndex].script.remove();
+		if ($defined(this.threads[threadIndex].script)) {
+			this.threads[threadIndex].script.remove();
+		}
 		delete this.threads[threadIndex];
 	}
 });
@@ -1367,7 +1630,6 @@ var TMRemoteAjax = new Class({
 	initialize: function(uri) {
 		this.proxy = php.proxyUri + '?uri=' + escape(uri);
 	},
-	
 	send: function(callback, args) {
 		this.callback = callback;
 		this.args = args || [];
@@ -1376,9 +1638,8 @@ var TMRemoteAjax = new Class({
 			onComplete: this.receive.bind(this)
 		}).request();
 	},
-	
 	receive: function(result) {
-		this.callback(eval(result), this.args);
+		this.callback(Json.evaluate(result), this.args);
 	}
 });
 

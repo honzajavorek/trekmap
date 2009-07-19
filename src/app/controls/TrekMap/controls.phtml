@@ -39,6 +39,12 @@
 			<input id="tm-milestones-toggle" type="checkbox" checked>
 		</td></tr>
 		
+		<tr><th>
+			<label for="tm-altitude-toggle">Výškový profil:</label>
+		</th><td>
+			<input id="tm-altitude-toggle" type="checkbox">
+		</td></tr>
+		
 		{if $mode != TrekMap::VIEW}
 		<tr><th>
 			<label for="tm-center-toggle">Automaticky centrovat:</label>
@@ -46,11 +52,34 @@
 			<input id="tm-center-toggle" type="checkbox">
 		</td></tr>
 		{/if}
+    </table>
+</fieldset>
+<fieldset class="settings">
+	<legend>Vrstvy</legend>
 	
+	<table>
 		<tr><th>
-			<label for="tm-altitude-toggle">Výškový profil:</label>
+			<label for="tm-photos-toggle">Fotky:</label>
 		</th><td>
-			<input id="tm-altitude-toggle" type="checkbox">
+			<input id="tm-photos-toggle" type="checkbox">
+		</td></tr>
+		
+		<tr><th>
+			<label for="tm-wikipedia-toggle">Wikipedia:</label>
+		</th><td>
+			<input id="tm-wikipedia-toggle" type="checkbox">
+		</td></tr>
+		
+		<tr><th>
+			<label for="tm-webcams-toggle">Webkamery:</label>
+		</th><td>
+			<input id="tm-webcams-toggle" type="checkbox">
+		</td></tr>
+		
+		<tr><th>
+			<label for="tm-toponames-toggle">Popisky:</label>
+		</th><td>
+			<input id="tm-toponames-toggle" type="checkbox">
 		</td></tr>
 	</table>
 </fieldset>

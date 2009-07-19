@@ -20,15 +20,15 @@ class XmlPresenter extends BasePresenter {
 		$this->setLayout(FALSE); // disables layout
 		$this->absoluteUrls = TRUE; // switching to absolute URLs
 		
-//		Environment::getHttpResponse()
-//			->setHeader('Content-Description', 'File Transfer');
+		Environment::getHttpResponse()
+			->setHeader('Content-Description', 'File Transfer');
 			
 		$this->ext = '.' . $this->getView();
 	}
 	
 	public function setFilename($string) {
-//		Environment::getHttpResponse()
-//			->setHeader('Content-Disposition', 'attachment; filename="' . String::webalize($string) . $this->ext . '"');
+		Environment::getHttpResponse()
+			->setHeader('Content-Disposition', 'attachment; filename="' . String::webalize($string) . $this->ext . '"');
 	}
 	
 	public function fetchTracks() {
@@ -138,8 +138,8 @@ class XmlPresenter extends BasePresenter {
 	
 	public function renderKml($id, $user = NULL) {
 		$t = new Tracks;
-		$track = $t->fetch($track);
-		
+		$track = $t->fetch($id);
+
 		$this->template->id = $track['id'];
 		$this->template->name = $track['name'];
 		$this->setFilename($track['name'], 'gpx');
@@ -172,7 +172,7 @@ class XmlPresenter extends BasePresenter {
 	
 	public function renderGpx($id, $user = NULL) {
 		$t = new Tracks;
-		$track = $t->fetch($track);
+		$track = $t->fetch($id);
 		
 		$this->template->id = $track['id'];
 		$this->template->name = $track['name'];

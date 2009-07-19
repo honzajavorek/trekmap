@@ -33,7 +33,7 @@
 	<td class="number">{$ach['distance']|round:2}</td>
 	<td class="number">{$ach['speed']|round:2}</td>
 	<td class="number">{$ach['pace']|round:2}</td>
-	<td class="number">{if $component->isMine($ach)}
+	<td class="number">{if $component->isMine($ach['user'])}
 		{if $ach['energy']}{$ach['energy']|round:2}{else}&ndash;{/if}
 	{/if}</td>
 	<td>{if $component->isMine($ach['user'])}<a href="{link delete $ach['id']}" class="confirm">Smazat</a>{/if}</td>

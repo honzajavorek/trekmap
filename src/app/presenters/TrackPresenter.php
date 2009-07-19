@@ -237,7 +237,7 @@ class TrackPresenter extends BasePresenter {
 		));
 
 		$this->flashMessage('Výkon byl v pořádku přidán.');
-		$this->redirect('Track:item', $track['id']);
+		//$this->redirect('Track:item', $track['id']);
 	}
 
 	public function renderItem($id) {
@@ -252,7 +252,12 @@ class TrackPresenter extends BasePresenter {
 		$this->template->title = $track['name'];
 		$this->template->track = $track;
 		$this->template->map->setTrack($track);
-
+		
+		// google maps link
+		$this->absoluteUrls = TRUE;
+		$this->template->googleMapsLink = 'http://maps.google.com/maps?hl=cs&q=' . rawurlencode($this->link('Xml:kml', $track['id'])) . '&ie=UTF-8';
+		$this->absoluteUrls = FALSE;
+		
 		// rss
 		$this->template->feeds[] = array(
 			'title' => $this->template->title,
@@ -473,8 +478,8 @@ class TrackPresenter extends BasePresenter {
 		//$this->flashMessage('Toto je tvůj vlastní profil. <a href="' . $this->link('Account:') . '">Chceš upravit jeho text? Změnit obrázek?</a>', 'tip');
 
 		// rss
-		$this->template->feeds[] = array('title' => "Výkony ($user[fullname])", 'link' => $this->link('Xml:user', $user['id']));
-		$this->template->feeds[] = array('title' => "Komentáře ($user[fullname])", 'link' => $this->link('Xml:comments', $user['id']));
+//		$this->template->feeds[] = array('title' => "Výkony ($user[fullname])", 'link' => $this->link('Xml:user', $user['id']));
+//		$this->template->feeds[] = array('title' => "Komentáře ($user[fullname])", 'link' => $this->link('Xml:comments', $user['id']));
 	}
 
 

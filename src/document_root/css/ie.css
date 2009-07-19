@@ -9,7 +9,7 @@
 }
 
 input.button, button {
-    width: 0;
+    _width: 0;
 }
 
 .track .desc {

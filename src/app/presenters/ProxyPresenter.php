@@ -17,7 +17,26 @@ class ProxyPresenter extends BasePresenter {
 	}
 	
 	public function renderDefault($uri) {
-		echo @file_get_contents($uri);
+		$contents = trim(@file_get_contents($uri));
+		if (empty($contents)) {
+			$this->terminate();
+		}
+		$response = json_decode($contents, TRUE);
+		if (is_array($response)) {
+			foreach ($response as $item => $value) {
+				$this->payload->{$item} = $value;
+			}
+		} else {
+			$xml = simplexml_load_string($response);
+			if ($xml == FALSE) { // text
+				$this->payload->response = $response;
+			} else { // converts xml to json
+				$response = json_decode(json_encode($xml));
+				foreach ($response as $item => $value) {
+					$this->payload->{$item} = $value;
+				}
+			}
+		}
 		$this->terminate();
 	}
 
