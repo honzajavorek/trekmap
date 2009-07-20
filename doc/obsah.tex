@@ -89,117 +89,12 @@ Zajímavě problematiku mashupů zpracoval ve svém článku
 Zandl. Na téma API se v seriálu \cite{misantropApi} rozepsal Martin
 Malý.
 
-\chapter{Analýza a specifikace požadavků}
+\chapter{Analýza dostupných veřejných aplikačních rozhraní}
 
-Jak jsem již pro osvětlení zmínil v úvodu práce, evidencí
-geografických tras uživatele se rozumí webová aplikace, umožňující
-člověku pohodlně a interaktivně zaznačit do mapových podkladů trasu,
-kterou plánuje absolvovat či kterou již absolvoval například na kole,
-pěšky, na bruslích nebo během. Nic samozřejmě uživateli nebrání
-evidovat i jiné, delší trasy, systém by měl být však primárně určen
-pro výše naznačené lokální sportovní využití.
-
-Aplikace je službou, kam se uživatel zaregistruje a potom,
-přihlášen na svůj účet, může zakládat trasy svých výletů. Ty má
-možnost ukládat a zpětně prohlížet. Trasy jako takové neposkytují jen
-interaktivní záznam cesty na mapovém podkladu, ale také statistiky a
-běžné informace o trase. Zde je prostor pro kombinaci s dalšími
-podklady –- například s informacemi o nadmořské výšce terénu lze
-uživateli poskytnout navíc výškový profil jeho trasy. Uživatel má
-možnost trasy i plánovat. V tomto režimu aplikace vykazuje statistiky
-trasy a může využít zase jiných datových zdrojů, aby poskytnula lepší
-obraz o tom, co může například běžce na trase potkat (to může být
-opět výškový profil, ale také např. předpověď počasí pro místo trasy
-nebo vrstva s fotografiemi místních zajímavostí či panoramat).
-
-Integrace s jinými zdroji dat potom může zasahovat i do zcela jiných
-sfér –- např. by mohlo být možné implementovat výměnu dat s přenosným
-GPS zařízením.
-
-\section{Cílení projektu}
-Cílovou skupinou projektu jsou běžci, pěší turisté, cyklisté,
-běžkaři, bruslaři, jezdci na koních a třeba i vodáci. Je tedy
-důležité si uvědomit, že projekt pracuje s uživatelem, jenž nemusí
-být nijak technicky vzdělán, takže by mu měl nabídnout srozumitelné a
-příjemné uživatelské prostředí. Během výběru mapových podkladů (viz
-\ref{vybermap}) však také vyvstává otázka, zda projekt cílit pouze na
-Českou republiku, nebo počítat s uživatelskou základnou z celého světa.
-
-Cílit mapový projekt celosvětově totiž neznamená jen lokalizovat
-systém přinej\-menším i do angličtiny, ale také mít k dispozici dobré
-globální mapové podklady a s nimi samozřejmě také všechna použitá
-API. Území Česka a Slovenska má jednu z nej\-dokonalejších a nej\-hustších
-sítí turistického značení pro pěší turistiku \cite{kct}.
-Podobné značení má také Polsko, ale jinak je takováto síť prakticky světově unikátní. To
-znamená pro mou aplikaci především skutečnost, že pokud chce
-poskytovat možnost zobrazení těchto tras, musí využít lokálního
-poskytovatele mapových podkladů. Na druhou stranu bude potom
-funkčnost systému omezena prakticky na jeden stát, protože kvalitní a
-podrobné mapové podklady místních poskytovatelů nejsou v zásadě
-celosvětové.
-
-Nabízí se dvě možnosti -- zda se vydat cestou horších podkladů, ale
-oslovením větší uživatelské základny, nebo zkusit oslovit maximum
-uživatelů na domácím trhu a moci odrážet jeho lokální specifika. Dá se
-říci, že Češi jsou pro výše zmíněnou turistickou činnost dosti
-zapálení \cite{turistika} a proto lze očekávat, že hustota
-potencionálních uživatelů systému by zde byla mnohem vyšší než v
-jiných zemích, i přes zdánlivě malý, desetimilionový trh.
-
-Specifika českého turismu, existence celosvětově operujících
-konkurenčních projektů jako např. MapMyRun.com a absence vážné
-konkurence na domácím trhu mě přivedla k rozhodnutí cílit aplikaci
-pouze na Českou republiku. Jak se lze dočíst v \ref{vybranamapa},
-využívám tedy nakonec podkladů lokálního poskytovatele. Navíc jsou
-často na ČR omezeny i jiné zdroje dat a celý systém je pouze v
-češtině.
-
-\chapter{Výběr aplikačních rozhraní a zdrojů dat}
 Evidence geografických tras uživatele je aplikací postavenou na
 architektuře mashup (viz \ref{mashup}), a proto je výběr API již z
 principu zcela zásadní. S ohledem na tuto skutečnost problematice
 věnuji velký následující úsek práce.
-
-\section{Specifika práce na základě API}
-Vystavět aplikaci z větší části na externích zdrojích přináší možnost
-využít již hotových, profesionálních a ihned funkčních řešení a služeb
-od specializovaných poskytovatelů. Kdybychom si například chtěli sami
-naprogramovat mapový systém, stálo by nás to nemalé prostředky a
-rozsahem problému bychom překročili celou tuto práci. Stejně tak by
-nebylo snadné zajistit si svá vlastní geografická data s nadmořskými
-výškami nebo aktuální informace o počasí. S použitím API se na tyto
-problémy nemusíme soustředit a s využitím minima úsilí spojujeme
-existující prostředky do velmi silných aplikací.
-
-Přístup samozřejmě ale přináší také nevýhody. Zdroje dat nejsou nijak
-v naší moci a proto hrozí riziko prodlev či nedostupnosti služeb v
-případě lepším, v tom horším potom jejich neaktuálnost, chybovost, nebo
-dokonce zánik. Prodlevy v odpovědích z cizích serverů musí program
-zohlednit, zabývat se synchronizací požadavků s interaktivním
-uživatelským rozhraním a zamezit kolizím. Pokud navíc hrozí, že 
-prodlevy budou dlouhé a znepříjemní uživatelský prožitek, je dobré
-funkci, která je způsobuje separovat a dát uživateli možnost ji
-vypínat a zapínat. Rizika s vážným dopadem na funkčnost programu může
-potom aplikace postavená nad API ošetřovat především omezením své
-závislosti na jediném poskytovateli dat.
-
-U mapových podkladů si takové řešení můžeme představit například v
-naprogramování vrstvy, která nám poskytne rozhraní k funkcím API,
-ale oddělí nás od jejich konkrétní implementace. Vrstva potom může
-obalovat API Google Maps, Mapy.cz i Amapy.cz (viz \ref{vybermap}) a
-konkrétní službu potom použít na základě jediného parametru, podobně
-jako se to dělá například u databázových vrstev s abstrakcí
-několika druhů SŘBD (viz \ref{mysql}). Podobný projekt již existuje a
-nese název Mapstraction\footnote{Aktuální zdrojové kódy jsou k dispozici na
-\url{http://code.google.com/p/mapstraction/}.}, ale je ve velmi ranném stádiu a navíc podporuje zatím pouze globální
-mapové systémy. Využití jeho zdrojových kódů a případné zanesení českých
-mapových API je nyní tedy spíše zajímavou ideou do budoucna.
-
-U ostatních podkladů není omezování rizik tak obtížné. Pokud má
-aplikace na výběr z několika podkladů, může jednoduše použít lepší z
-nich a pokud ten selže, ve výjimce se na data dotáže alternativního,
-byť třeba méně přesného. Takto jsem zdvojil například API pro
-získávání nadmořské výšky (viz \ref{vyskovyProfil}).
 
 \section{Mapové podklady}\label{vybermap}
 V oblasti mapových technologií na internetu proběhl v
@@ -294,10 +189,12 @@ ještě nejsou známy nové licenční podmínky.
 
 Mapy.cz jsou připraveny kombinací geografických dat od PLANstudio a
 GEODIS Brno. Turistická mapa je nej\-kvalitnější podobnou mapou na českém
-internetu. Seznam.cz ji poskytuje na základě dat společnosti SHOCart,
-známou svými papírovými turistickými a cyklistickými publikacemi. Je
-škoda, že nepoužitelné API v tomto případě brání využít tak kvalitní
-podklady.
+internetu\footnote{Za její asi nejpodstatnější nevýhodu by se dala
+chápat absence velkého měřítka. Turistickou mapu lze na rozdíl od té
+na Amapy.cz přiblížit jen do poměrně omezené podrobnosti.}. Seznam.cz
+ji poskytuje na základě dat společnosti SHOCart, známou svými
+papírovými turistickými a cyklistickými publikacemi. Je škoda, že
+nepoužitelné API v tomto případě brání využít tak kvalitní podklady.
 
 \subsection{Amapy.cz společnosti Centrum Holdings}
 Amapy.cz se na svět dostaly v roce 2006 pod hlavičkou portálu
@@ -345,40 +242,6 @@ o jeho použití ve své práci jsem příliš neuvažoval. Uvedl jsem jej
 pro úplnost jako alternativní a otevřený zdroj geografických dat,
 jenž by v budoucnosti mohl nabýt na relevanci.
 
-\subsection{Výběr API s ohledem na požadavky a cílení
-práce}\label{vybranamapa}
-Z charakteru aplikace, jež je předmětem této práce, celkem jasně
-vyplývá, že výběr mapových podkladů je jedním z nej\-důležitějších
-rozhodnutí, které bude mít vliv na celý další vývoj projektu.
-Soustředil jsem se proto opravdu pečlivě na vlastnosti
-jednotlivých API a dlouze zvažoval.
-
-Vzhledem k faktům zmíněným v předcházejících odstavcích jsem však
-postupně nabyl dojmu, že ani jedno řešení rozhodně nelze favorizovat a
-spíše bude nutné vybrat nej\-méně bolestivý kompromis. Vybíral jsem
-podle třech hlavních kritérií:
-\begin{itemize}
-	\item Možnosti a funkce API,
-	\item kvalita mapových podkladů s důrazem na turistické
-	mapy a možnosti zobrazovat české turistické značky a cyklictické
-	trasy,
-	\item zázemí poskytovatele a budoucnost API.
-\end{itemize}
-
-Google nabízí bezkonkurenční API a dokonce v současné době
-představuje jeho zcela novou verzi, ale jeho mapové podklady jsou pro turistiku v
-českých podmínkách naprosto nedostatečné. Mapy.cz naopak disponují
-vynikajícími mapovými podklady, jenomže jejich aplikační rozhraní je
-velmi chabé z hlediska funkcionality a ještě mnohem více omezující v
-oblasti licenčních podmínek jeho použití. Seznam.cz sice vyvíjí nové
-API, ale to je zatím velmi nestabilní a jeho licence je stále
-neznámá. Pro svou práci jsem tedy nakonec vybral podklady od Centrum
-Holdings, protože poskytují dobré turistické mapy a mají bohatou
-škálu funkcí. S faktem, že vývoj aplikačního rozhraní je již několik
-let zcela mrtvý a jeho budoucnost je nejistá, mi nezbylo než se
-smířit a počítat s tím, že v budoucnu ji možná bude zapotřebí přepsat
-pro jiné API. V tomto ohledu bych vzhlížel k vývoji nového API v Seznam.cz.
-
 \section{Výškový profil}\label{vyskovyProfil}
 \subsection{Nadmořská výška}\label{vyskopis}
 Existují de facto dva hlavní zdroje dat o nadmořské výšce.
@@ -401,10 +264,6 @@ GTOPO30, takže dosahují rozlišení asi jednoho kilometru
 \footnote{Viz dokumentace k API dostupná na
 \url{http://www.geonames.org/export/web-services.html\#gtopo30}.}. GeoNames.org jsou široce využívaným a známým \footnote{Seznam uživatelů obsahuje společnosti jako BBC, Adidas nebo Nike -- viz \url{http://www.geonames.org/users.html}.} poskytovatelem nej\-růz\-něj\-ších dat, takže jej zřejmě lze považovat za spolehlivý.
 
-Pro svůj projekt jsem se rozhodl použít jako primární zdroj dat
-Výškopis.cz a v podobě záložního jsem implementoval API s méně
-přesnými výsledky od GeoNames.org.
-
 \subsection{Grafy}\label{grafy}
 Pro zobrazení výškového profilu uživateli je potřeba mít možnost
 dynamicky vygenerovat spojnicový graf. Dalo by se použít přímé funkce
@@ -417,32 +276,95 @@ vlastními nástroji, pokud má aplikace k dispozici potřebná data na
 trase. Vybíral jsem mezi povedenou PHP knihovnou pro generování
 grafů {\it pChart}, interaktivní Flash knihovnou {\it Open Flash Chart
 2} a vzdáleným REST rozhraním {\it Google Chart API} (viz \ref{rest}).
-Knihovny by zřejmě dokázaly poskytnout sofistikovanější
-výstup, ale hledal jsem spíše rychlé a jednoduché řešení a tím se
-ukázalo být Google Chart API. V případě, že by v budoucnu svými
-základními funkcemi nedostačovalo, je zde vždy možnost nahradit jej
-jednou z výše zmíněných knihoven.
+
+\section{Geocoding}
+Výrazem {\it geocoding} se rozumí proces vyhledání zeměpisných
+souřadnic na základě jiných geografických dat jako například adresa
+nebo PSČ.
+
+Veřejně tuto službu nabízí v požadované kvalitě dva subjekty --
+Google v rámci svého Google Maps API a Yahoo. První zmiňované má
+velmi dobrou síť údajů pro Českou republiku, druhé naopak spíše
+omezenou.
 
 \section{Obraz z terénu}
 \subsection{Fotografie}
-panoramio atd.
+V oblasti API k fotografiím, u nichž lze vyčíst data o poloze místa
+jejich vzniku, existuje snad pouze jediný zdroj, Panoramio. To je
+služba, kam se mohou uživatelé zaregistrovat, nahrávat své fotografie
+a následně jim přiřazovat polohu na mapě. Stala se po svém vzniku
+rychle velmi populární \cite{panoramio} a se svým API je zřejmě bezkonkurenční,
+jelikož jsem na žádnou jinou alternativu nenarazil. Panoramio bylo v
+roce 2008 koupeno společností Google.
+
 \subsection{Webkamery}
-\ldots
+Existují mnohé služby zabývající se zobrazováním
+veřejných webkamer jak u nás, tak i ve světě. Bohužel velmi málo
+z nich nabízí přímé API. Nejblíže k tomu z českých je Webcams.cz,
+které nabízí export dat na základě domluvy. Velmi dobrou
+síť kamer pro ČR a navíc výborné API jsem však našel u
+Webcams.travel, globální služby využívané například i na Google
+Maps.
 
 \section{Počasí}
-\ldots
+Při hledání API k informacím o počasí lze narazit na mnohá výborná
+rozhraní i data, avšak většinou pouze pro USA. Z celosvětových služeb
+lze jmenovat především Weather.com s přístupem pro vývojáře. Pracuje
+však na základě svých jednoznačných identifikátorů k meteostanicím a
+ty není příliš dobře možné programově získat ze zeměpisných
+souřadnic. Yahoo Weather poskytuje jednoduché API, ale data má z
+Weather.com, takže počasí vrací oproti těm samým problémovým kódům.
+
+Světové zdroje nebývají zdaleka tak přesné v datech jako české.
+Z~našich poskytovatelů lze najít dva hlavní zdroje dat o počasí,
+Meteopress a ČHMÚ\footnote{Český hydrometeorologický ústav.}. Oba
+však svá data nikde nenabízejí v podobě API a pokud ano, jedná se
+spíše o placenou službu. Jediný server s aplikačním rozhraním je
+In-počasí.eu s daty od ČHMÚ. Na požádání odhalí adresy XML souboru,
+jenže v něm se nachází pouze jednoduchá globální předpověď pro ČR bez
+místního rozdělení.
+
+Marné hledání jsem skončil u dvou dalších poskytovatelů dat o
+počasí -- Google a GeoNames.org. Na webu lze dohledat zmínky o Google
+Weather API, ale bližší přezkoumání nás přivádí ke skutečnosti, že je
+to pouze neoficiální kanál bez podpory a dokumentace. Několik lidí si
+všimlo, že Google aplikace se svými programovými dotazy na počasí
+míří na jednu určitou adresu a že ji lze využít i veřejně, ale ze
+strany společnosti neexistuje žádné vyjádření. Poslední šancí tedy
+byly GeoNames.org, které mají dokonce rozhraní se vstupem v podobě
+zeměpisných souřadnic, nicméně ani ty nelze použít, jelikož mají data
+pouze z větších letišť v ČR a těch je tak málo, že by vrstva s
+těmito údaji v mé aplikaci neměla příliš velký smysl. 
 
 \section{Užitečná turistická data}
-\subsection{Wikipedia}
-\ldots
-\subsection{Zdroje POI}
-\ldots
-\subsection{MHD}
-\ldots
-\subsection{Občerstvení}
-\ldots
+Na mapě lze zobrazovat vrstvy s tzv. body zájmu, označovanými často
+zkratkou POI z anglického {\it point of interest}.
 
-\chapter{Interoperabilita aplikace}
+\subsection{Wikipedia}
+Zajímavým zdrojem POI je otevřená encyklopedie Wikipedia, v níž je
+mnoho článků označených zeměpisnými souřadnicemi. Lze tak například
+na mapě Jižní Moravy zobrazit k poloze zámku Lednice detaily z článku
+o tomto zámku na české (ale i jiné) Wikipedii. Encyklopedie samotná
+sice takovou službu přímo nenabízí, ale lze ji najít u GeoNames.org
+jako zcela standardní API.
+
+\subsection{Jiné zdroje POI}
+GeoNames.org také nabízí API\footnote{Nejen API, protože všechna data
+poskytovaná na GeoNames.org si lze dokonce legálně stáhnout a použít
+jako vlastní databázi.} ke zřejmě nejucelenější veřejné databázi
+ostatních topografických dat. Je to celosvětová a i pro ČR velmi
+hustá síť názvů a dalších informací o významných místech s
+geografickými souřadnicemi a kategorizací podle typu obsahu.
+
+Jediné další API, které mne v tomto směru zaujalo, bylo to u služby
+Tixik.com, mezinárodního turistického průvodce. Rozhraní vypadá velmi
+dobře, ale data jím dodávaná jsou bohužel prakticky nepoužitelná. Na
+dotaz se souřadnicemi server neodpoví
+informacemi či fotografiemi o nejzajímavějších místech jak
+prezentuje, ale řadou příspěvků z jeho fóra týkajících se okolí v
+blízkosti bodu.
+
+\chapter{Možnosti interoperability aplikace}
 Pojem interoperabilita lze vysvětlit jako schopnost vzájemně si
 rozumět, vzájemně spolupracovat, dosáhnout vzájemné součinnosti. V
 kontextu této práce jsem pojem převedl především na součinnost s
@@ -476,7 +398,7 @@ poskytne svá osobní data. Identifikátor má tvar běžné adresy webové
 stránky, kterou má namísto tradiční dvojice {\it jméno \& heslo}.
 Systém funguje tak, že uživatel zadá v klientské aplikaci svůj
 identifikátor (např. {\tt uzivatel.myopenid.com}) a ta zašle
-požadavek na registrátora (v tomto případě {\tt myopenid.com}).
+požadavek na registrátora (v tomto případě {\tt myOpenID.com}).
 Registrátor si s aplikací vymění klíče a ta uživatele přes HTTP
 přesměruje na přihlašovací stránku OpenID providera. Zde uživatel
 zadá své heslo, jediné, které si musí zapamatovat, společné pro
@@ -495,17 +417,6 @@ projektu. Minimum nej\-důležitějších informací aplikace získá z OpenID
 identity a doplňkové údaje si potom uživatel může sám vyplnit
 dodatečně v nastavení svého účtu.
 
-I vzhledem k současné podpoře OpenID je vše teprve v začátcích a
-povědomí o službě není tak velké. Mohlo by být tedy celkem rizikové
-metodu nasadit jako jediný způsob registrace a přihlášení do aplikace.
-Protože ale OpenID nasadil i hegemon českého internetu
-Seznam.cz\footnote{Nápověda
-k OpenID je na \url{http://napoveda.seznam.cz/cz/login/openid/}.}, u
-něhož většina Čechů účet má, rozhodl jsem se tuto nej\-pokrokovější metodu autentizace implementovat opravdu bez alternativy. Získání
-OpenID od Seznam.cz je navíc velmi snadné -- stačí ve své e-mailové
-adrese (např. {\tt uzivatel@seznam.cz}) zaměnit znak zavináče za
-písmena {\tt id} oddělená tečkami ({\tt uzivatel.id.seznam.cz}).
-
 \section{Import a export dat}
 Jak bylo zmíněno v úvodu kapitoly, přenosné GPS systémy se stávají
 mezi běžnými lidmi stále populárnější. Jejich příznivější ceny
@@ -515,8 +426,7 @@ jednou z hlavních než doplňkových funkcí výsledné aplikace. Při
 jejich implementaci jsme navíc už jen krok od interoperability s
 geografickými aplikacemi jako Google Earth nebo Google Maps. Ty
 podporují buď přímo formát přenosných GPS zařízení, nebo vyžadují
-svůj, který je ale velmi podobný, protože je rovněž založen na XML
-(viz \ref{xml}).
+svůj, který je ale rovněž založen na XML (viz \ref{xml}).
 
 \subsection{GPS eXchange Format}
 GPS navigace většinou operují v rámci svých vlastních, uzavřených
@@ -525,6 +435,9 @@ facto standard v podobě GPX, formátu velmi rozšířeného výrobce GPS
 navigací, společnosti Garmin. GPX je aplikací univerzálního jazyka
 XML a jeho schémata jsou veřejně dostupná\footnote{Viz
 \url{http://www.topografix.com/gpx/1/1/}.}.
+
+Na formátu lze poznat zaměření pro navigace. Podporuje například
+zaznamenání trasy i přes výpadky v signálu apod.
 
 \subsection{Keyhole Markup Language}
 Společnost Keyhole, která vytvořila formát KML, již dnes přežívá
@@ -550,6 +463,12 @@ Generovat KML opět není nijak obtížné. Formát je otevřený a nabízí na
 webu ucelenou dokumentaci\footnote{Viz
 \url{http://code.google.com/intl/cs/apis/kml/}.}.
 
+Formát KML je velmi ovlivněn tím, že vychází z aplikace Google Earth
+a obsahuje velké množství elementů i jen pro definici zobrazení
+geografických dat v aplikaci (např. zda má být nabídka v menu
+rozvinutá či svinutá). Tyto elementy však není nevyhnutelně nutné
+používat.
+
 \section{Mikroformáty}\label{microformats}
 Mikroformáty jsou způsob, jak do webových stránek vkládat strojově
 čitelnou informaci a přitom zůstat v rámci syntaxe na možnostech
@@ -569,22 +488,178 @@ mikroformátů v akci lze koneckonců spatřit i na webu
 fakulty, např. u stránky s profilem vedoucího této práce
 \url{http://www.fit.vutbr.cz/~hruska/}.
 
-Při tvorbě práce však zřejmě mikroformáty nebude možné příliš využít.
+Velmi aktivně se o technologie mikroformátů v České republice zajímá
+Martin Hassman \cite{mfLupa}. Komplexní seriál o problematice vyšel
+na serveru Zdroják.cz Janu Sládkovi \cite{mf}.
+
+\chapter{Specifikace požadavků a rámcový návrh řešení}
+
+Jak jsem již pro osvětlení zmínil v úvodu práce, evidencí
+geografických tras uživatele se rozumí webová aplikace, umožňující
+člověku pohodlně a interaktivně zaznačit do mapových podkladů trasu,
+kterou plánuje absolvovat či kterou již absolvoval například na kole,
+pěšky, na bruslích nebo během. Nic samozřejmě uživateli nebrání
+evidovat i jiné, delší trasy, systém by měl být však primárně určen
+pro výše naznačené lokální sportovní využití.
+
+\section{Základní koncepce}
+Aplikaci jsem koncipoval jako službu, kam se uživatel zaregistruje a
+potom, přihlášen na svůj účet, může zakládat trasy svých výletů. Ty má
+možnost ukládat a zpětně prohlížet. Trasy jako takové neposkytují jen
+interaktivní záznam cesty na mapovém podkladu, ale také statistiky a
+běžné informace o trase. Zde je prostor pro kombinaci s dalšími
+podklady –- například s informacemi o nadmořské výšce terénu lze
+uživateli poskytnout navíc výškový profil jeho trasy. Uživatel má
+možnost trasy i plánovat. V tomto režimu aplikace vykazuje statistiky
+trasy a může využít zase jiných datových zdrojů, aby poskytnula lepší
+obraz o tom, co může například běžce na trase potkat (to může být
+opět výškový profil, ale také např. předpověď počasí pro místo trasy
+nebo vrstva s fotografiemi místních zajímavostí či panoramat).
+
+\section{Cílení projektu}
+Cílovou skupinou projektu jsou běžci, pěší turisté, cyklisté,
+běžkaři, bruslaři, jezdci na koních a třeba i vodáci. Je tedy
+důležité si uvědomit, že projekt pracuje s uživatelem, jenž nemusí
+být nijak technicky vzdělán, takže by mu měl nabídnout srozumitelné a
+příjemné uživatelské prostředí. Během výběru mapových podkladů (viz
+\ref{vybermap}) však také vyvstává otázka, zda projekt cílit pouze na
+Českou republiku, nebo počítat s uživatelskou základnou z celého světa.
+
+Cílit mapový projekt celosvětově totiž neznamená jen lokalizovat
+systém přinej\-menším i do angličtiny, ale také mít k dispozici dobré
+globální mapové podklady a s nimi samozřejmě také všechna použitá
+API. Území Česka a Slovenska má jednu z nej\-dokonalejších a nej\-hustších
+sítí turistického značení pro pěší turistiku \cite{kct}.
+Podobné značení má také Polsko, ale jinak je takováto síť prakticky světově unikátní. To
+znamená pro mou aplikaci především skutečnost, že pokud chce
+poskytovat možnost zobrazení těchto tras, musí využít lokálního
+poskytovatele mapových podkladů. Na druhou stranu bude potom
+funkčnost systému omezena prakticky na jeden stát, protože kvalitní a
+podrobné mapové podklady místních poskytovatelů nejsou v zásadě
+celosvětové.
+
+Nabízí se dvě možnosti -- zda se vydat cestou horších podkladů, ale
+oslovením větší uživatelské základny, nebo zkusit oslovit maximum
+uživatelů na domácím trhu a moci odrážet jeho lokální specifika. Dá se
+říci, že Češi jsou pro výše zmíněnou turistickou činnost dosti
+zapálení \cite{turistika} a proto lze očekávat, že hustota
+potencionálních uživatelů systému by zde byla mnohem vyšší než v
+jiných zemích, i přes zdánlivě malý, desetimilionový trh.
+
+Specifika českého turismu, existence celosvětově operujících
+konkurenčních projektů jako např. MapMyRun.com a absence vážné
+konkurence na domácím trhu mě přivedla k rozhodnutí cílit aplikaci
+pouze na Českou republiku. Jak se lze dočíst v \ref{vybranamapa},
+využívám tedy nakonec podkladů lokálního poskytovatele. Navíc jsou
+často na ČR omezeny i jiné zdroje dat a celý systém je pouze v
+češtině.
+
+\section{Výběr mapového API}\label{vybranamapa}
+Z charakteru aplikace, jež je předmětem této práce, celkem jasně
+vyplývá, že výběr mapových podkladů je jedním z nej\-důležitějších
+rozhodnutí, které bude mít vliv na celý další vývoj projektu.
+Soustředil jsem se proto opravdu pečlivě na vlastnosti
+jednotlivých API a dlouze zvažoval.
+
+Vzhledem k faktům zmíněným v předcházejících odstavcích jsem však
+postupně nabyl dojmu, že ani jedno řešení rozhodně nelze favorizovat a
+spíše bude nutné vybrat nej\-méně bolestivý kompromis. Vybíral jsem
+podle třech hlavních kritérií:
+\begin{itemize}
+	\item Možnosti a funkce API,
+	\item kvalita mapových podkladů s důrazem na turistické
+	mapy a možnosti zobrazovat české turistické značky a cyklictické
+	trasy,
+	\item zázemí poskytovatele a budoucnost API.
+\end{itemize}
+
+Google nabízí bezkonkurenční API a dokonce v současné době
+představuje jeho zcela novou verzi, ale jeho mapové podklady jsou pro turistiku v
+českých podmínkách naprosto nedostatečné. Mapy.cz naopak disponují
+vynikajícími mapovými podklady, jenomže jejich aplikační rozhraní je
+velmi chabé z hlediska funkcionality a ještě mnohem více omezující v
+oblasti licenčních podmínek jeho použití. Seznam.cz sice vyvíjí nové
+API, ale to je zatím velmi nestabilní a jeho licence je stále
+neznámá. Pro svou práci jsem tedy nakonec vybral podklady od Centrum
+Holdings, protože poskytují dobré turistické mapy a mají bohatou
+škálu funkcí. S faktem, že vývoj aplikačního rozhraní je již několik
+let zcela mrtvý a jeho budoucnost je nejistá, mi nezbylo než se
+smířit a počítat s tím, že v budoucnu ji možná bude zapotřebí přepsat
+pro jiné API. V tomto ohledu bych vzhlížel k vývoji nového API v Seznam.cz.
+
+\section{Nástroje pro výškový profil}
+Pro svůj projekt jsem se rozhodl použít jako primární zdroj dat
+Výškopis.cz a v podobě záložního jsem implementoval API s méně
+přesnými výsledky od GeoNames.org. Výškopis.cz má také výhodu
+přítomnosti metody pro získání série dat v jednom požadavku. Ta je
+důležitá -- velmi usnadňuje řešení situací, kdy aplikace potřebuje v
+jednom okamžiku zjistit nadmořskou výšku z celé řady míst na mapě.
+Takový problém se běžně nedá řešit sérií samostatných požadavků na
+server s API, protože ten je tak nárazově zatížen a nestíhá na
+požadavky odpovídat.
+
+Zvážil jsem, že pro vykreslení grafu by knihovny zřejmě dokázaly
+poskytnout sofistikovanější výstup, ale hledal jsem spíše rychlé a
+jednoduché řešení a tím se ukázalo být Google Chart API. V případě,
+že by v budoucnu svými základními funkcemi nedostačovalo, je zde vždy
+možnost nahradit jej jednou z výše zmíněných knihoven.
+
+\section{Výběr ostatních služeb}
+V oblasti ostatních podkladů není příliš velký prostor k
+závěrečné rozvaze a následnému výběru. Už prvotní analýza totiž při
+nich dospěla k závěru, že služby jsou buď poskytovány pouze jedním
+serverem, nebo je nelze vůbec zahrnout.
+
+\section{Export a import dat}
+Z hlediska interoperability se jeví implementace pro výměnu
+dat s přenosným GPS zařízením nebo aplikací Google Earth jako
+klíčová. Vlastnost jsem tedy považoval spíše za nutnou než volitelnou.
+
+U každé trasy je možnost vyexportovat si ji do GPX nebo KML. Pro
+popularizaci možností formátu KML ve spolupráci s online mapami jsem
+přidal i třetí volbu -- možnost otevřít trasu v Google Maps. V obou
+formátech lze také trasu přímo importovat do aplikace jako novou trasu
+namísto jejího ručního klikání do mapy.
+
+\section{Způsob autentizace}
+Výhoda OpenID, tedy jednoznačná identifikace uživatele napříč webem,
+je i jeho hlavní nevýhodou. Uživatelé nejsou zvyklí na webu
+vystupovat pod svým jménem nebo jinak jednoznačně identifikovatelní a
+často jim právě z hlediska určité anonymity diverzita účtů i vyhovuje.
+
+I vzhledem k současné podpoře OpenID je vše teprve v začátcích a
+povědomí o službě není tak velké. Mohlo by být tedy celkem rizikové
+metodu nasadit jako jediný způsob registrace a přihlášení do aplikace.
+Protože ale OpenID nasadil i hegemon českého internetu
+Seznam.cz\footnote{Nápověda
+k OpenID je na \url{http://napoveda.seznam.cz/cz/login/openid/}.}, u
+něhož většina Čechů účet má, rozhodl jsem se tuto nej\-pokrokovější metodu autentizace implementovat opravdu bez alternativy. Získání
+OpenID od Seznam.cz je navíc velmi snadné -- stačí ve své e-mailové
+adrese (např. {\tt uzivatel@seznam.cz}) zaměnit znak zavináče za
+písmena {\tt id} oddělená tečkami ({\tt uzivatel.id.seznam.cz}).
+
+Rozhodnutí implementovat OpenID bez alternativy je nutné přehodnotit
+až po nějaké době existence aplikace a zpětné vazbě
+stávajících, ale i potencionálních uživatelů. Pokud by OpenID
+bylo pro službu spíše handicapem než přínosem, je systém navržen tak,
+že lze snadno i se zachováním podpory pro OpenID doprogramovat druhý
+způsob přihlašování a samostatnou registraci.
+
+\section{Využití mikrofotmátů}
+Při tvorbě práce zřejmě mikroformáty nebude možné příliš využít.
 Množiny specifikovaných mikroformátů a prvků stránek použitých v
 projektu se totiž příliš neprotínají. Na několika místech by šlo
 implementovat například
 hCard\footnote{Viz
 specifikace \url{http://microformats.org/wiki/hcard}.} –- pro
-vyznačení adresy uživatele (výchozí lokace na mapě) nebo provozovatele služby. Z ostatních mikroformátů je zajímavý především
-geo\footnote{Viz specifikace \url{http://microformats.org/wiki/geo}.},
-který specifikuje zaznačení zeměpisných souřadnic do webové stránky.
-Nachází se však zatím v rozpracovaném stavu a je označen jako
-koncept\footnote{Tato skutečnost ale například nijak nebránila vyhledávači Seznam.cz
-přidat pro něj podporu \cite{geoSeznam}.}.
-
-Velmi aktivně se o technologie mikroformátů v České republice zajímá
-Martin Hassman \cite{mfLupa}. Komplexní seriál o problematice vyšel
-na serveru Zdroják.cz Janu Sládkovi \cite{mf}.
+vyznačení adresy uživatele (výchozí lokace na mapě) nebo
+provozovatele služby. Z ostatních mikroformátů je zajímavý především
+geo\footnote{Viz specifikace
+\url{http://microformats.org/wiki/geo}.}, který specifikuje zaznačení
+zeměpisných souřadnic do webové stránky. Nachází se však zatím v
+rozpracovaném stavu a je označen jako koncept\footnote{Tato
+skutečnost ale například nijak nebránila vyhledávači Seznam.cz přidat
+pro něj podporu \cite{geoSeznam}.}.
 
 \chapter{Použité technologie}\label{technologie}
 Množina technologií použitých na tomto projektu by se dala označit v
@@ -1080,8 +1155,8 @@ Jak napovídá celý název, {\it JavaScript Object Notation}, JSON byl
 vyvinut v kontextu jazyka JavaScript. Dnes je však samostatným, na
 jazyku či platformě nezávislým způsobem zápisu dat. JSON jsou v
 podstatě serializované objekty naplněné jednoduchými daty (např.
-{\tt \{ jmeno: "Jan", prijmeni: "Javorek", povolani: "student" \}}).
-Jeho výhodami je jednoduchost a také snadná čitelnost pro člověka.
+{\tt \{ "jmeno": "Jan", "prijmeni": "Javorek", "povolani": "student"
+\}}). Jeho výhodami je jednoduchost a také snadná čitelnost pro člověka.
 
 Mezi hlavní nevýhody JSON patří absence určení kódování obsahu
 (znaky mimo ASCII se nahrazují escape sekvencemi) a nemožnost pojmout
@@ -1100,18 +1175,146 @@ místech, kde k přenosu dat stačí méně komplexní nástroje než je XML
 (viz \ref{ajax} a \ref{rest}).
 
 \chapter{Návrh systému}
-navrh databaze, mozna use case, popis celkoveho reseni systemu,
+V této kapitole se zabývám podrobnějším návrhem aplikace a jeho
+formálními modely. Postupně procházím strukturou systému, specifikací
+uživatelského rozhraní, rozborem práce s API a popisem návrhu databáze. 
+
+\section{Struktura webu}
+Aplikaci jsem se rozhodl strukturovat pro lepší přehlednost a
+srozumitelnost běžnému uživateli velmi jednoduše. Na základě dvou
+hlavních pilířů systému, uživatelů a tras, jsem vytvořil jim
+odpovídající dva oddíly aplikace. Ostatní stránky se zabývají
+doprovodnými funkcemi, mezi něž lze zařadit úvodní stránku, nápovědu,
+informace o webu nebo stránku s demem mapování trasy.
+
+Zatímco část s uživateli, kde lze vlastně jen zobrazovat jejich
+profily, je malá a čistě prezentační, část s trasami nese hlavní
+jádro aplikace. V ní návštěvník může trasy vyhledávat, zobrazovat je
+i s výkony a samozřejmě s trasami pracovat. Všechny tyto případy
+užití znázorňuje schéma X.X.
+
+DOPLNIT OBRAZEK S USE CASE DIAGRAMEM
+
+\section{Uživatelské rozhraní}
+V návrhu uživatelského rozhraní jsem se inspiroval u známých a
+úspěšných služeb jako např. Flickr.com, Google.com nebo i český
+Seznam.cz, kde se často soustředí jen na hlavní sdělení stránky a
+jinak ponechávají uživateli volný prostor. Vzhled potom působí
+přehledně, vzdušně a jednoduše a uživateli se s ním pracuje lépe
+\cite{design}. Pod těmito výrazy lze sice prezentovat i návrh, kde si
+grafik jednoduchost vyložil minimální propracovaností prvků, ale
+snažil jsem se, aby tato situace u mé aplikace nenastala.
+
+\subsection{Texty}
+V rámci uživatelského rozhraní jsou velmi důležité texty. Měly by být
+stručné, jednoznačné, srozumitelné a měly by uživatele vést k akci
+\cite{ui}. Významné je také navození atmosféry při komunikaci s
+uživatelem. Jak ukazuje trend nových internetových aplikací, nemusí
+být vždy nutné zachovávat oficiální tón. Jestliže uživatel pracuje s
+informačním systémem, který spravuje jeho účetnictví a umožňuje mu
+tisk faktur, očekává od něj i seriózní komunikaci. Pokud však
+aplikaci využívá spíše ve volném čase, není špatným rozhodnutím
+zvolit neformální tón a pokusit se navodit mezi aplikací a člověkem
+přátelskou atmosféru \cite{informalTone}. V rámci toho, aby aplikace
+vyšla vstříc uživateli, jsem také implementoval do celého systému
+údaj o jeho pohlaví a všechny texty používají na jeho základě
+korektní formulace. Jedinou vyjímkou je ne zcela formální výraz
+\uv{borci}, který je dle platných pravidel přechylován jako
+\uv{borkyně}, ale to mi subjektivně neznělo příliš přirozeně.
+
+\subsection{Navigace}
+Hlavní menu má tři nebo čtyři položky pro přístup k hlavním
+oblastem aplikace. Další stránky, které nemusí mít uživatel tolik na
+očích, jsem zpřístupnil pod podrobnější navigací v patičce webu.
+Hlavní menu nesplňuje známé pravidlo o vyznačení aktuální pozice pro
+lepší orientaci, protože uživatel se většinu času nachází pouze v
+oddíle {\it trasy} a zvýraznění tlačítka {\it borci} při přechodu na
+vlastní či cizí profil by jej asi spíše jen mátlo.
+
+\subsection{Omezení chyb uživatele}
+Systém by měl počítat s tím, že uživatel bude (ve většině případů
+nevědomky) chybovat. Může kliknout na tlačítko o kousek vedle než
+zamýšlel a omylem si smazat výkon nebo může špatně vyplnit formulář a
+snažit se jej odeslat s pro aplikaci neplatnými daty.
+
+Ve všech nevratných případech užití jsem uživateli \uv{podstrčil}
+potvrzovací dialog na bázi JavaScriptu \ref{javaScript}. Ten není
+sice spolehlivý, protože může být v prohlížeči vypnutý, ale na
+druhou stranu je celá mapová část aplikace založena právě na tomto jazyce,
+takže lze předpokládat, že všichni návštěvníci pracující se svými
+daty budou mít JavaScript povolen. V případě formulářů je kontrola dat
+navíc zdvojena -- operuje zde i serverová část, která za žádných
+okolností neplatná data do databáze nepropustí a i v případě
+vypnutých skriptů vypíše chybová oznámení.
+
+DOPLNIT SCREENSHOTY APLIKACE (NEPATRI NAHODOU DO PRILOHY?? ZEPTAT SE)
+
+\section{Specifika práce na základě API}
+Vystavět aplikaci z větší části na externích zdrojích přináší možnost
+využít již hotových, profesionálních a ihned funkčních řešení a služeb
+od specializovaných poskytovatelů. Kdybychom si například chtěli sami
+naprogramovat mapový systém, stálo by nás to nemalé prostředky a
+rozsahem problému bychom překročili celou tuto práci. Stejně tak by
+nebylo snadné zajistit si svá vlastní geografická data s nadmořskými
+výškami nebo aktuální informace o počasí. S použitím API se na tyto
+problémy nemusíme soustředit a s využitím minima úsilí spojujeme
+existující prostředky do velmi silných aplikací.
+
+Přístup samozřejmě ale přináší také nevýhody. Zdroje dat nejsou nijak
+v naší moci a proto hrozí riziko prodlev či nedostupnosti služeb v
+případě lepším, v tom horším potom jejich neaktuálnost, chybovost, nebo
+dokonce zánik. Prodlevy v odpovědích z cizích serverů musí program
+zohlednit, zabývat se synchronizací požadavků s interaktivním
+uživatelským rozhraním a zamezit kolizím. Pokud navíc hrozí, že 
+prodlevy budou dlouhé a znepříjemní uživatelský prožitek, je dobré
+funkci, která je způsobuje separovat a dát uživateli možnost ji
+vypínat a zapínat. Rizika s vážným dopadem na funkčnost programu může
+potom aplikace postavená nad API ošetřovat především omezením své
+závislosti na jediném poskytovateli dat.
+
+U mapových podkladů si takové řešení můžeme představit například v
+naprogramování vrstvy, která nám poskytne rozhraní k funkcím API,
+ale oddělí nás od jejich konkrétní implementace. Vrstva potom může
+obalovat API Google Maps, Mapy.cz i Amapy.cz (viz \ref{vybermap}) a
+konkrétní službu potom použít na základě jediného parametru, podobně
+jako se to dělá například u databázových vrstev s abstrakcí
+několika druhů SŘBD (viz \ref{mysql}). Podobný projekt již existuje a
+nese název Mapstraction\footnote{Aktuální zdrojové kódy jsou k dispozici na
+\url{http://code.google.com/p/mapstraction/}.}, ale je ve velmi ranném stádiu a navíc podporuje zatím pouze globální
+mapové systémy. Využití jeho zdrojových kódů a případné zanesení českých
+mapových API je nyní tedy spíše zajímavou ideou do budoucna.
+
+U ostatních podkladů není omezování rizik tak obtížné. Pokud má
+aplikace na výběr z několika podkladů, může jednoduše použít lepší z
+nich a pokud ten selže, ve výjimce se na data dotáže alternativního,
+byť třeba méně přesného. Takto jsem zdvojil například API pro
+získávání nadmořské výšky (viz \ref{vyskovyProfil}). Pokud výběr
+není, nejedná se většinou o příliš významnou vlastnost a uživatel se
+bez ní může obejít (např. vrstva s kamerami).
+
+\section{Databáze}
+navrh databaze, erd
 
 \chapter{Implementace}
-struktura portalu, viz 9193 str 26
 
-detaily v kapitolkach o jednotlivych problemech jako pocitani ruznych
-bodu na mape, reseni prodlev dat dodavanych z api, zdvojovani api apod.
+\section{Vrstvy aplikace}
+MVC, odstavec o tom, ze detaily resi FWky
 
 rozepsani detailneji nez v minule kapitole o tom kde je javascript,
-co dela, jak je implementovano ukladani, kresleni car na tu mapu
+co dela
+
+\section{Detaily řešení vybraných problémů}
+rovnice, screenshoty
+
+\subsection{Vykreslování objektů na mapu}
+jak je implementovano ukladani, kresleni car na tu mapu
 apod. detaily
 
+\subsection{Tématické vrstvy s velkým množstvím značek}
+
+\subsection{Dva režimy mapy, editor mapy}
+
+\subsection{Výškový profil}
 Při zaznamenávání dat je důležité si uvědomit, že pokud známe
 nadmořskou výšku dvou bodů, neznamená to, že mezi nimi existuje
 lineární spojnice (např. mezi body Praha a Brno jistě nebude jen
@@ -1120,6 +1323,17 @@ měst). Správně by měl systém dopočítávat mezibody na relevantních
 intervalech a zjišťovat nadmořskou výšku i na nich. To by však mohlo
 vést k velkému provozu na API pro zjištění výškopisu a také k velkým
 prodlevám. \ldots
+
+\subsection{Vyhledávání polohy a trasy podle zadaného místa}
+jak poznat kde trasa je, rozdeleni na body, vypocet jednoho stupne
+
+\subsection{Zobrazování vzdálenosti na trase}
+
+\subsection{Demo aplikace}
+
+\subsection{Výpočet statistik}
+
+\subsection{Detaily exportu a importu dat}
 
 \chapter{Vývoj a testování}
 verze vyvojovych nastroju, verze mootools, nette, eclipse, apache,
