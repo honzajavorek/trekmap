@@ -443,7 +443,7 @@ class TrackPresenter extends BasePresenter {
 			$data = $form->values;
 			$file = $data['file'];
 	
-			if (!empty($file)) {
+			if ($file->getError() != 4) {
 				if ($file->isOK()) {
 					$this->getComponent('map')->setTrack($this->parseFile(file_get_contents($file)));
 				} else {

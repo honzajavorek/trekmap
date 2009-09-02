@@ -1,23 +1,23 @@
 -- phpMyAdmin SQL Dump
 -- version 2.10.1
 -- http://www.phpmyadmin.net
---
--- Počítač: localhost
--- Vygenerováno: Sobota 18. července 2009, 04:15
--- Verze MySQL: 5.0.45
--- Verze PHP: 5.2.5
+-- 
+-- Host: localhost
+-- Generation Time: Sep 02, 2009 at 10:14 PM
+-- Server version: 5.0.45
+-- PHP Version: 5.2.5
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
---
--- Databáze: `trekmap`
---
+-- 
+-- Database: `trekmap`
+-- 
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `achievements`
---
+-- 
+-- Table structure for table `achievements`
+-- 
 
 CREATE TABLE `achievements` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -36,25 +36,28 @@ CREATE TABLE `achievements` (
   KEY `user` (`user`),
   KEY `track` (`track`),
   KEY `activity` (`activity`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=12 ;
 
---
--- Vypisuji data pro tabulku `achievements`
---
+-- 
+-- Dumping data for table `achievements`
+-- 
 
-INSERT INTO `achievements` (`id`, `user`, `track`, `activity`, `time`, `laps`, `achieved`, `altitude`, `distance`, `speed`, `pace`, `energy`) VALUES
+INSERT INTO `achievements` (`id`, `user`, `track`, `activity`, `time`, `laps`, `achieved`, `altitude`, `distance`, `speed`, `pace`, `energy`) VALUES 
 (1, 3, 41, 'Lyžařský sjezd', '838:59:59', 1, '0000-00-00', 255, 10, 4.71902, 12.7145, NULL),
 (2, 3, 41, 'Běh', '01:00:00', 1, '2009-07-17', 255, 10, 9.674, 6.20219, NULL),
 (3, 3, 41, 'Běh', '01:00:00', 2, '2009-07-17', 510, 19, 19.348, 3.1011, 3168),
 (4, 3, 41, 'Běh', '02:00:00', 2, '2009-07-17', 510, 19.348, 9.674, 6.20219, 4864.2),
 (5, 4, 41, 'Cyklistika', '00:30:00', 1, '2009-07-15', 255, 9.674, 19.348, 3.1011, NULL),
-(8, 4, 41, 'Cyklistika', '02:00:00', 1, '2009-07-17', 255, 9.674, 4.837, 12.4044, 1281.6);
+(8, 4, 41, 'Cyklistika', '02:00:00', 1, '2009-07-17', 255, 9.674, 4.837, 12.4044, 1281.6),
+(9, 3, 28, 'Běh', '00:20:00', 1, '2009-07-18', 0, 2.752, 8.256, 7.26744, 633.6),
+(10, 3, 28, 'Běh', '00:10:00', 1, '2009-07-18', 0, 2.752, 16.512, 3.63372, 612.7),
+(11, 3, 28, 'Běh', '01:00:00', 1, '2009-07-18', 0, 2.752, 2.752, 21.8023, 1900.8);
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `activities`
---
+-- 
+-- Table structure for table `activities`
+-- 
 
 CREATE TABLE `activities` (
   `id` tinyint(4) unsigned NOT NULL auto_increment,
@@ -65,11 +68,11 @@ CREATE TABLE `activities` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=60 ;
 
---
--- Vypisuji data pro tabulku `activities`
---
+-- 
+-- Dumping data for table `activities`
+-- 
 
-INSERT INTO `activities` (`id`, `name`, `ratio`, `terrain`, `speed`) VALUES
+INSERT INTO `activities` (`id`, `name`, `ratio`, `terrain`, `speed`) VALUES 
 (1, 'Cyklistika', 0.178, NULL, 8),
 (2, 'Cyklistika', 0.217, NULL, 10),
 (3, 'Cyklistika', 0.293, NULL, 13),
@@ -132,9 +135,9 @@ INSERT INTO `activities` (`id`, `name`, `ratio`, `terrain`, `speed`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `bookmarks`
---
+-- 
+-- Table structure for table `bookmarks`
+-- 
 
 CREATE TABLE `bookmarks` (
   `id` varchar(12) collate utf8_czech_ci NOT NULL,
@@ -143,11 +146,11 @@ CREATE TABLE `bookmarks` (
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
---
--- Vypisuji data pro tabulku `bookmarks`
---
+-- 
+-- Dumping data for table `bookmarks`
+-- 
 
-INSERT INTO `bookmarks` (`id`, `track`, `saved`) VALUES
+INSERT INTO `bookmarks` (`id`, `track`, `saved`) VALUES 
 ('4a45dd3790f2', '[{"coords":{"x":3370841,"y":5491762},"altitude":399},{"coords":{"x":3381081,"y":5568562},"altitude":407}]', '2009-06-27 10:49:59'),
 ('4a45ddb5823a', '[{"coords":{"x":3365209,"y":5492274},"altitude":471},{"coords":{"x":3491673,"y":5530162},"altitude":438}]', '2009-06-27 10:52:05'),
 ('4a45e80deaa3', '[{"coords":{"x":3370841,"y":5491762},"altitude":399},{"coords":{"x":3381081,"y":5568562},"altitude":407},{"coords":{"x":3456857,"y":5530674},"altitude":223}]', '2009-06-27 11:36:13'),
@@ -171,13 +174,14 @@ INSERT INTO `bookmarks` (`id`, `track`, `saved`) VALUES
 ('4a5d2bd8b3e', '{"name":"","points":[{"coords":{"x":49.20018624255232,"y":16.607984760637397},"alt":221},{"coords":{"x":49.198570083547644,"y":16.613772399588775},"alt":209},{"coords":{"x":49.19592741880954,"y":16.61630594482192},"alt":206},{"coords":{"x":49.193408592344305,"y":16.61650026086709},"alt":202},{"coords":{"x":49.190775859575616,"y":16.61406369290552},"alt":205},{"coords":{"x":49.190004663247706,"y":16.610326812310664},"alt":208},{"coords":{"x":49.19019017473668,"y":16.604776146650178},"alt":204},{"coords":{"x":49.19325211359944,"y":16.603056289098998},"alt":239},{"coords":{"x":49.193511217939104,"y":16.604669656593227},"alt":234},{"coords":{"x":49.19717629372402,"y":16.603291772205424},"alt":229},{"coords":{"x":49.198328409666686,"y":16.603211986198986},"alt":231},{"coords":{"x":49.20018624255232,"y":16.607984760637397},"alt":221}],"length":3548.0398406629747}', '2009-07-15 03:07:36'),
 ('4a5d373010a9', '{"name":"","points":[{"coords":{"x":50.136216156680376,"y":12.410938626997053},"alt":437},{"coords":{"x":50.1444561194608,"y":14.287277486876762},"alt":328},{"coords":{"x":49.960350542720754,"y":14.289992682619365},"alt":298},{"coords":{"x":49.59167717822038,"y":12.793999298377939},"alt":487},{"coords":{"x":50.136216156680376,"y":12.410938626997053},"alt":437}],"length":335441.26061097835}', '2009-07-15 03:56:00'),
 ('4a5ded4310c4', '{"name":"","points":[{"coords":{"x":49.22513790571328,"y":16.547330081927452},"alt":295},{"coords":{"x":49.236059945452354,"y":16.58386019760435},"alt":249},{"coords":{"x":49.22625979298299,"y":16.586477297664352},"alt":249},{"coords":{"x":49.22226603557252,"y":16.565926590508074},"alt":290}],"length":5577.0968978057645}', '2009-07-15 16:52:51'),
-('4a5df21127a9', '{"name":"","points":[{"coords":{"x":49.22692723938847,"y":16.546038023492226},"alt":269},{"coords":{"x":49.22975510205067,"y":16.557280401911523},"alt":247}],"length":874.2849380287041}', '2009-07-15 17:13:21');
+('4a5df21127a9', '{"name":"","points":[{"coords":{"x":49.22692723938847,"y":16.546038023492226},"alt":269},{"coords":{"x":49.22975510205067,"y":16.557280401911523},"alt":247}],"length":874.2849380287041}', '2009-07-15 17:13:21'),
+('4a636077ffd5', '{"name":"","description":"","points":[{"coords":{"x":49.90318235820359,"y":13.57811611519705},"alt":411},{"coords":{"x":49.941697207500795,"y":16.273151219696302},"alt":353},{"coords":{"x":49.328832511521696,"y":15.834620097907848},"alt":598},{"coords":{"x":48.9376024246142,"y":13.032629939444136},"alt":904},{"coords":{"x":49.67223890100295,"y":12.918049475879048},"alt":445}],"length":558277.9475521215,"altitude":4397,"articulation":560}', '2009-07-19 20:05:43');
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `comments`
---
+-- 
+-- Table structure for table `comments`
+-- 
 
 CREATE TABLE `comments` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -190,16 +194,16 @@ CREATE TABLE `comments` (
   KEY `user` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=1 ;
 
---
--- Vypisuji data pro tabulku `comments`
---
+-- 
+-- Dumping data for table `comments`
+-- 
 
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `points`
---
+-- 
+-- Table structure for table `points`
+-- 
 
 CREATE TABLE `points` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
@@ -213,11 +217,11 @@ CREATE TABLE `points` (
   KEY `track` (`track`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=337 ;
 
---
--- Vypisuji data pro tabulku `points`
---
+-- 
+-- Dumping data for table `points`
+-- 
 
-INSERT INTO `points` (`id`, `track`, `lat`, `lng`, `alt`) VALUES
+INSERT INTO `points` (`id`, `track`, `lat`, `lng`, `alt`) VALUES 
 (69, 26, 49.22798, 16.54763, 259),
 (70, 26, 49.22745, 16.55236, 259),
 (71, 26, 49.22713, 16.55694, 247),
@@ -428,9 +432,9 @@ INSERT INTO `points` (`id`, `track`, `lat`, `lng`, `alt`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `tags`
---
+-- 
+-- Table structure for table `tags`
+-- 
 
 CREATE TABLE `tags` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -439,16 +443,16 @@ CREATE TABLE `tags` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=1 ;
 
---
--- Vypisuji data pro tabulku `tags`
---
+-- 
+-- Dumping data for table `tags`
+-- 
 
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `tracks`
---
+-- 
+-- Table structure for table `tracks`
+-- 
 
 CREATE TABLE `tracks` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -463,11 +467,11 @@ CREATE TABLE `tracks` (
   KEY `author` (`author`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=45 ;
 
---
--- Vypisuji data pro tabulku `tracks`
---
+-- 
+-- Dumping data for table `tracks`
+-- 
 
-INSERT INTO `tracks` (`id`, `author`, `length`, `altitude`, `articulation`, `created`, `name`, `description`) VALUES
+INSERT INTO `tracks` (`id`, `author`, `length`, `altitude`, `articulation`, `created`, `name`, `description`) VALUES 
 (26, 2, 5404, 0, 0, '2009-07-14 20:06:20', 'Komínské kolečko', 'Takové menší kolečko po Komínských polích. Co dodat :) .'),
 (27, 2, 13492, 0, 0, '2009-07-14 20:09:17', 'Klánovický les', 'Pokus o fakt dlouhý popis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sagittis sem quis urna vestibulum eu ultrices ligula molestie. Vivamus hendrerit porta tincidunt. Morbi ultrices ultrices arcu sit amet porttitor. Maecenas in a'),
 (28, 2, 2752, 0, 0, '2009-07-15 01:49:03', 'Okolo Špilberku', NULL),
@@ -484,9 +488,9 @@ INSERT INTO `tracks` (`id`, `author`, `length`, `altitude`, `articulation`, `cre
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `tracks_tags`
---
+-- 
+-- Table structure for table `tracks_tags`
+-- 
 
 CREATE TABLE `tracks_tags` (
   `track` int(10) unsigned NOT NULL,
@@ -495,16 +499,16 @@ CREATE TABLE `tracks_tags` (
   KEY `tag` (`tag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
---
--- Vypisuji data pro tabulku `tracks_tags`
---
+-- 
+-- Dumping data for table `tracks_tags`
+-- 
 
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `tracks_users`
---
+-- 
+-- Table structure for table `tracks_users`
+-- 
 
 CREATE TABLE `tracks_users` (
   `track` int(10) unsigned NOT NULL,
@@ -514,11 +518,11 @@ CREATE TABLE `tracks_users` (
   KEY `user` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
---
--- Vypisuji data pro tabulku `tracks_users`
---
+-- 
+-- Dumping data for table `tracks_users`
+-- 
 
-INSERT INTO `tracks_users` (`track`, `user`, `markers`) VALUES
+INSERT INTO `tracks_users` (`track`, `user`, `markers`) VALUES 
 (26, 2, NULL),
 (27, 2, NULL),
 (28, 2, NULL),
@@ -541,9 +545,9 @@ INSERT INTO `tracks_users` (`track`, `user`, `markers`) VALUES
 
 -- --------------------------------------------------------
 
---
--- Struktura tabulky `users`
---
+-- 
+-- Table structure for table `users`
+-- 
 
 CREATE TABLE `users` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -561,55 +565,55 @@ CREATE TABLE `users` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci AUTO_INCREMENT=5 ;
 
---
--- Vypisuji data pro tabulku `users`
---
+-- 
+-- Dumping data for table `users`
+-- 
 
-INSERT INTO `users` (`id`, `username`, `fullname`, `description`, `place`, `weight`, `height`, `email`, `female`, `admin`, `active`) VALUES
+INSERT INTO `users` (`id`, `username`, `fullname`, `description`, `place`, `weight`, `height`, `email`, `female`, `admin`, `active`) VALUES 
 (2, 'littlemaple.myopenid.com', 'Honza Javorek', 'Victor Cibich byl proslulý svou láskou k pivu Březňák nejen ve Velkém Březně, ale i okolí. V roce 1906 ho proto oslovila správní rada s nabídkou stát se tváří piva Březňák a Cibich rád souhlasil. Jeho portrét se od té doby objevoval na etiketách, reklamních cedulích, inzertních a propagačních materiálech všeho druhu. Jako protihodnotu dostal doživotní rentu 30 piv týdně, kterou si vychutnával v restauraci Tivoli ve Velkém Březně.', 'Kolejní, Brno', 52, 170, 'honza@javorek.net', 0, 1, 1),
 (3, 'littlemaple.id.seznam.cz', 'Honza Javorek', 'Testovací profil, OpenID na Seznam.cz.', 'Varvažov', 55, 177, 'littlemaple@seznam.cz', 0, 0, 1),
 (4, 'trekmap.id.email.cz', 'Zuzana Trekmapová', '', 'Praha 9, Horní Počernice', 60, NULL, 'trekmap@email.cz', 1, 0, 1);
 
---
--- Omezení pro exportované tabulky
---
+-- 
+-- Constraints for dumped tables
+-- 
 
---
--- Omezení pro tabulku `achievements`
---
+-- 
+-- Constraints for table `achievements`
+-- 
 ALTER TABLE `achievements`
   ADD CONSTRAINT `achievements_ibfk_15` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `achievements_ibfk_16` FOREIGN KEY (`track`) REFERENCES `tracks` (`id`) ON DELETE CASCADE;
 
---
--- Omezení pro tabulku `comments`
---
+-- 
+-- Constraints for table `comments`
+-- 
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`id`),
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
---
--- Omezení pro tabulku `points`
---
+-- 
+-- Constraints for table `points`
+-- 
 ALTER TABLE `points`
   ADD CONSTRAINT `points_ibfk_1` FOREIGN KEY (`track`) REFERENCES `tracks` (`id`) ON DELETE CASCADE;
 
---
--- Omezení pro tabulku `tracks`
---
+-- 
+-- Constraints for table `tracks`
+-- 
 ALTER TABLE `tracks`
   ADD CONSTRAINT `tracks_ibfk_1` FOREIGN KEY (`author`) REFERENCES `users` (`id`);
 
---
--- Omezení pro tabulku `tracks_tags`
---
+-- 
+-- Constraints for table `tracks_tags`
+-- 
 ALTER TABLE `tracks_tags`
   ADD CONSTRAINT `tracks_tags_ibfk_1` FOREIGN KEY (`track`) REFERENCES `tracks` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `tracks_tags_ibfk_2` FOREIGN KEY (`tag`) REFERENCES `tags` (`id`) ON DELETE CASCADE;
 
---
--- Omezení pro tabulku `tracks_users`
---
+-- 
+-- Constraints for table `tracks_users`
+-- 
 ALTER TABLE `tracks_users`
   ADD CONSTRAINT `tracks_users_ibfk_1` FOREIGN KEY (`track`) REFERENCES `tracks` (`id`),
   ADD CONSTRAINT `tracks_users_ibfk_2` FOREIGN KEY (`user`) REFERENCES `users` (`id`) ON DELETE CASCADE;

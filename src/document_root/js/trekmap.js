@@ -1125,22 +1125,36 @@ var TMAltitude = new Class({
 		this.askVyskopisCzBatch(points);
 	},
 	askVyskopisCz: function(point) {
-		this.getVyskopisCz().send(function (args) {
-			var coords = args[0].coords;
-			topoGetAltitude(coords.x, coords.y, args[1], args[0], 3000);
-		}, [point, this.receive.bind(this)]);
+	    this.getVyskopisCz();
+		if ($defined(window.topoGetAltitude)) {
+			this.getVyskopisCz().send(function (args) {
+				var coords = args[0].coords;
+				topoGetAltitude(coords.x, coords.y, args[1], args[0], 3000);
+			}, [point, this.receive.bind(this)]);
+		} else {
+			(function() {
+                this.askVyskopisCz(point);
+			}).delay(10, this);
+		}
 	},
 	askVyskopisCzBatch: function(points) {
-		this.getVyskopisCz().send(function (args) {
-			var points = args[0];
-			var method = args[1];
-			var tmp = [];
-			for (var i = 0, c; i < points.length; i++) {
-				c = points[i].coords;
-				tmp.push([c.x, c.y, method, points[i]]);
-			}
-			topoGetAltitudes(tmp, 3000);
-		}, [points, this.receive.bind(this)]);
+		this.getVyskopisCz();
+		if ($defined(window.topoGetAltitude)) {
+			this.getVyskopisCz().send(function (args) {
+				var points = args[0];
+				var method = args[1];
+				var tmp = [];
+				for (var i = 0, c; i < points.length; i++) {
+					c = points[i].coords;
+					tmp.push([c.x, c.y, method, points[i]]);
+				}
+				topoGetAltitudes(tmp, 3000);
+			}, [points, this.receive.bind(this)]);
+		} else {
+			(function() {
+                this.askVyskopisCzBatch(points);
+			}).delay(10, this);
+		}
 	},
 	askGeoNames: function(point) {
 		var coords = point.coords;
