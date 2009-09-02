@@ -9,7 +9,8 @@
 % připomínky posílejte na e-mail: bidlom AT fit.vutbr.cz
 % vim: set syntax=tex encoding=utf8:
 %============================================================================
-\documentclass[cover]{fitthesis} % odevzdani do wisu - odkazy, na ktere se da klikat
+\documentclass[print]{fitthesis}
+%\documentclass[cover]{fitthesis} % odevzdani do wisu - odkazy, na ktere se da klikat
 %\documentclass[cover,print]{fitthesis} % pro tisk - na odkazy se neda klikat
 %\documentclass[english,print]{fitthesis} % pro tisk - na odkazy se neda klikat
 %      \documentclass[english]{fitthesis}
@@ -71,14 +72,14 @@
   %bud pomoci nasledujicich parametru nebo pomoci vyhrazenych maker (viz dale)
   %===========================================================================
   %Klicova slova
-  keywords.cs={Klíčová slova v českém jazyce.}, %klicova slova v ceskem jazyce
-  keywords.en={Klíčová slova v anglickém jazyce.}, %klicova slova v anglickem jazyce
+  keywords.cs={mashup, mapy, trasy, API, web, PHP, MySQL, XML, JSON}, %klicova slova v ceskem jazyce
+  keywords.en={mashup, maps, tracks, API, web, PHP, MySQL, XML, JSON}, %klicova slova v anglickem jazyce
   %Abstract
-  abstract.cs={Výtah (abstrakt) práce v českém jazyce.}, % abstrakt v ceskem jazyce
-  abstract.en={Výtah (abstrakt) práce v anglickém jazyce.}, % abstrakt v anglickem jazyce
+  abstract.cs={Tato bakalářská práce se zabývá tvorbou webové služby, v níž si uživatel může do interaktivní mapy zaznamenat své trasy pro volnočasové aktivity (např. běh). Využita je architektura tzv. mashupu, kdy v sobě program spojuje mnohé externí služby a zdroje dat přístupné veřejně díky jejich aplikačnímu rozhraní. Práce se postupně zabývá analýzou všech služeb s API, návrhem vlastní webové služby a poté zmiňuje detaily implementace vybraných problémů.}, % abstrakt v ceskem jazyce
+  abstract.en={This Bachelor thesis describes a problem of creating a web service, in which user can mark his or her own track of free-time activity (such as running) into an interactive map. Application is built up on so-called mashup, an architecture in which program represents a connection of many external services and resources of data. These are approachable thanks to their application interfaces. Thesis step by step deals with an analysis of all services with API and by a design of the web service. After all describes some details of solution and implementation of selected problems.}, % abstrakt v anglickem jazyce
   %Prohlaseni
   declaration={Prohlašuji, že jsem tuto bakalářskou práci vypracoval
-  samostatně pod vedením pana Prof.~Ing.~Tomáše Hrušky~CSc. Uvedl
+  samostatně pod vedením pana Prof. Ing.~Tomáše Hrušky CSc. Uvedl
   jsem všechny literární prameny a publikace, z nichž jsem čerpal.},
   %Podekovani (nepovinne)
   acknowledgment={Rád bych poděkoval vedoucímu Prof.~Ing.~Tomáši
