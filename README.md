@@ -31,6 +31,10 @@ _(copy & paste from document)_
 
 This Bachelor thesis describes a problem of creating a web service, in which user can mark his or her own track of free-time activity (such as running) into an interactive map. Application is built up on so-called mashup, an architecture in which program represents a connection of many external services and resources of data. These are approachable thanks to their application interfaces. Thesis step by step deals with an analysis of all services with API and by a design of the web service. After all describes some details of solution and implementation of selected problems.
 
+## Grade: A
+
+Reader suggested A, supervisor suggested A, I got A. And I won Dean Award for the best BSc thesis.
+
 ## License: ISC
 
 © 2009 Jan Javorek &lt;<a
