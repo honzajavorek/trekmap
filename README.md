@@ -34,4 +34,6 @@ This Bachelor thesis describes a problem of creating a web service, in which use
 
 ## License: ISC
 
+© 2009 Honza Javorek
+
 This work is licensed under [ISC license](https://en.wikipedia.org/wiki/ISC_license).
