@@ -34,6 +34,7 @@ This Bachelor thesis describes a problem of creating a web service, in which use
 
 ## License: ISC
 
-© 2009 Jan Javorek <jan.javorek@gmail.com>
+© 2009 Jan Javorek &lt;<a
+href="mailto:jan.javorek&#64;gmail.com">jan.javorek&#64;<!---->gmail.com</a>&gt;
 
 This work is licensed under [ISC license](https://en.wikipedia.org/wiki/ISC_license).
