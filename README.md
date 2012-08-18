@@ -1,4 +1,3 @@
-
 # TrekMap
 
 My BSc Thesis called _Evidence of user's geographic traces_. Web service to provide mapping and profiling your run or walk. Formerly had it's home at trekmap.cz.
@@ -35,6 +34,6 @@ This Bachelor thesis describes a problem of creating a web service, in which use
 ## License: ISC
 
 © 2009 Jan Javorek &lt;<a
-href="mailto:jan.javorek&#64;gmail.com">jan.javorek&#64;<!---->gmail.com</a>&gt;
+href="mailto:jan.javorek&#64;gmail.com">jan.javorek&#64;gmail.com</a>&gt;
 
 This work is licensed under [ISC license](https://en.wikipedia.org/wiki/ISC_license).
