@@ -4,10 +4,6 @@ My BSc Thesis called _Evidence of user's geographic traces_. Web service to prov
 
 It was something like a Czech copy of MapMyRun, or if you want, predecessor of RunKeeper. It was build on top of Amapy.cz's API, it had a shitload of features and a very good support for touristic/cycling routes. I had some plans with it, but later they just faded away and now, in time of RunKeeper, Endomondo, DailyMile, etc., it would have no sense in reviving such idea.
 
-## Status: IDLE
-
-This my [BSc Thesis](http://www.fit.vut.cz) project is idle since 2009. [No future, no future for me!](https://www.youtube.com/watch?v=yqrAPOZxgzU)
-
 ## Installation
 
 It's an old [Nette](http://www.nette.org) project with a lot of JavaScript (ancient version of MooTools). It probably doesn't even work any more as it's map provider, Amapy.cz, has shut down thir API. If you want to get this project run, have fun with reverse engineering.
